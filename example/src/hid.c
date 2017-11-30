@@ -29,15 +29,19 @@
  * this code.
  */
 
+#include <hid.h>
 #include "board.h"
 #include <stdint.h>
 #include <string.h>
 #include "usbd_rom_api.h"
-#include "hid_mouse.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
+
+#define FLAG_MOUSE 		(1<<0)
+#define FLAG_KEYBOARD   (1<<1)
+#define FLAG_JOYSTICK	(1<<2)
 
 /**
  * @brief Structure to hold mouse data
@@ -45,8 +49,13 @@
 
 typedef struct {
 	USBD_HANDLE_T hUsb;	/*!< Handle to USB stack. */
-	uint8_t report[MOUSE_REPORT_SIZE];	/*!< Last report data  */
+	uint8_t reportMouse[MOUSE_REPORT_SIZE];	/*!< Last report data  */
+	uint8_t reportKeyboard[KEYBOARD_REPORT_SIZE];	/*!< Last report data  */
+	uint8_t reportJoystick[JOYSTICK_REPORT_SIZE];	/*!< Last report data  */
 	uint8_t tx_busy;	/*!< Flag indicating whether a report is pending in endpoint queue. */
+	uint8_t tx_flags;   //flag signalling which HID endpoint needs sending (1<<0 mouse, 1<<1 keyboard, 1<<2 joystick)
+	uint8_t nextsend;	//which report has to be sent next (equal to reportid)
+	uint8_t nextlen;	//length of next sent report
 } Mouse_Ctrl_T;
 
 /** Singleton instance of mouse control */
@@ -56,54 +65,70 @@ static Mouse_Ctrl_T g_mouse;
  * Public types/enumerations/variables
  ****************************************************************************/
 
-extern const uint8_t Mouse_ReportDescriptor[];
-extern const uint16_t Mouse_ReportDescSize;
+extern const uint8_t HID_ReportDescriptor[];
+extern const uint16_t HID_ReportDescSize;
 
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
-
 static void setXYMouseReport(uint8_t *rep, int8_t xVal, int8_t yVal)
 {
-	rep[1] = (uint8_t) xVal;
-	rep[2] = (uint8_t) yVal;
+	rep[2] = (uint8_t) xVal;
+	rep[3] = (uint8_t) yVal;
 }
 
 static void setLeftButtonMouseReport(uint8_t *rep, uint8_t state)
 {
 	if (state) {
-		rep[0] |= 0x01;
+		rep[1] |= 0x01;
 	}
 	else {
-		rep[0] &= ~0x01;
+		rep[1] &= ~0x01;
 	}
 }
 
 /* Routine to update mouse state report */
 static void Mouse_UpdateReport(void)
 {
+	//keyboard report structure:
+	//[0] reportID
+	//[1] reserved
+	//[2] modifier
+	//[3]-[8] keycodes
 	uint8_t joystick_status = Joystick_GetStatus();
-	CLEAR_HID_MOUSE_REPORT(&g_mouse.report[0]);
+	CLEAR_HID_MOUSE_REPORT(&g_mouse.reportMouse[0]);
+	CLEAR_HID_KEYBOARD_REPORT(&g_mouse.reportKeyboard[0]);
+	g_mouse.reportMouse[0] = HID_REPORTID_MOUSE;
+	g_mouse.reportKeyboard[0] = HID_REPORTID_KEYBOARD;
 
 	switch (joystick_status) {
 	case JOY_PRESS:
-		setLeftButtonMouseReport(g_mouse.report, 1);
+		g_mouse.reportKeyboard[3] = 27; //press y key
+		g_mouse.tx_flags |= FLAG_KEYBOARD;
+		g_mouse.nextsend = HID_REPORTID_KEYBOARD;
+		//setLeftButtonMouseReport(g_mouse.report, 1);
+		//TODO....
 		break;
 
 	case JOY_LEFT:
-		setXYMouseReport(g_mouse.report, -4, 0);
+		setXYMouseReport(g_mouse.reportMouse, -4, 0);
+		g_mouse.tx_flags |= FLAG_MOUSE;
+		g_mouse.nextsend = HID_REPORTID_MOUSE;
 		break;
 
 	case JOY_RIGHT:
-		setXYMouseReport(g_mouse.report, 4, 0);
+		setXYMouseReport(g_mouse.reportMouse, 4, 0);
+		g_mouse.tx_flags |= FLAG_MOUSE;
 		break;
 
 	case JOY_UP:
-		setXYMouseReport(g_mouse.report, 0, -4);
+		setXYMouseReport(g_mouse.reportMouse, 0, -4);
+		g_mouse.tx_flags |= FLAG_MOUSE;
 		break;
 
 	case JOY_DOWN:
-		setXYMouseReport(g_mouse.report, 0, 4);
+		setXYMouseReport(g_mouse.reportMouse, 0, 4);
+		g_mouse.tx_flags |= FLAG_MOUSE;
 		break;
 	}
 }
@@ -115,8 +140,24 @@ static ErrorCode_t Mouse_GetReport(USBD_HANDLE_T hHid, USB_SETUP_PACKET *pSetup,
 	switch (pSetup->wValue.WB.H) {
 	case HID_REPORT_INPUT:
 		Mouse_UpdateReport();
-		*pBuffer = &g_mouse.report[0];
-		*plength = MOUSE_REPORT_SIZE;
+		//TODO: does this work?
+		switch(pSetup->wValue.WB.L)
+		{
+			case HID_REPORTID_MOUSE:
+				*pBuffer = &g_mouse.reportMouse[0];
+				*plength = MOUSE_REPORT_SIZE;
+				break;
+			case HID_REPORTID_KEYBOARD:
+				*pBuffer = &g_mouse.reportKeyboard[0];
+				*plength = KEYBOARD_REPORT_SIZE;
+				break;
+			case HID_REPORTID_JOYSTICK:
+				*pBuffer = &g_mouse.reportJoystick[0];
+				*plength = JOYSTICK_REPORT_SIZE;
+			//unkown next sending...
+			default:
+				return ERR_FAILED;
+		}
 		break;
 
 	case HID_REPORT_OUTPUT:				/* Not Supported */
@@ -162,7 +203,7 @@ static ErrorCode_t Mouse_EpIN_Hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t even
  ****************************************************************************/
 
 /* Mouse init routine. */
-ErrorCode_t Mouse_Init(USBD_HANDLE_T hUsb,
+ErrorCode_t HID_Init(USBD_HANDLE_T hUsb,
 					   USB_INTERFACE_DESCRIPTOR *pIntfDesc,
 					   uint32_t *mem_base,
 					   uint32_t *mem_size)
@@ -190,9 +231,9 @@ ErrorCode_t Mouse_Init(USBD_HANDLE_T hUsb,
 	hid_param.HID_SetReport = Mouse_SetReport;
 	hid_param.HID_EpIn_Hdlr  = Mouse_EpIN_Hdlr;
 	/* Init reports_data */
-	reports_data[0].len = Mouse_ReportDescSize;
+	reports_data[0].len = HID_ReportDescSize;
 	reports_data[0].idle_time = 0;
-	reports_data[0].desc = (uint8_t *) &Mouse_ReportDescriptor[0];
+	reports_data[0].desc = (uint8_t *) &HID_ReportDescriptor[0];
 	hid_param.report_data  = reports_data;
 
 	ret = USBD_API->hid->init(hUsb, &hid_param);
@@ -207,19 +248,53 @@ ErrorCode_t Mouse_Init(USBD_HANDLE_T hUsb,
 }
 
 /* Mouse tasks routine. */
-void Mouse_Tasks(void)
+void HID_Tasks(void)
 {
 	/* check device is configured before sending report. */
+
 	if ( USB_IsConfigured(g_mouse.hUsb)) {
 		if (g_mouse.tx_busy == 0) {
 			/* update report based on board state */
 			Mouse_UpdateReport();
 			/* send report data */
 			g_mouse.tx_busy = 1;
-			USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.report[0], MOUSE_REPORT_SIZE);
+			if((g_mouse.tx_flags & FLAG_MOUSE) == FLAG_MOUSE)
+			{
+				//send report
+				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
+				//clear flag
+				g_mouse.tx_flags &= ~(FLAG_MOUSE);
+				//return, we cannot send 2 reports at once.
+				return;
+			}
+			if((g_mouse.tx_flags & FLAG_KEYBOARD) == FLAG_KEYBOARD)
+			{
+				//send report
+				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportKeyboard[0], KEYBOARD_REPORT_SIZE);
+				//clear flag
+				g_mouse.tx_flags &= ~(FLAG_KEYBOARD);
+				//return, we cannot send 2 reports at once.
+				return;
+			}
+			if((g_mouse.tx_flags & FLAG_JOYSTICK) == FLAG_JOYSTICK)
+			{
+				//send report
+				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportJoystick[0], JOYSTICK_REPORT_SIZE);
+				//clear flag
+				g_mouse.tx_flags &= ~(FLAG_JOYSTICK);
+				//return, we cannot send 2 reports at once.
+				return;
+			}
+
+			//if we are here, no flags for required updates were set.
+			//send a keepalive packet (mouse report with previous set buttons, but no movement)
+			for(uint8_t i=2; i<MOUSE_REPORT_SIZE;i++)
+			{
+				g_mouse.reportMouse[2] = (uint8_t) -0;
+			}
+			USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
 		}
-	}
-	else {
+	} else {
 		/* reset busy flag if we get disconnected. */
 		g_mouse.tx_busy = 0;
 	}

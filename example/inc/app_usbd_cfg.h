@@ -44,8 +44,16 @@ extern "C"
  * @{
  */
 
-/* HID In/Out Endpoint Address */
-#define HID_EP_IN                           0x81
+/* HID In Endpoint Address */
+//#define HID_MOUSE_EP_IN                     0x81
+#define HID_EP_IN							0x81
+
+#define HID_REPORTID_MOUSE					0x01
+#define HID_REPORTID_KEYBOARD				0x02
+#define HID_REPORTID_JOYSTICK				0x03
+
+//#define HID_KEYBOARD_EP_IN					0x84
+//#define HID_JOYSTICK_EP_IN					0x85
 #define USB_HID_IF_NUM                      0
 /** Interval between mouse reports expressed in milliseconds for full-speed device. */
 #define HID_MOUSE_REPORT_INTERVAL_MS        10
@@ -82,7 +90,8 @@ extern "C"
 extern const uint8_t USB_DeviceDescriptor[];
 extern uint8_t USB_HsConfigDescriptor[];
 extern uint8_t USB_FsConfigDescriptor[];
-extern const uint8_t USB_StringDescriptor[];
+extern const uint8_t USB_StringDescriptorFABI[];
+extern const uint8_t USB_StringDescriptorFLipMouse[];
 extern const uint8_t USB_DeviceQualifier[];
 
 /**

@@ -29,23 +29,35 @@
  * this code.
  */
 
+#include <hid.h>
+#include "parser.h"
 #include "board.h"
 #include <stdio.h>
 #include <string.h>
 #include "app_usbd_cfg.h"
-#include "hid_mouse.h"
 #include "cdc_vcom.h"
 
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
 
+/* Transmit and receive ring buffers */
+STATIC RINGBUFF_T txring, rxring;
+
+/* Transmit and receive ring buffer sizes */
+#define UART_TXB_SIZE 64	/* Send */
+#define UART_RXB_SIZE 64	/* Receive */
+
+/* Transmit and receive buffers */
+static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
+
+
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
 
 static USBD_HANDLE_T g_hUsb;
-static uint8_t g_rxBuff[256];
+static uint8_t g_rxBuff[UART_TXB_SIZE];
 
 extern const  USBD_HW_API_T hw_api;
 extern const  USBD_CORE_API_T core_api;
@@ -84,6 +96,19 @@ static void usb_pin_clk_init(void)
 /*****************************************************************************
  * Public functions
  ****************************************************************************/
+
+/**
+ * @brief	UART interrupt handler using ring buffers
+ * @return	Nothing
+ */
+void UART_IRQHandler(void)
+{
+	/* Want to handle any errors? Do it here. */
+
+	/* Use default ring buffer handler. Override this with your own
+	   code if you need more capability. */
+	Chip_UART_IRQRBHandler(LPC_USART, &rxring, &txring);
+}
 
 /**
  * @brief	Handle interrupt from USB0
@@ -133,11 +158,40 @@ int main(void)
 	ErrorCode_t ret = LPC_OK;
 	uint32_t prompt = 0, rdCnt = 0;
 
-	/* Initialize board and chip */
-	Board_Init();
+	/* Initialize GPIOs */
+	//Board_Init();
+	Chip_GPIO_Init(LPC_GPIO);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 16, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_16 used for USB strings */
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 16);	/* set PIO0_16 as input */
 
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
+
+	/* Setup UART for 115.2K8N1 */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
+	Chip_UART_Init(LPC_USART);
+	Chip_UART_SetBaud(LPC_USART, 115200);
+	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
+	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
+	Chip_UART_TXEnable(LPC_USART);
+
+	/* Before using the ring buffers, initialize them using the ring
+	   buffer init function */
+	RingBuffer_Init(&rxring, rxbuff, 1, UART_RXB_SIZE);
+	RingBuffer_Init(&txring, txbuff, 1, UART_TXB_SIZE);
+
+	/* Enable receive data and line status interrupt */
+	Chip_UART_IntEnable(LPC_USART, (UART_IER_RBRINT | UART_IER_RLSINT));
+
+	/* preemption = 1, sub-priority = 1 */
+	NVIC_SetPriority(UART0_IRQn, 1);
+	NVIC_EnableIRQ(UART0_IRQn);
+
+	//TODO:do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
+
 
 	/* initilize call back structures */
 	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
@@ -148,7 +202,14 @@ int main(void)
 
 	/* Set the USB descriptors */
 	desc.device_desc = (uint8_t *) USB_DeviceDescriptor;
-	desc.string_desc = (uint8_t *) USB_StringDescriptor;
+	/* depending on PIO0_16, either FABI or FLipMouse strings are loaded */
+	uint32_t input = Chip_GPIO_GetPinState(LPC_GPIO, 0, 16);
+	if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 16) == 0)
+	{
+		desc.string_desc = (uint8_t *) USB_StringDescriptorFLipMouse;
+	} else {
+		desc.string_desc = (uint8_t *) USB_StringDescriptorFABI;
+	}
 
 	/* Note, to pass USBCV test full-speed only devices should have both
 	 * descriptor arrays point to same location and device_qualifier set
@@ -162,7 +223,7 @@ int main(void)
 	ret = USBD_API->hw->Init(&g_hUsb, &desc, &usb_param);
 	if (ret == LPC_OK) {
 
-		ret = Mouse_Init(g_hUsb,
+		ret = HID_Init(g_hUsb,
 						 (USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.high_speed_desc,
 																	USB_DEVICE_CLASS_HUMAN_INTERFACE),
 						 &usb_param.mem_base, &usb_param.mem_size);
@@ -181,20 +242,30 @@ int main(void)
 	while (1) {
 		/* If everything went well with stack init do the tasks or else sleep */
 		if (ret == LPC_OK) {
-			/* Do Mouse tasks */
-			Mouse_Tasks();
+			/* Do HID tasks (mouse, keyboard and joystick*/
+			HID_Tasks();
 
 			/* Check if host has connected and opened the VCOM port */
-			if ((vcom_connected() != 0) && (prompt == 0)) {
-				vcom_write("Hello World!!\r\n", 15);
-				prompt = 1;
+			if ((vcom_connected() != 0) && (prompt == 0)) prompt = 1;
+
+			/* read incoming bytes from UART */
+			rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+			/* either parse as keyboard/mouse/joystick commands or send to vcom */
+			if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 17) == false)	{
+				if(rdCnt != 0) parseBuffer(&g_rxBuff[0],rdCnt);
+			} else {
+				//if connected to vcom and bytes were in the ringbuffer, send to vcom
+				if(prompt && rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
 			}
-			/* If VCOM port is opened echo whatever we receive back to host. */
-			if (prompt) {
-				rdCnt = vcom_bread(&g_rxBuff[0], 256);
-				if (rdCnt) {
-					vcom_write(&g_rxBuff[0], rdCnt);
-				}
+
+			//independent from UART direction select:
+			//always send received data from vcom to UART
+			if(prompt)
+			{
+				//read from vcom to buffer
+				rdCnt = vcom_bread(&g_rxBuff[0], UART_TXB_SIZE);
+				//if something was received, put to UART ringbuffer
+				if (rdCnt) Chip_UART_SendRB(LPC_USART, &txring, &g_rxBuff[0], rdCnt);
 			}
 		}
 

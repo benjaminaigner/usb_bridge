@@ -8,7 +8,8 @@ C_SRCS += \
 ../example/src/composite_desc.c \
 ../example/src/composite_main.c \
 ../example/src/cr_startup_lpc11xx.c \
-../example/src/hid_mouse.c \
+../example/src/hid.c \
+../example/src/parser.c \
 ../example/src/sysinit.c 
 
 OBJS += \
@@ -16,7 +17,8 @@ OBJS += \
 ./example/src/composite_desc.o \
 ./example/src/composite_main.o \
 ./example/src/cr_startup_lpc11xx.o \
-./example/src/hid_mouse.o \
+./example/src/hid.o \
+./example/src/parser.o \
 ./example/src/sysinit.o 
 
 C_DEPS += \
@@ -24,7 +26,8 @@ C_DEPS += \
 ./example/src/composite_desc.d \
 ./example/src/composite_main.d \
 ./example/src/cr_startup_lpc11xx.d \
-./example/src/hid_mouse.d \
+./example/src/hid.d \
+./example/src/parser.d \
 ./example/src/sysinit.d 
 
 

@@ -40,37 +40,119 @@
  ****************************************************************************/
 
 /**
- * HID Mouse Report Descriptor
+ * HID Report Descriptor, including mouse, keyboard and joystick
  */
-const uint8_t Mouse_ReportDescriptor[] = {
+const uint8_t HID_ReportDescriptor[] = {
+	/*++++ HID mouse ++++*/
 	HID_UsagePage(HID_USAGE_PAGE_GENERIC),
 	HID_Usage(HID_USAGE_GENERIC_MOUSE),
 	HID_Collection(HID_Application),
-	HID_Usage(HID_USAGE_GENERIC_POINTER),
-	HID_Collection(HID_Physical),
-	HID_UsagePage(HID_USAGE_PAGE_BUTTON),
-	HID_UsageMin(1),
-	HID_UsageMax(3),
-	HID_LogicalMin(0),
-	HID_LogicalMax(1),
-	HID_ReportCount(3),
-	HID_ReportSize(1),
-	HID_Input(HID_Data | HID_Variable | HID_Absolute),
-	HID_ReportCount(1),
-	HID_ReportSize(5),
-	HID_Input(HID_Constant),
-	HID_UsagePage(HID_USAGE_PAGE_GENERIC),
-	HID_Usage(HID_USAGE_GENERIC_X),
-	HID_Usage(HID_USAGE_GENERIC_Y),
-	HID_LogicalMin( (uint8_t) -127),
-	HID_LogicalMax(127),
-	HID_ReportSize(8),
-	HID_ReportCount(2),
-	HID_Input(HID_Data | HID_Variable | HID_Relative),
+		HID_ReportID(HID_REPORTID_MOUSE),
+		HID_Usage(HID_USAGE_GENERIC_POINTER),
+		HID_Collection(HID_Physical),
+			HID_UsagePage(HID_USAGE_PAGE_BUTTON),
+			HID_UsageMin(1),
+			HID_UsageMax(3),
+			HID_LogicalMin(0),
+			HID_LogicalMax(1),
+			HID_ReportCount(3),
+			HID_ReportSize(1),
+			HID_Input(HID_Data | HID_Variable | HID_Absolute),
+			HID_ReportCount(1),
+			HID_ReportSize(5),
+			HID_Input(HID_Constant),
+			HID_UsagePage(HID_USAGE_PAGE_GENERIC),
+			HID_Usage(HID_USAGE_GENERIC_X),
+			HID_Usage(HID_USAGE_GENERIC_Y),
+			HID_LogicalMin( (uint8_t) -127),
+			HID_LogicalMax(127),
+			HID_ReportSize(8),
+			HID_ReportCount(2),
+			HID_Input(HID_Data | HID_Variable | HID_Relative),
+		HID_EndCollection,
 	HID_EndCollection,
+	/*++++ HID keyboard ++++*/
+	HID_UsagePage(HID_USAGE_PAGE_GENERIC),
+	HID_Usage(HID_USAGE_GENERIC_KEYBOARD),
+	HID_Collection(HID_Application),
+		HID_ReportID(HID_REPORTID_KEYBOARD),
+		HID_ReportSize(1),
+		HID_ReportCount(8),
+		HID_UsagePage(HID_USAGE_PAGE_KEYBOARD),
+		HID_UsageMin(224),
+		HID_UsageMax(231),
+		HID_LogicalMin(0),
+		HID_LogicalMax(1),
+		HID_Input(HID_Data | HID_Variable | HID_Absolute),
+		HID_ReportCount(1),
+		HID_ReportSize(8),
+		HID_Input(0x03), //from usb.c from Teensyduino
+		HID_ReportCount(5),
+		HID_ReportSize(1),
+		HID_UsagePage(HID_USAGE_PAGE_LED),
+		HID_UsageMin(1),
+		HID_UsageMax(5),
+		HID_Output(HID_Data | HID_Variable | HID_Absolute),
+		HID_ReportCount(1),
+		HID_ReportSize(3),
+		HID_Output(0x03),
+		HID_ReportCount(6),
+		HID_ReportSize(8),
+		HID_LogicalMin(0),
+		HID_LogicalMax(104),
+		HID_UsagePage(HID_USAGE_PAGE_KEYBOARD),
+		HID_UsageMin(0),
+		HID_UsageMax(104),
+		HID_Input(HID_Data | HID_Array),
+	HID_EndCollection,
+	/*++++ HID joystick ++++*/
+	//according to teensy USB_hid -> usb.c
+	//Thanks again Paul Stoffregen (PJRC), you are a hero!!!
+	HID_UsagePage(HID_USAGE_PAGE_GENERIC),
+	HID_Usage(HID_USAGE_GENERIC_JOYSTICK),
+	HID_Collection(HID_Application),
+		HID_ReportID(HID_REPORTID_JOYSTICK),
+		HID_LogicalMin(0),
+		HID_LogicalMax(1),
+		HID_ReportSize(1),
+		HID_ReportCount(32),
+		HID_UsagePage(HID_USAGE_PAGE_BUTTON),
+		HID_UsageMin(1),
+		HID_UsageMax(32),
+		HID_Input(HID_Variable | HID_Absolute),
+		HID_LogicalMin(0),
+		HID_LogicalMax(7),
+		HID_PhysicalMin(0),
+		HID_PhysicalMaxS(315),
+		HID_ReportSize(4),
+		HID_ReportCount(1),
+		HID_Unit(20),
+		HID_UsagePage(HID_USAGE_PAGE_GENERIC),
+		HID_Usage(HID_USAGE_GENERIC_HATSWITCH),
+		HID_Input(HID_Variable | HID_Absolute | HID_NullState),
+		HID_UsagePage(HID_USAGE_PAGE_GENERIC),
+		HID_Usage(HID_USAGE_GENERIC_POINTER),
+		HID_Collection(0),
+		HID_LogicalMin(0),
+		HID_LogicalMaxL(1023),
+		HID_ReportSize(10),
+		HID_ReportCount(4),
+		HID_Usage(HID_USAGE_GENERIC_X),
+		HID_Usage(HID_USAGE_GENERIC_Y),
+		HID_Usage(HID_USAGE_GENERIC_Z),
+		HID_Usage(HID_USAGE_GENERIC_RZ),
+		HID_Input(HID_Variable | HID_Absolute),
+		HID_EndCollection,
+		HID_LogicalMin(0),
+		HID_LogicalMaxL(1023),
+		HID_ReportSize(10),
+		HID_ReportCount(2),
+		HID_Usage(HID_USAGE_GENERIC_SLIDER),
+		HID_Usage(HID_USAGE_GENERIC_SLIDER),
+		HID_Input(HID_Variable | HID_Absolute),
 	HID_EndCollection,
 };
-const uint16_t Mouse_ReportDescSize = sizeof(Mouse_ReportDescriptor);
+const uint16_t HID_ReportDescSize = sizeof(HID_ReportDescriptor);
 
 /**
  * USB Standard Device Descriptor
@@ -118,8 +200,8 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	0x03,							/* bNumInterfaces */
 	0x01,							/* bConfigurationValue */
 	0x00,							/* iConfiguration */
-	USB_CONFIG_SELF_POWERED,		/* bmAttributes */
-	USB_CONFIG_POWER_MA(2),			/* bMaxPower */
+	USB_CONFIG_BUS_POWERED,		/* bmAttributes */
+	USB_CONFIG_POWER_MA(500),			/* bMaxPower */
 
 	/* Interface 0, Alternate Setting 0, HID Class */
 	USB_INTERFACE_DESC_SIZE,		/* bLength */
@@ -128,8 +210,8 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	0x00,							/* bAlternateSetting */
 	0x01,							/* bNumEndpoints */
 	USB_DEVICE_CLASS_HUMAN_INTERFACE,	/* bInterfaceClass */
-	HID_SUBCLASS_BOOT,				/* bInterfaceSubClass */
-	HID_PROTOCOL_MOUSE,				/* bInterfaceProtocol */
+	0x00, /*HID_SUBCLASS_BOOT,*/				/* bInterfaceSubClass */
+	0x00, /*HID_PROTOCOL_MOUSE,*/				/* bInterfaceProtocol */
 	0x04,							/* iInterface */
 	/* HID Class Descriptor */
 	/* HID_DESC_OFFSET = 0x0012 */
@@ -139,13 +221,14 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	0x00,							/* bCountryCode */
 	0x01,							/* bNumDescriptors */
 	HID_REPORT_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	WBVAL(sizeof(Mouse_ReportDescriptor)),	/* wDescriptorLength */
+	WBVAL(sizeof(HID_ReportDescriptor)),	/* wDescriptorLength */
 	/* Endpoint, HID Interrupt In */
 	USB_ENDPOINT_DESC_SIZE,			/* bLength */
 	USB_ENDPOINT_DESCRIPTOR_TYPE,	/* bDescriptorType */
 	HID_EP_IN,						/* bEndpointAddress */
 	USB_ENDPOINT_TYPE_INTERRUPT,	/* bmAttributes */
-	WBVAL(0x0008),					/* wMaxPacketSize */
+	//WBVAL(0x0008),					/* wMaxPacketSize */
+	WBVAL(16), /* wMaxPacketSize */
 	HID_MOUSE_REPORT_INTERVAL,		/* bInterval */
 
 	/* Interface association descriptor IAD*/
@@ -228,83 +311,168 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 };
 
 /**
- * USB String Descriptor (optional)
+ * USB String Descriptor for FLipMouse device
  */
-const uint8_t USB_StringDescriptor[] = {
+const uint8_t USB_StringDescriptorFLipMouse[] = {
 	/* Index 0x00: LANGID Codes */
 	0x04,							/* bLength */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	WBVAL(0x0409),					/* wLANGID : US English */
 	/* Index 0x01: Manufacturer */
-	(18 * 2 + 2),					/* bLength (18 Char + Type + lenght) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'N', 0,
-	'X', 0,
-	'P', 0,
-	' ', 0,
-	'S', 0,
-	'e', 0,
-	'm', 0,
-	'i', 0,
-	'c', 0,
-	'o', 0,
-	'n', 0,
-	'd', 0,
-	'u', 0,
-	'c', 0,
-	't', 0,
-	'o', 0,
-	'r', 0,
-	's', 0,
-	/* Index 0x02: Product */
-	(13 * 2 + 2),					/* bLength (13 Char + Type + lenght) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'L', 0,
-	'P', 0,
-	'C', 0,
-	'1', 0,
-	'1', 0,
-	'U', 0,
-	'x', 0,
-	' ', 0,
-	'M', 0,
-	'O', 0,
-	'U', 0,
-	'S', 0,
-	'E', 0,
-	/* Index 0x03: Serial Number */
-	(13 * 2 + 2),					/* bLength (13 Char + Type + lenght) */
+	(19 * 2 + 2),					/* bLength (19 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	'A', 0,
-	'B', 0,
+	's', 0,
+	'T', 0,
+	'e', 0,
+	'R', 0,
+	'I', 0,
 	'C', 0,
-	'D', 0,
-	'1', 0,
-	'2', 0,
-	'3', 0,
-	'4', 0,
-	'5', 0,
-	'6', 0,
-	'7', 0,
-	'8', 0,
-	'9', 0,
-	/* Index 0x04: Interface 0, Alternate Setting 0 */
+	'S', 0,
+	' ', 0,
+	'F', 0,
+	'o', 0,
+	'u', 0,
+	'n', 0,
+	'd', 0,
+	'a', 0,
+	't', 0,
+	'i', 0,
+	'o', 0,
+	'n', 0,
+	/* Index 0x02: Product */
 	(9 * 2 + 2),					/* bLength (9 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'H', 0,
-	'I', 0,
-	'D', 0,
-	' ', 0,
+	'F', 0,
+	'L', 0,
+	'i', 0,
+	'p', 0,
 	'M', 0,
-	'O', 0,
-	'U', 0,
-	'S', 0,
-	'E', 0,
+	'o', 0,
+	'u', 0,
+	's', 0,
+	'e', 0,
+	/* Index 0x03: Serial Number */
+	(4 * 2 + 2),					/* bLength (13 Char + Type + lenght) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	'v', 0,
+	'3', 0,
+	'.', 0,
+	'0', 0,
+	/* Index 0x04: Interface 0, Alternate Setting 0 */
+	(23 * 2 + 2),					/* bLength (9 Char + Type + lenght) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	'M', 0,
+	'o', 0,
+	'u', 0,
+	's', 0,
+	'e', 0,
+	'/', 0,
+	'K', 0,
+	'e', 0,
+	'y', 0,
+	'b', 0,
+	'o', 0,
+	'a', 0,
+	'r', 0,
+	'd', 0,
+	'/', 0,
+	'J', 0,
+	'o', 0,
+	'y', 0,
+	's', 0,
+	't', 0,
+	'i', 0,
+	'c', 0,
+	'k', 0,
 	/* Index 0x05: Interface 1, Alternate Setting 0 */
-	( 4 * 2 + 2),						/* bLength (4 Char + Type + lenght) */
+	( 6 * 2 + 2),						/* bLength (4 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,			/* bDescriptorType */
-	'V', 0,
+	'S', 0,
+	'e', 0,
+	'r', 0,
+	'i', 0,
+	'a', 0,
+	'l', 0,
+};
+
+/**
+ * USB String Descriptor for FABI device
+ */
+const uint8_t USB_StringDescriptorFABI[] = {
+	/* Index 0x00: LANGID Codes */
+	0x04,							/* bLength */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	WBVAL(0x0409),					/* wLANGID : US English */
+	/* Index 0x01: Manufacturer */
+	(19 * 2 + 2),					/* bLength (19 Char + Type + length) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	'A', 0,
+	's', 0,
+	'T', 0,
+	'e', 0,
+	'R', 0,
+	'I', 0,
 	'C', 0,
-	'O', 0,
+	'S', 0,
+	' ', 0,
+	'F', 0,
+	'o', 0,
+	'u', 0,
+	'n', 0,
+	'd', 0,
+	'a', 0,
+	't', 0,
+	'i', 0,
+	'o', 0,
+	'n', 0,
+	/* Index 0x02: Product */
+	(4 * 2 + 2),					/* bLength (4 Char + Type + length) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	'F', 0,
+	'A', 0,
+	'B', 0,
+	'I', 0,
+	/* Index 0x03: Serial Number */
+	(4 * 2 + 2),					/* bLength (4 Char + Type + length) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
+	'v', 0,
+	'3', 0,
+	'.', 0,
+	'0', 0,
+	/* Index 0x04: Interface 0, Alternate Setting 0 */
+	(23 * 2 + 2),					/* bLength (23 Char + Type + length) */
+	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	'M', 0,
+	'o', 0,
+	'u', 0,
+	's', 0,
+	'e', 0,
+	'/', 0,
+	'K', 0,
+	'e', 0,
+	'y', 0,
+	'b', 0,
+	'o', 0,
+	'a', 0,
+	'r', 0,
+	'd', 0,
+	'/', 0,
+	'J', 0,
+	'o', 0,
+	'y', 0,
+	's', 0,
+	't', 0,
+	'i', 0,
+	'c', 0,
+	'k', 0,
+	/* Index 0x05: Interface 1, Alternate Setting 0 */
+	( 6 * 2 + 2),						/* bLength (4 Char + Type + lenght) */
+	USB_STRING_DESCRIPTOR_TYPE,			/* bDescriptorType */
+	'S', 0,
+	'e', 0,
+	'r', 0,
+	'i', 0,
+	'a', 0,
+	'l', 0,
 };
