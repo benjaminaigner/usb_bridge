@@ -9,6 +9,7 @@
 #define INC_PARSER_H_
 
 #include "lpc_types.h"
+#include "hid.h"
 #include <stdio.h>
 #include <string.h>
 

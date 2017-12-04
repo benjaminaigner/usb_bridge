@@ -52,22 +52,23 @@ const uint8_t HID_ReportDescriptor[] = {
 		HID_Collection(HID_Physical),
 			HID_UsagePage(HID_USAGE_PAGE_BUTTON),
 			HID_UsageMin(1),
-			HID_UsageMax(3),
+			HID_UsageMax(8),
 			HID_LogicalMin(0),
 			HID_LogicalMax(1),
-			HID_ReportCount(3),
+			HID_ReportCount(8),
 			HID_ReportSize(1),
 			HID_Input(HID_Data | HID_Variable | HID_Absolute),
-			HID_ReportCount(1),
-			HID_ReportSize(5),
-			HID_Input(HID_Constant),
+			//HID_ReportCount(1),
+			//HID_ReportSize(5),
+			//HID_Input(HID_Constant),
 			HID_UsagePage(HID_USAGE_PAGE_GENERIC),
 			HID_Usage(HID_USAGE_GENERIC_X),
 			HID_Usage(HID_USAGE_GENERIC_Y),
+			HID_Usage(HID_USAGE_GENERIC_WHEEL),
 			HID_LogicalMin( (uint8_t) -127),
 			HID_LogicalMax(127),
 			HID_ReportSize(8),
-			HID_ReportCount(2),
+			HID_ReportCount(3),
 			HID_Input(HID_Data | HID_Variable | HID_Relative),
 		HID_EndCollection,
 	HID_EndCollection,
@@ -177,6 +178,7 @@ ALIGNED(4) const uint8_t USB_DeviceDescriptor[] = {
 /**
  * USB FSConfiguration Descriptor
  * All Descriptors (Configuration, Interface, Endpoint, Class, Vendor)
+ * WARNING: if USB_FsConfigDescriptor is changed, the index in parser.c (referencing bCountryCode) MUST be replaced!
  */
 ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	/* Configuration 1 */
@@ -218,6 +220,7 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	HID_DESC_SIZE,					/* bLength */
 	HID_HID_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	WBVAL(0x0111),					/* bcdHID : 1.11*/
+	//WARNING: if USB_FsConfigDescriptor is changed, the index in parser.c (referencing to this position) MUST be replaced!
 	0x00,							/* bCountryCode */
 	0x01,							/* bNumDescriptors */
 	HID_REPORT_DESCRIPTOR_TYPE,		/* bDescriptorType */
@@ -341,7 +344,7 @@ const uint8_t USB_StringDescriptorFLipMouse[] = {
 	'o', 0,
 	'n', 0,
 	/* Index 0x02: Product */
-	(9 * 2 + 2),					/* bLength (9 Char + Type + lenght) */
+	(14 * 2 + 2),					/* bLength (14 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	'F', 0,
 	'L', 0,
@@ -352,6 +355,11 @@ const uint8_t USB_StringDescriptorFLipMouse[] = {
 	'u', 0,
 	's', 0,
 	'e', 0,
+	'/', 0,
+	'F', 0,
+	'A', 0,
+	'B', 0,
+	'I', 0,
 	/* Index 0x03: Serial Number */
 	(4 * 2 + 2),					/* bLength (13 Char + Type + lenght) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
@@ -361,87 +369,6 @@ const uint8_t USB_StringDescriptorFLipMouse[] = {
 	'0', 0,
 	/* Index 0x04: Interface 0, Alternate Setting 0 */
 	(23 * 2 + 2),					/* bLength (9 Char + Type + lenght) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'M', 0,
-	'o', 0,
-	'u', 0,
-	's', 0,
-	'e', 0,
-	'/', 0,
-	'K', 0,
-	'e', 0,
-	'y', 0,
-	'b', 0,
-	'o', 0,
-	'a', 0,
-	'r', 0,
-	'd', 0,
-	'/', 0,
-	'J', 0,
-	'o', 0,
-	'y', 0,
-	's', 0,
-	't', 0,
-	'i', 0,
-	'c', 0,
-	'k', 0,
-	/* Index 0x05: Interface 1, Alternate Setting 0 */
-	( 6 * 2 + 2),						/* bLength (4 Char + Type + lenght) */
-	USB_STRING_DESCRIPTOR_TYPE,			/* bDescriptorType */
-	'S', 0,
-	'e', 0,
-	'r', 0,
-	'i', 0,
-	'a', 0,
-	'l', 0,
-};
-
-/**
- * USB String Descriptor for FABI device
- */
-const uint8_t USB_StringDescriptorFABI[] = {
-	/* Index 0x00: LANGID Codes */
-	0x04,							/* bLength */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	WBVAL(0x0409),					/* wLANGID : US English */
-	/* Index 0x01: Manufacturer */
-	(19 * 2 + 2),					/* bLength (19 Char + Type + length) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'A', 0,
-	's', 0,
-	'T', 0,
-	'e', 0,
-	'R', 0,
-	'I', 0,
-	'C', 0,
-	'S', 0,
-	' ', 0,
-	'F', 0,
-	'o', 0,
-	'u', 0,
-	'n', 0,
-	'd', 0,
-	'a', 0,
-	't', 0,
-	'i', 0,
-	'o', 0,
-	'n', 0,
-	/* Index 0x02: Product */
-	(4 * 2 + 2),					/* bLength (4 Char + Type + length) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'F', 0,
-	'A', 0,
-	'B', 0,
-	'I', 0,
-	/* Index 0x03: Serial Number */
-	(4 * 2 + 2),					/* bLength (4 Char + Type + length) */
-	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
-	'v', 0,
-	'3', 0,
-	'.', 0,
-	'0', 0,
-	/* Index 0x04: Interface 0, Alternate Setting 0 */
-	(23 * 2 + 2),					/* bLength (23 Char + Type + length) */
 	USB_STRING_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	'M', 0,
 	'o', 0,

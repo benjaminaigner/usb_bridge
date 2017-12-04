@@ -157,14 +157,18 @@ int main(void)
 	USB_CORE_DESCS_T desc;
 	ErrorCode_t ret = LPC_OK;
 	uint32_t prompt = 0, rdCnt = 0;
+	const char strParamErr[] = "_parameter error\n";
+	const char strOK[] = "_OK\n";
+	const char strUnknown[] = "_unknown command\n";
+	const char strUnknown2[] = "_unknown error code\n";
 
 	/* Initialize GPIOs */
 	//Board_Init();
 	Chip_GPIO_Init(LPC_GPIO);
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
 	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 16, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_16 used for USB strings */
-	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 16);	/* set PIO0_16 as input */
+	//Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 16, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_16 used for USB strings */
+	//Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 16);	/* set PIO0_16 as input */
 
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
@@ -202,14 +206,8 @@ int main(void)
 
 	/* Set the USB descriptors */
 	desc.device_desc = (uint8_t *) USB_DeviceDescriptor;
-	/* depending on PIO0_16, either FABI or FLipMouse strings are loaded */
-	uint32_t input = Chip_GPIO_GetPinState(LPC_GPIO, 0, 16);
-	if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 16) == 0)
-	{
-		desc.string_desc = (uint8_t *) USB_StringDescriptorFLipMouse;
-	} else {
-		desc.string_desc = (uint8_t *) USB_StringDescriptorFABI;
-	}
+	/* FLipMouse strings are loaded */
+	desc.string_desc = (uint8_t *) USB_StringDescriptorFLipMouse;
 
 	/* Note, to pass USBCV test full-speed only devices should have both
 	 * descriptor arrays point to same location and device_qualifier set
@@ -252,7 +250,28 @@ int main(void)
 			rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
 			/* either parse as keyboard/mouse/joystick commands or send to vcom */
 			if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 17) == false)	{
-				if(rdCnt != 0) parseBuffer(&g_rxBuff[0],rdCnt);
+				if(rdCnt != 0)
+				{
+					switch(parseBuffer(&g_rxBuff[0],rdCnt))
+					{
+						//parameter length too short
+						case 1:
+							Chip_UART_SendRB(LPC_USART, &txring, strParamErr, sizeof(strParamErr));
+						break;
+						//everything fine
+						case 0:
+							Chip_UART_SendRB(LPC_USART, &txring, strOK, sizeof(strOK));
+						break;
+						//unknown command
+						case 2:
+							Chip_UART_SendRB(LPC_USART, &txring, strUnknown, sizeof(strUnknown));
+						break;
+						//unknown return error code
+						default:
+							Chip_UART_SendRB(LPC_USART, &txring, strUnknown2, sizeof(strUnknown2));
+						break;
+					}
+				}
 			} else {
 				//if connected to vcom and bytes were in the ringbuffer, send to vcom
 				if(prompt && rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);

@@ -55,7 +55,7 @@ typedef struct {
 	uint8_t tx_busy;	/*!< Flag indicating whether a report is pending in endpoint queue. */
 	uint8_t tx_flags;   //flag signalling which HID endpoint needs sending (1<<0 mouse, 1<<1 keyboard, 1<<2 joystick)
 	uint8_t nextsend;	//which report has to be sent next (equal to reportid)
-	uint8_t nextlen;	//length of next sent report
+	uint8_t tx_autoclear;	//length of next sent report
 } Mouse_Ctrl_T;
 
 /** Singleton instance of mouse control */
@@ -71,30 +71,56 @@ extern const uint16_t HID_ReportDescSize;
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
-static void setXYMouseReport(uint8_t *rep, int8_t xVal, int8_t yVal)
-{
-	rep[2] = (uint8_t) xVal;
-	rep[3] = (uint8_t) yVal;
-}
 
-static void setLeftButtonMouseReport(uint8_t *rep, uint8_t state)
-{
-	if (state) {
-		rep[1] |= 0x01;
-	}
-	else {
-		rep[1] &= ~0x01;
-	}
-}
-
-/* Routine to update mouse state report */
-static void Mouse_UpdateReport(void)
+void Keyboard_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 {
 	//keyboard report structure:
 	//[0] reportID
 	//[1] reserved
 	//[2] modifier
 	//[3]-[8] keycodes
+	g_mouse.reportKeyboard[0] = HID_REPORTID_KEYBOARD;
+	memcpy(&g_mouse.reportKeyboard[2], reportData, KEYBOARD_REPORT_SIZE-2);
+	//set flag to update report (send to host)
+	g_mouse.tx_flags |= FLAG_KEYBOARD;
+	//if autoclear is set, the HID task clears the report after this one is sent
+	if(autoClear) g_mouse.tx_autoclear |= FLAG_KEYBOARD;
+	else g_mouse.tx_autoclear &= ~FLAG_KEYBOARD;
+}
+
+void Joystick_UpdateReport(uint8_t *reportData)
+{
+	//joystick report structure:
+	//TBA
+	g_mouse.reportJoystick[0] = HID_REPORTID_JOYSTICK;
+	memcpy(&g_mouse.reportJoystick[1], reportData, JOYSTICK_REPORT_SIZE-1);
+	//set flag to update report (send to host)
+	g_mouse.tx_flags |= FLAG_JOYSTICK;
+}
+
+void UpdateReport(void)
+{
+	//Update a general report, requested by host...
+}
+
+/* Routine to update mouse state report */
+void Mouse_UpdateReport(uint8_t *reportData, uint8_t autoClear)
+{
+	//mouse report structure:
+	//[0] reportID
+	//[1] buttons
+	//[2/3] X/Y (-127/127)
+	//[4] mouse scroll wheel (-127/127)
+	g_mouse.reportMouse[0] = HID_REPORTID_MOUSE;
+	memcpy(&g_mouse.reportMouse[1], reportData, MOUSE_REPORT_SIZE-1);
+	//set flag to update report (send to host)
+	g_mouse.tx_flags |= FLAG_MOUSE;
+	//if autoclear is set, the HID task clears the report after this one is sent
+	if(autoClear) g_mouse.tx_autoclear |= FLAG_MOUSE;
+	else g_mouse.tx_autoclear &= ~FLAG_MOUSE;
+}
+/*
+
 	uint8_t joystick_status = Joystick_GetStatus();
 	CLEAR_HID_MOUSE_REPORT(&g_mouse.reportMouse[0]);
 	CLEAR_HID_KEYBOARD_REPORT(&g_mouse.reportKeyboard[0]);
@@ -131,7 +157,7 @@ static void Mouse_UpdateReport(void)
 		g_mouse.tx_flags |= FLAG_MOUSE;
 		break;
 	}
-}
+}*/
 
 /* HID Get Report Request Callback. Called automatically on HID Get Report Request */
 static ErrorCode_t Mouse_GetReport(USBD_HANDLE_T hHid, USB_SETUP_PACKET *pSetup, uint8_t * *pBuffer, uint16_t *plength)
@@ -139,7 +165,7 @@ static ErrorCode_t Mouse_GetReport(USBD_HANDLE_T hHid, USB_SETUP_PACKET *pSetup,
 	/* ReportID = SetupPacket.wValue.WB.L; */
 	switch (pSetup->wValue.WB.H) {
 	case HID_REPORT_INPUT:
-		Mouse_UpdateReport();
+		UpdateReport();
 		//TODO: does this work?
 		switch(pSetup->wValue.WB.L)
 		{
@@ -247,6 +273,12 @@ ErrorCode_t HID_Init(USBD_HANDLE_T hUsb,
 	return ret;
 }
 
+/* reset the USB device (necessary for re-evaluation of the HID country code */
+void USB_resetdevice(void)
+{
+	mwUSB_ResetCore(g_mouse.hUsb);
+}
+
 /* Mouse tasks routine. */
 void HID_Tasks(void)
 {
@@ -255,7 +287,7 @@ void HID_Tasks(void)
 	if ( USB_IsConfigured(g_mouse.hUsb)) {
 		if (g_mouse.tx_busy == 0) {
 			/* update report based on board state */
-			Mouse_UpdateReport();
+			UpdateReport();
 			/* send report data */
 			g_mouse.tx_busy = 1;
 			if((g_mouse.tx_flags & FLAG_MOUSE) == FLAG_MOUSE)
