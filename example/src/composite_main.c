@@ -158,7 +158,7 @@ int main(void)
 	ErrorCode_t ret = LPC_OK;
 	uint32_t prompt = 0, rdCnt = 0;
 	const char strParamErr[] = "_parameter error\n";
-	const char strOK[] = "_OK\n";
+	const char strOK[] = "__OK__\n";
 	const char strUnknown[] = "_unknown command\n";
 	const char strUnknown2[] = "_unknown error code\n";
 
@@ -260,7 +260,8 @@ int main(void)
 						break;
 						//everything fine
 						case 0:
-							Chip_UART_SendRB(LPC_USART, &txring, strOK, sizeof(strOK));
+							//do not send anything back, garbages the ESP32
+							//Chip_UART_SendRB(LPC_USART, &txring, strOK, sizeof(strOK));
 						break;
 						//unknown command
 						case 2:

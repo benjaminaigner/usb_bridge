@@ -162,9 +162,9 @@ ALIGNED(4) const uint8_t USB_DeviceDescriptor[] = {
 	USB_DEVICE_DESC_SIZE,			/* bLength */
 	USB_DEVICE_DESCRIPTOR_TYPE,		/* bDescriptorType */
 	WBVAL(0x0200),					/* bcdUSB : 2.00*/
-	0x00,							/* bDeviceClass */
-	0x00,							/* bDeviceSubClass */
-	0x00,							/* bDeviceProtocol */
+	0xEF,							/* bDeviceClass */
+	0x02,							/* bDeviceSubClass */
+	0x01,							/* bDeviceProtocol */
 	USB_MAX_PACKET0,				/* bMaxPacketSize0 */
 	WBVAL(0x1FC9),					/* idVendor */
 	WBVAL(0x0087),					/* idProduct */

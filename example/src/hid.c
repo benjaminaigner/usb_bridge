@@ -76,11 +76,12 @@ void Keyboard_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 {
 	//keyboard report structure:
 	//[0] reportID
-	//[1] reserved
-	//[2] modifier
+	//[1] modifier
+	//[2] reserved
 	//[3]-[8] keycodes
 	g_mouse.reportKeyboard[0] = HID_REPORTID_KEYBOARD;
-	memcpy(&g_mouse.reportKeyboard[2], reportData, KEYBOARD_REPORT_SIZE-2);
+	g_mouse.reportKeyboard[1] = reportData[0];
+	memcpy(&g_mouse.reportKeyboard[3], &reportData[1], KEYBOARD_REPORT_SIZE-3);
 	//set flag to update report (send to host)
 	g_mouse.tx_flags |= FLAG_KEYBOARD;
 	//if autoclear is set, the HID task clears the report after this one is sent
@@ -289,9 +290,10 @@ void HID_Tasks(void)
 			/* update report based on board state */
 			UpdateReport();
 			/* send report data */
-			g_mouse.tx_busy = 1;
 			if((g_mouse.tx_flags & FLAG_MOUSE) == FLAG_MOUSE)
 			{
+				//active
+				g_mouse.tx_busy = 1;
 				//send report
 				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
 				//clear flag
@@ -301,6 +303,8 @@ void HID_Tasks(void)
 			}
 			if((g_mouse.tx_flags & FLAG_KEYBOARD) == FLAG_KEYBOARD)
 			{
+				//active
+				g_mouse.tx_busy = 1;
 				//send report
 				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportKeyboard[0], KEYBOARD_REPORT_SIZE);
 				//clear flag
@@ -310,6 +314,8 @@ void HID_Tasks(void)
 			}
 			if((g_mouse.tx_flags & FLAG_JOYSTICK) == FLAG_JOYSTICK)
 			{
+				//active
+				g_mouse.tx_busy = 1;
 				//send report
 				USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportJoystick[0], JOYSTICK_REPORT_SIZE);
 				//clear flag
@@ -320,11 +326,11 @@ void HID_Tasks(void)
 
 			//if we are here, no flags for required updates were set.
 			//send a keepalive packet (mouse report with previous set buttons, but no movement)
-			for(uint8_t i=2; i<MOUSE_REPORT_SIZE;i++)
+			/*for(uint8_t i=2; i<MOUSE_REPORT_SIZE;i++)
 			{
 				g_mouse.reportMouse[2] = (uint8_t) -0;
-			}
-			USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
+			}*/
+			//USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
 		}
 	} else {
 		/* reset busy flag if we get disconnected. */
