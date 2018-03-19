@@ -87,6 +87,10 @@ void Keyboard_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 	//if autoclear is set, the HID task clears the report after this one is sent
 	if(autoClear) g_mouse.tx_autoclear |= FLAG_KEYBOARD;
 	else g_mouse.tx_autoclear &= ~FLAG_KEYBOARD;
+	//call HID_Task
+	//if USB is active, nothing will be done (update will be sent on next interrupt)
+	//if not, a transmission will be started
+	HID_Tasks();
 }
 
 void Joystick_UpdateReport(uint8_t *reportData)
@@ -97,6 +101,10 @@ void Joystick_UpdateReport(uint8_t *reportData)
 	memcpy(&g_mouse.reportJoystick[1], reportData, JOYSTICK_REPORT_SIZE-1);
 	//set flag to update report (send to host)
 	g_mouse.tx_flags |= FLAG_JOYSTICK;
+	//call HID_Task
+	//if USB is active, nothing will be done (update will be sent on next interrupt)
+	//if not, a transmission will be started
+	HID_Tasks();
 }
 
 void UpdateReport(void)
@@ -119,6 +127,10 @@ void Mouse_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 	//if autoclear is set, the HID task clears the report after this one is sent
 	if(autoClear) g_mouse.tx_autoclear |= FLAG_MOUSE;
 	else g_mouse.tx_autoclear &= ~FLAG_MOUSE;
+	//call HID_Task
+	//if USB is active, nothing will be done (update will be sent on next interrupt)
+	//if not, a transmission will be started
+	HID_Tasks();
 }
 /*
 
