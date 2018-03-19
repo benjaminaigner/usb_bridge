@@ -45,8 +45,8 @@
 STATIC RINGBUFF_T txring, rxring;
 
 /* Transmit and receive ring buffer sizes */
-#define UART_TXB_SIZE 64	/* Send */
-#define UART_RXB_SIZE 64	/* Receive */
+#define UART_TXB_SIZE 128	/* Send */
+#define UART_RXB_SIZE 128	/* Receive */
 
 /* Transmit and receive buffers */
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
@@ -56,6 +56,7 @@ static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
  * Public types/enumerations/variables
  ****************************************************************************/
 
+static uint8_t uartidleflag = 0;
 static USBD_HANDLE_T g_hUsb;
 static uint8_t g_rxBuff[UART_TXB_SIZE];
 
@@ -103,8 +104,10 @@ static void usb_pin_clk_init(void)
  */
 void UART_IRQHandler(void)
 {
-	/* Want to handle any errors? Do it here. */
-
+	/* Reset timer 0 */
+	Chip_TIMER_Reset(LPC_TIMER32_0);
+	uartidleflag = 0;
+	Chip_TIMER_Enable(LPC_TIMER32_0);
 	/* Use default ring buffer handler. Override this with your own
 	   code if you need more capability. */
 	Chip_UART_IRQRBHandler(LPC_USART, &rxring, &txring);
@@ -147,8 +150,20 @@ USB_INTERFACE_DESCRIPTOR *find_IntfDesc(const uint8_t *pDesc, uint32_t intfClass
 	return pIntfDesc;
 }
 
+void TIMER32_0_IRQHandler(void)
+{
+	if (Chip_TIMER_MatchPending(LPC_TIMER32_0, 1)) {
+		Chip_TIMER_ClearMatch(LPC_TIMER32_0, 1);
+		/* if UART input direction is set to HID, set idle flag */
+		uartidleflag = 1;
+		Chip_TIMER_Disable(LPC_TIMER32_0);
+	}
+}
+
 /**
  * @brief	main routine for blinky example
+ * @todo Reports are delayed by one cycle!!!!
+ * @todo Send events, even if not updated. (except relative reports, like mouse axis)
  * @return	Function should not exit.
  */
 int main(void)
@@ -177,7 +192,8 @@ int main(void)
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
-	Chip_UART_SetBaud(LPC_USART, 115200);
+	//Chip_UART_SetBaud(LPC_USART, 115200);
+	Chip_UART_SetBaud(LPC_USART, 38400); /** @todo change this back on final PCB */
 	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
 	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
 	Chip_UART_TXEnable(LPC_USART);
@@ -193,6 +209,20 @@ int main(void)
 	/* preemption = 1, sub-priority = 1 */
 	NVIC_SetPriority(UART0_IRQn, 1);
 	NVIC_EnableIRQ(UART0_IRQn);
+
+	/* enable timer 0 for UART timeout */
+	Chip_TIMER_Init(LPC_TIMER32_0);
+	/* Timer rate is system clock rate */
+	uint32_t timerFreq = Chip_Clock_GetSystemClockRate();
+
+	/* Timer setup for match and interrupt at TICKRATE_HZ */
+	Chip_TIMER_Reset(LPC_TIMER32_0);
+	Chip_TIMER_MatchEnableInt(LPC_TIMER32_0, 1);
+	//wait 2ms (500Hz) for an UART idle signal
+	//wait 10ms (100Hz) for an UART idle signal
+	Chip_TIMER_SetMatch(LPC_TIMER32_0, 1, (timerFreq / 100));
+	NVIC_ClearPendingIRQ(TIMER_32_0_IRQn);
+	NVIC_EnableIRQ(TIMER_32_0_IRQn);
 
 	//TODO:do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
 
@@ -243,15 +273,33 @@ int main(void)
 			/* Do HID tasks (mouse, keyboard and joystick*/
 			HID_Tasks();
 
-			/* Check if host has connected and opened the VCOM port */
-			if ((vcom_connected() != 0) && (prompt == 0)) prompt = 1;
+			//check if connection is still existing
+			//if not, set our flag here to false
+			if(vcom_connected() == 0) prompt = 0;
 
-			/* read incoming bytes from UART */
-			rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+			/* Check if host has connected and opened the VCOM port */
+			if ((vcom_connected() != 0) && (prompt == 0)) {
+				//if yes, flush all buffers
+				uint8_t b;
+				while(vcom_bread(&b, 1) != 0); //flush VCOM in
+				//flush UART RBs
+				RingBuffer_Flush(&rxring);
+				RingBuffer_Flush(&txring);
+				//and set connected flag
+				prompt = 1;
+			}
+
+
 			/* either parse as keyboard/mouse/joystick commands or send to vcom */
 			if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 17) == false)	{
+				if(uartidleflag == 1) {
+					rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+				} else {
+					rdCnt = 0;
+				}
 				if(rdCnt != 0)
 				{
+					uartidleflag = 0;
 					switch(parseBuffer(&g_rxBuff[0],rdCnt))
 					{
 						//parameter length too short
@@ -274,6 +322,8 @@ int main(void)
 					}
 				}
 			} else {
+				/* read incoming bytes from UART */
+				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
 				//if connected to vcom and bytes were in the ringbuffer, send to vcom
 				if(prompt && rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
 			}
