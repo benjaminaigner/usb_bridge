@@ -92,6 +92,11 @@ static void usb_pin_clk_init(void)
 	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_USBRAM);
 	/* power UP USB Phy */
 	Chip_SYSCTL_PowerUp(SYSCTL_POWERDOWN_USBPAD_PD);
+
+	/* Enable IOCON clock */
+	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
+	Chip_IOCON_PinMuxSet(LPC_IOCON,0,6,(IOCON_FUNC1 | IOCON_MODE_INACT));
+
 }
 
 /*****************************************************************************
@@ -177,23 +182,70 @@ int main(void)
 	const char strUnknown[] = "_unknown command\n";
 	const char strUnknown2[] = "_unknown error code\n";
 
-	/* Initialize GPIOs */
-	//Board_Init();
-	Chip_GPIO_Init(LPC_GPIO);
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
-	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
-	//Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 16, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_16 used for USB strings */
-	//Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 16);	/* set PIO0_16 as input */
-
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
+
+	/* Initialise call back structures */
+	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
+	//usb_param.USB_Resume_Event = ;
+	//usb_param.USB_Suspend_Event = ;
+	usb_param.usb_reg_base = LPC_USB0_BASE;
+	usb_param.max_num_ep = 5;
+	usb_param.mem_base = USB_STACK_MEM_BASE;
+	usb_param.mem_size = USB_STACK_MEM_SIZE;
+
+	/* Set the USB descriptors */
+	desc.device_desc = (uint8_t *) USB_DeviceDescriptor;
+	/* FLipMouse strings are loaded */
+	desc.string_desc = (uint8_t *) USB_StringDescriptorFLipMouse;
+
+	/* Note, to pass USBCV test full-speed only devices should have both
+	 * descriptor arrays point to same location and device_qualifier set
+	 * to 0.
+	 */
+	desc.high_speed_desc = USB_FsConfigDescriptor;
+	desc.full_speed_desc = USB_FsConfigDescriptor;
+	desc.device_qualifier = 0;
+
+	/* USB Initialization */
+	ret = USBD_API->hw->Init(&g_hUsb, &desc, &usb_param);
+	if (ret == LPC_OK) {
+
+		ret = HID_Init(g_hUsb,
+						 (USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.full_speed_desc,
+																	USB_DEVICE_CLASS_HUMAN_INTERFACE),
+						 &usb_param.mem_base, &usb_param.mem_size);
+		if (ret == LPC_OK) {
+			/* Init VCOM interface */
+			ret = vcom_init(g_hUsb, &desc, &usb_param);
+			if (ret == LPC_OK) {
+				/*  enable USB interrrupts */
+				NVIC_EnableIRQ(USB0_IRQn);
+				/* now connect */
+				USBD_API->hw->Connect(g_hUsb, 1);
+			}
+		}
+	}
+
+
+	/* Initialize GPIOs */
+	//Board_SystemInit();
+	Chip_GPIO_Init(LPC_GPIO);
+
+	/*++++ Input signal pin for CDC/HID directing ++++*/
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
+	/*++++ ESP32 power switch pin ++++*/
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 1, 16);
+	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+
 
 	/* Setup UART for 115.2K8N1 */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
-	//Chip_UART_SetBaud(LPC_USART, 115200);
-	Chip_UART_SetBaud(LPC_USART, 38400); /** @todo change this back on final PCB */
+	Chip_UART_SetBaud(LPC_USART, 115200);
+	//Chip_UART_SetBaud(LPC_USART, 38400); /** @todo change this back on final PCB */
 	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
 	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
 	Chip_UART_TXEnable(LPC_USART);
@@ -225,47 +277,6 @@ int main(void)
 	NVIC_EnableIRQ(TIMER_32_0_IRQn);
 
 	//TODO:do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
-
-
-	/* initilize call back structures */
-	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
-	usb_param.usb_reg_base = LPC_USB0_BASE;
-	usb_param.max_num_ep = 5;
-	usb_param.mem_base = USB_STACK_MEM_BASE;
-	usb_param.mem_size = USB_STACK_MEM_SIZE;
-
-	/* Set the USB descriptors */
-	desc.device_desc = (uint8_t *) USB_DeviceDescriptor;
-	/* FLipMouse strings are loaded */
-	desc.string_desc = (uint8_t *) USB_StringDescriptorFLipMouse;
-
-	/* Note, to pass USBCV test full-speed only devices should have both
-	 * descriptor arrays point to same location and device_qualifier set
-	 * to 0.
-	 */
-	desc.high_speed_desc = USB_FsConfigDescriptor;
-	desc.full_speed_desc = USB_FsConfigDescriptor;
-	desc.device_qualifier = 0;
-
-	/* USB Initialization */
-	ret = USBD_API->hw->Init(&g_hUsb, &desc, &usb_param);
-	if (ret == LPC_OK) {
-
-		ret = HID_Init(g_hUsb,
-						 (USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.high_speed_desc,
-																	USB_DEVICE_CLASS_HUMAN_INTERFACE),
-						 &usb_param.mem_base, &usb_param.mem_size);
-		if (ret == LPC_OK) {
-			/* Init VCOM interface */
-			ret = vcom_init(g_hUsb, &desc, &usb_param);
-			if (ret == LPC_OK) {
-				/*  enable USB interrrupts */
-				NVIC_EnableIRQ(USB0_IRQn);
-				/* now connect */
-				USBD_API->hw->Connect(g_hUsb, 1);
-			}
-		}
-	}
 
 	while (1) {
 		/* If everything went well with stack init do the tasks or else sleep */

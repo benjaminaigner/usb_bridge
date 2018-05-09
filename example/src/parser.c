@@ -14,7 +14,25 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 	//determine HID function by first character:
 	//'K' for a keyboard report, parameter are 7 bytes (1 modifier, 6 keycodes, 0 for unused)
 	//'M' for a mouse report: parameter are xx bytes
-	//'J' for a joystick report: TBD
+	//'J' for a joystick report:
+		// [Byte]		[Function]
+		// [0]			button mask 1 (buttons 0-7)
+		// [1]			button mask 2 (buttons 8-15)
+		// [2]			button mask 3 (buttons 16-23)
+		// [3]			button mask 4 (buttons 24-31)
+		// [4]			bit 0-3: hat
+		// [4]			bit 4-7: X axis low bits
+		// [5]			bit 0-5: X axis high bits
+		// [5]			bit 6-7: Y axis low bits
+		// [6]			bit 0-7: Y axis high bits
+		// [7]			bit 0-7: Z axis low bits
+		// [8]			bit 0-1: Z axis high bits
+		// [8]			bit 2-7: Z rotate low bits
+		// [9]			bit 0-3: Z rotate high bits
+		// [9]			bit 4-7: slider left low bits
+		// [10]			bit 0-5: slider left high bits
+		// [10]			bit 6-7: slider right low bits
+		// [11]			bit 0-7: slider right high bits
 	//'X' for a simplified keyboard report. format is equal to 'K', but an automatic null report is sent afterwards (no need to send by MCU)
 	//'N' for a mouse report, which is automatically cleared (otherwise mouse buttons are pressed as long as no release report is sent)
 	//'T' send something of every device, a little bit moving, clicking and keyboardpressing. Joystick will be added.
