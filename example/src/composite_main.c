@@ -45,8 +45,9 @@
 STATIC RINGBUFF_T txring, rxring;
 
 /* Transmit and receive ring buffer sizes */
-#define UART_TXB_SIZE 128	/* Send */
-#define UART_RXB_SIZE 128	/* Receive */
+#define UART_TXB_SIZE 256	/* Send */
+#define UART_RXB_SIZE 256	/* Receive */
+#define ATCMD_LENGTH  256	/* Receive */
 
 /* Transmit and receive buffers */
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
@@ -56,9 +57,11 @@ static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
  * Public types/enumerations/variables
  ****************************************************************************/
 
+static uint8_t cimMode = 0;
 static uint8_t uartidleflag = 0;
 static USBD_HANDLE_T g_hUsb;
 static uint8_t g_rxBuff[UART_TXB_SIZE];
+static uint8_t g_txBuff[ATCMD_LENGTH];
 
 extern const  USBD_HW_API_T hw_api;
 extern const  USBD_CORE_API_T core_api;
@@ -165,10 +168,35 @@ void TIMER32_0_IRQHandler(void)
 	}
 }
 
+/** @brief Handler for USB suspend event
+ * In our case: switch off external MCU, by setting IO1_16 to low
+ * @note ISR context, be fast!
+ */
+ErrorCode_t onSuspendHandler(USBD_HANDLE_T hUsb)
+{
+	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, false);
+	return LPC_OK;
+}
+
+/** @brief Handler for USB resume event
+ * In our case: switch on external MCU, by setting IO1_16 to high
+ * @note ISR context, be fast!
+ */
+ErrorCode_t onResumeHandler(USBD_HANDLE_T hUsb)
+{
+	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+	return LPC_OK;
+}
+
 /**
- * @brief	main routine for blinky example
- * @todo Reports are delayed by one cycle!!!!
- * @todo Send events, even if not updated. (except relative reports, like mouse axis)
+ * @brief Main for USB CDC+HID to serial bridge for FLipMouse/FABI with ESP32
+ *
+ * The main method initialises:
+ * * the USBD ROM stack
+ * * UART for receiving CDC data or HID commands (determined by GPIO)
+ * * Timer for measuring a timeout before processing HID commands
+ * * Handle data from/to CDC and HID
+ *
  * @return	Function should not exit.
  */
 int main(void)
@@ -176,19 +204,17 @@ int main(void)
 	USBD_API_INIT_PARAM_T usb_param;
 	USB_CORE_DESCS_T desc;
 	ErrorCode_t ret = LPC_OK;
+	//flag for connection status (0 not connected, != 0 connected)
+	//currently read bytes from CDC
 	uint32_t prompt = 0, rdCnt = 0;
-	const char strParamErr[] = "_parameter error\n";
-	const char strOK[] = "__OK__\n";
-	const char strUnknown[] = "_unknown command\n";
-	const char strUnknown2[] = "_unknown error code\n";
 
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
 
 	/* Initialise call back structures */
 	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
-	//usb_param.USB_Resume_Event = ;
-	//usb_param.USB_Suspend_Event = ;
+	usb_param.USB_Resume_Event = onResumeHandler;
+	usb_param.USB_Suspend_Event = onSuspendHandler;
 	usb_param.usb_reg_base = LPC_USB0_BASE;
 	usb_param.max_num_ep = 5;
 	usb_param.mem_base = USB_STACK_MEM_BASE;
@@ -210,18 +236,19 @@ int main(void)
 	/* USB Initialization */
 	ret = USBD_API->hw->Init(&g_hUsb, &desc, &usb_param);
 	if (ret == LPC_OK) {
-
+		//initialize HID interface
 		ret = HID_Init(g_hUsb,
 						 (USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.full_speed_desc,
 																	USB_DEVICE_CLASS_HUMAN_INTERFACE),
 						 &usb_param.mem_base, &usb_param.mem_size);
 		if (ret == LPC_OK) {
-			/* Init VCOM interface */
+			// Init CDC interface
 			ret = vcom_init(g_hUsb, &desc, &usb_param);
 			if (ret == LPC_OK) {
-				/*  enable USB interrrupts */
+				//if everything is fine, enable USB IRQ
 				NVIC_EnableIRQ(USB0_IRQn);
-				/* now connect */
+				//and set the USB HW to connect
+				//normally this would setup the pull up resistor, not used in this case.
 				USBD_API->hw->Connect(g_hUsb, 1);
 			}
 		}
@@ -229,45 +256,44 @@ int main(void)
 
 
 	/* Initialize GPIOs */
-	//Board_SystemInit();
 	Chip_GPIO_Init(LPC_GPIO);
 
 	/*++++ Input signal pin for CDC/HID directing ++++*/
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
 	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
+
 	/*++++ ESP32 power switch pin ++++*/
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 1, 16);
 	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
 
 
-	/* Setup UART for 115.2K8N1 */
+	/*++++ Setup UART for 115200 8N1 ++++*/
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
 	Chip_UART_SetBaud(LPC_USART, 115200);
-	//Chip_UART_SetBaud(LPC_USART, 38400); /** @todo change this back on final PCB */
 	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
 	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
+	//finally: enable
 	Chip_UART_TXEnable(LPC_USART);
 
-	/* Before using the ring buffers, initialize them using the ring
-	   buffer init function */
+	//initialize UART RX/TX ringbuffers
 	RingBuffer_Init(&rxring, rxbuff, 1, UART_RXB_SIZE);
 	RingBuffer_Init(&txring, txbuff, 1, UART_TXB_SIZE);
 
-	/* Enable receive data and line status interrupt */
+	//  Enable receive data and line status interrupt
 	Chip_UART_IntEnable(LPC_USART, (UART_IER_RBRINT | UART_IER_RLSINT));
 
 	/* preemption = 1, sub-priority = 1 */
 	NVIC_SetPriority(UART0_IRQn, 1);
 	NVIC_EnableIRQ(UART0_IRQn);
 
-	/* enable timer 0 for UART timeout */
+	/*++++ Setup timer 0 for UART timeout */
 	Chip_TIMER_Init(LPC_TIMER32_0);
-	/* Timer rate is system clock rate */
+	// Timer rate is system clock rate
 	uint32_t timerFreq = Chip_Clock_GetSystemClockRate();
 
-	/* Timer setup for match and interrupt at TICKRATE_HZ */
+	// Timer setup for match and interrupt at TICKRATE_HZ
 	Chip_TIMER_Reset(LPC_TIMER32_0);
 	Chip_TIMER_MatchEnableInt(LPC_TIMER32_0, 1);
 	//wait 2ms (500Hz) for an UART idle signal
@@ -276,7 +302,7 @@ int main(void)
 	NVIC_ClearPendingIRQ(TIMER_32_0_IRQn);
 	NVIC_EnableIRQ(TIMER_32_0_IRQn);
 
-	//TODO:do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
+	/// @todo do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
 
 	while (1) {
 		/* If everything went well with stack init do the tasks or else sleep */
@@ -294,10 +320,16 @@ int main(void)
 				uint8_t b;
 				while(vcom_bread(&b, 1) != 0); //flush VCOM in
 				//flush UART RBs
-				RingBuffer_Flush(&rxring);
 				RingBuffer_Flush(&txring);
+				RingBuffer_Flush(&rxring);
+				//flush buffers
+				memset(g_rxBuff,0,sizeof(g_rxBuff));
+				memset(g_txBuff,0,sizeof(g_txBuff));
+
 				//and set connected flag
 				prompt = 1;
+				//reset AT parser & cim mode
+				cimMode = 0;
 			}
 
 
@@ -305,33 +337,11 @@ int main(void)
 			if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 17) == false)	{
 				if(uartidleflag == 1) {
 					rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+					parseBuffer(g_rxBuff,rdCnt);
 				} else {
 					rdCnt = 0;
 				}
-				if(rdCnt != 0)
-				{
-					uartidleflag = 0;
-					switch(parseBuffer(&g_rxBuff[0],rdCnt))
-					{
-						//parameter length too short
-						case 1:
-							Chip_UART_SendRB(LPC_USART, &txring, strParamErr, sizeof(strParamErr));
-						break;
-						//everything fine
-						case 0:
-							//do not send anything back, garbages the ESP32
-							//Chip_UART_SendRB(LPC_USART, &txring, strOK, sizeof(strOK));
-						break;
-						//unknown command
-						case 2:
-							Chip_UART_SendRB(LPC_USART, &txring, strUnknown, sizeof(strUnknown));
-						break;
-						//unknown return error code
-						default:
-							Chip_UART_SendRB(LPC_USART, &txring, strUnknown2, sizeof(strUnknown2));
-						break;
-					}
-				}
+				if(rdCnt != 0) uartidleflag = 0;
 			} else {
 				/* read incoming bytes from UART */
 				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
@@ -340,13 +350,16 @@ int main(void)
 			}
 
 			//independent from UART direction select:
-			//always send received data from vcom to UART
+			//always send received data from CDC to UART
 			if(prompt)
 			{
-				//read from vcom to buffer
-				rdCnt = vcom_bread(&g_rxBuff[0], UART_TXB_SIZE);
-				//if something was received, put to UART ringbuffer
-				if (rdCnt) Chip_UART_SendRB(LPC_USART, &txring, &g_rxBuff[0], rdCnt);
+				//check if buffer has at least 50% free, and read then
+				if(RingBuffer_GetFree(&txring) > (UART_TXB_SIZE / 2))
+				{
+					//read from USB, send to UART ringbuffer
+					rdCnt = vcom_bread(g_txBuff, RingBuffer_GetFree(&txring));
+					Chip_UART_SendRB(LPC_USART, &txring, g_txBuff, rdCnt);
+				}
 			}
 		}
 

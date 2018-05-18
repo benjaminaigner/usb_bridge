@@ -29,7 +29,7 @@ all: usb_bridge_LPC11U14.axf
 usb_bridge_LPC11U14.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\Users\AsTeRICS\Documents\MCUXpressoIDE_10.1.1_606\workspace\nxp_lpcxpresso_11u14_board_lib\Debug" -L"C:\Users\AsTeRICS\Documents\MCUXpressoIDE_10.1.1_606\workspace\lpc_chip_11uxx_lib\Debug" -L"C:\Users\AsTeRICS\Documents\MCUXpressoIDE_10.1.1_606\workspace\lpc_chip_11uxx_lib\libs" -Xlinker -Map="usb_bridge_LPC11U14.map" -Xlinker --gc-sections -mcpu=cortex-m0 -mthumb -T "usb_bridge_LPC11U14_Debug.ld" -o "usb_bridge_LPC11U14.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"/home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug" -L"/home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug" -L"/home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs" -Xlinker -Map="usb_bridge_LPC11U14.map" -Xlinker --gc-sections -mcpu=cortex-m0 -mthumb -T "usb_bridge_LPC11U14_Debug.ld" -o "usb_bridge_LPC11U14.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

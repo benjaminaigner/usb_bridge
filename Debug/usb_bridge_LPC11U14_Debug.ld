@@ -5,7 +5,7 @@
  * Generated linker script file for LPC11U14/201
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.1.1 [Build 606] [2018-01-02]  on Feb 6, 2018 11:19:36 AM
+ * MCUXpresso IDE v10.1.1 [Build 606] [2018-01-02] on 18-May-2018 13:29:49
  */
 
 INCLUDE "usb_bridge_LPC11U14_Debug_library.ld"
