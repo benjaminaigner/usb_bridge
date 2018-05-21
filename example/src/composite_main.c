@@ -271,7 +271,7 @@ int main(void)
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
-	Chip_UART_SetBaud(LPC_USART, 115200);
+	Chip_UART_SetBaud(LPC_USART, 230400);
 	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
 	Chip_UART_SetupFIFOS(LPC_USART, (UART_FCR_FIFO_EN | UART_FCR_TRG_LEV2));
 	//finally: enable
@@ -358,7 +358,7 @@ int main(void)
 				{
 					//read from USB, send to UART ringbuffer
 					rdCnt = vcom_bread(g_txBuff, RingBuffer_GetFree(&txring));
-					Chip_UART_SendRB(LPC_USART, &txring, g_txBuff, rdCnt);
+					if(rdCnt != 0) Chip_UART_SendRB(LPC_USART, &txring, g_txBuff, rdCnt);
 				}
 			}
 		}

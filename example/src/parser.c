@@ -13,7 +13,7 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 	//we do relatively simple parsing:
 	//determine HID function by first character:
 	//'K' for a keyboard report, parameter are 7 bytes (1 modifier, 6 keycodes, 0 for unused)
-	//'M' for a mouse report: parameter are xx bytes
+	//'M' for a mouse report: parameter are 4 bytes (buttons, X/Y, wheel)
 	//'J' for a joystick report:
 		// [Byte]		[Function]
 		// [0]			button mask 1 (buttons 0-7)
