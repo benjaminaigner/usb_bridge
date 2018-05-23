@@ -115,13 +115,18 @@ void UpdateReport(void)
 /* Routine to update mouse state report */
 void Mouse_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 {
+	static uint8_t buttons_prev = 0;
 	//mouse report structure:
 	//[0] reportID
-	//[1] buttons
+	//[1] buttons -> if this byte is set to 0xFF, previous button mask will be used...
 	//[2/3] X/Y (-127/127)
 	//[4] mouse scroll wheel (-127/127)
 	g_mouse.reportMouse[0] = HID_REPORTID_MOUSE;
 	memcpy(&g_mouse.reportMouse[1], reportData, MOUSE_REPORT_SIZE-1);
+	//sticky buttons
+	if(g_mouse.reportMouse[1] == 0xFF) g_mouse.reportMouse[1] = buttons_prev;
+	else buttons_prev = g_mouse.reportMouse[1];
+
 	//set flag to update report (send to host)
 	g_mouse.tx_flags |= FLAG_MOUSE;
 	//if autoclear is set, the HID task clears the report after this one is sent
