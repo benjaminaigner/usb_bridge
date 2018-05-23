@@ -9,10 +9,10 @@ USB bridge via LPC11U14 chip for next revision of FABI and FLipMouse (or other d
 |---------|-----|-------------|
 | PIO0_18 | I   | RXD of UART |
 | PIO0_19 | O   | TXD of UART |
-| PIO0_17 | I   | UART direction select |
+| PIO0_17 | I   | RXD for HID |
 | PIO0_16 | O   | power control for external HW (USB deep sleep) |
 
-The LPC chip is wired via UART ( _*115200, 8N1*_ ) to an external MCU (in case of FABI/FLipMouse an ESP32 in the next revision).
+The LPC chip is wired via UART ( _*230400, 8N1*_ ) to an external MCU (in case of FABI/FLipMouse an ESP32 in the next revision).
 This LPC acts as a composite USB device with following features:
 
 * HID mouse 
@@ -20,16 +20,21 @@ This LPC acts as a composite USB device with following features:
 * HID joystick
 * CDC virtual serial port
 
-The HID functions are controlled via UART commands, which are similar to some Bluetooth HID modules.
-If you want to send data via the USB-serial bridge, it is also sent via the same UART interface.
-Therefor, it should be determined via the external MCU if the UART input data should be processed as HID commands or sent
-to the USB serial. This is done via the UART direction select pin (PIO0_17), if it is tied to VCC (+3,3V!) all received UART data is sent transparently via the USB-CDC interface. If this is set to GND, input data is parsed as HID commands.
+The HID functions are controlled via pulse width modulated commands, received on pin IO0_17:
+
+* LSB is sent first
+* 0 pulse width: 10us
+* 1 pulse width: 20us
+* stop bit width: 40us
+* Maximum length of one packet is 16 Bytes.
+
+If you want to send data via the USB-serial bridge, it is sent via the UART 0 interface.
 
 To fulfill USB specifications, a device needs to support the USB sleep command with very little power consumption. On our boards, this is done via a N-channel MOSFET which switches off the remaining HW (which is not necessary in sleep mode).
 This MOSFET can be connected to PIO0_16. Output is low in sleep mode, output is high if in active mode.
 
 
-# Serial API (via UART, NOT USB)
+# Supported HID commands
 
 | Command | Parameter Length | Description |
 |---------|------------------|-------------|

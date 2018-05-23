@@ -41,24 +41,39 @@
  * Private types/enumerations/variables
  ****************************************************************************/
 
-/* Transmit and receive ring buffers */
+/* Transmit and receive ring buffers (UART/CDC)*/
 STATIC RINGBUFF_T txring, rxring;
 
-/* Transmit and receive ring buffer sizes */
+/* Transmit and receive ring buffer sizes (UART/CDC)*/
 #define UART_TXB_SIZE 256	/* Send */
 #define UART_RXB_SIZE 256	/* Receive */
 #define ATCMD_LENGTH  256	/* Receive */
 
-/* Transmit and receive buffers */
+/* Transmit and receive buffers (UART/CDC)*/
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
 
+/* Length of HID buffer (in bytes) */
+#define HID_BUF_SIZE 16
+
+/* HID input completed, this variable is set, if the stop edge is received. It contains the received edges timings (excluding stop edge) */
+volatile uint32_t hid_arrived = 0;
+/* HID input edge buffer, used in timer isr to save the received edges, processed in main */
+volatile uint32_t hidBuffEdges[HID_BUF_SIZE*8]; //declared as HID_BUF_SIZE*8, because of 8 edges each byte
+
+/* single bit time for receiving HID ('0' bit, '1' bit is twice this value) */
+//normal value 160
+#define HID_BIT_TIME_0_MIN	100
+#define HID_BIT_TIME_0_MAX	200
+//normal value 320
+#define HID_BIT_TIME_1_MIN	250
+#define HID_BIT_TIME_1_MAX	450
+//normal value: 640
+#define HID_BIT_TIME_S_MIN	500
+#define HID_BIT_TIME_S_MAX	800
 
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-
-static uint8_t cimMode = 0;
-static uint8_t uartidleflag = 0;
 static USBD_HANDLE_T g_hUsb;
 static uint8_t g_rxBuff[UART_TXB_SIZE];
 static uint8_t g_txBuff[ATCMD_LENGTH];
@@ -112,10 +127,6 @@ static void usb_pin_clk_init(void)
  */
 void UART_IRQHandler(void)
 {
-	/* Reset timer 0 */
-	Chip_TIMER_Reset(LPC_TIMER32_0);
-	uartidleflag = 0;
-	Chip_TIMER_Enable(LPC_TIMER32_0);
 	/* Use default ring buffer handler. Override this with your own
 	   code if you need more capability. */
 	Chip_UART_IRQRBHandler(LPC_USART, &rxring, &txring);
@@ -160,11 +171,31 @@ USB_INTERFACE_DESCRIPTOR *find_IntfDesc(const uint8_t *pDesc, uint32_t intfClass
 
 void TIMER32_0_IRQHandler(void)
 {
-	if (Chip_TIMER_MatchPending(LPC_TIMER32_0, 1)) {
-		Chip_TIMER_ClearMatch(LPC_TIMER32_0, 1);
-		/* if UART input direction is set to HID, set idle flag */
-		uartidleflag = 1;
-		Chip_TIMER_Disable(LPC_TIMER32_0);
+	//previous captured timer value
+	static uint32_t capture_prev = 0;
+	//edge counter
+	static uint32_t edgeC = 0;
+	//calculate diff between edges & save for next IRQ
+	uint32_t diff = Chip_TIMER_ReadCapture(LPC_TIMER32_0, 0) - capture_prev;
+	capture_prev = Chip_TIMER_ReadCapture(LPC_TIMER32_0, 0);
+	//clear pending
+	Chip_TIMER_ClearCapture(LPC_TIMER32_0, 0);
+
+	//discard wrong readings
+	if(diff > HID_BIT_TIME_S_MAX) return;
+
+	//if this variable is still set, main did not process yet -> do nothing
+	if(hid_arrived == 0)
+	{
+		//hid arrived is 0 -> process
+		//if stop bit detected, save edge count to hid_arrived
+		hidBuffEdges[edgeC] = diff;
+
+		if(diff <= HID_BIT_TIME_S_MAX && diff >= HID_BIT_TIME_S_MIN) {
+			//save received bytes
+			hid_arrived = edgeC;
+			edgeC = 0;
+		} else edgeC++;
 	}
 }
 
@@ -258,16 +289,12 @@ int main(void)
 	/* Initialize GPIOs */
 	Chip_GPIO_Init(LPC_GPIO);
 
-	/*++++ Input signal pin for CDC/HID directing ++++*/
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC0 | IOCON_MODE_PULLUP);/* PIO0_17 used for UART function determination */
-	Chip_GPIO_SetPinDIRInput(LPC_GPIO, 0, 17);	/* set PIO0_17 as input */
-
 	/*++++ ESP32 power switch pin ++++*/
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 1, 16);
 	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
 
 
-	/*++++ Setup UART for 115200 8N1 ++++*/
+	/*++++ Setup UART for 115200 8N1 - CDC communication ++++*/
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
@@ -288,19 +315,24 @@ int main(void)
 	NVIC_SetPriority(UART0_IRQn, 1);
 	NVIC_EnableIRQ(UART0_IRQn);
 
-	/*++++ Setup timer 0 for UART timeout */
-	Chip_TIMER_Init(LPC_TIMER32_0);
-	// Timer rate is system clock rate
-	uint32_t timerFreq = Chip_Clock_GetSystemClockRate();
+	/*++++ Setup timer 0 for HID command receiving */
+	uint8_t hidBuff[HID_BUF_SIZE];
+	uint8_t hidLen = 0;
+	//clear HID buffer
+	memset((void*)hidBuffEdges,0,HID_BUF_SIZE*8);
 
-	// Timer setup for match and interrupt at TICKRATE_HZ
+	Chip_TIMER_Init(LPC_TIMER32_0);
+	// Timer setup for capture (both edges + interrupt)
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC2 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_TIMER_Reset(LPC_TIMER32_0);
-	Chip_TIMER_MatchEnableInt(LPC_TIMER32_0, 1);
-	//wait 2ms (500Hz) for an UART idle signal
-	//wait 10ms (100Hz) for an UART idle signal
-	Chip_TIMER_SetMatch(LPC_TIMER32_0, 1, (timerFreq / 100));
+	Chip_TIMER_PrescaleSet(LPC_TIMER32_0, 2);
+	Chip_TIMER_CaptureFallingEdgeEnable(LPC_TIMER32_0, 0);
+	Chip_TIMER_CaptureRisingEdgeEnable(LPC_TIMER32_0, 0);
+	Chip_TIMER_CaptureEnableInt(LPC_TIMER32_0, 0);
 	NVIC_ClearPendingIRQ(TIMER_32_0_IRQn);
 	NVIC_EnableIRQ(TIMER_32_0_IRQn);
+	//finally start timer.
+	Chip_TIMER_Enable(LPC_TIMER32_0);
 
 	/// @todo do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
 
@@ -308,7 +340,36 @@ int main(void)
 		/* If everything went well with stack init do the tasks or else sleep */
 		if (ret == LPC_OK) {
 			/* Do HID tasks (mouse, keyboard and joystick*/
-			HID_Tasks();
+			if(hid_arrived != 0) //if a HID command was received
+			{
+				//clear previous HID buffer
+				memset(hidBuff,0,HID_BUF_SIZE);
+				uint8_t shift = 0;
+				//for each received edge
+				for(uint8_t i = 0; i<hid_arrived; i++)
+				{
+					//if it is a 1 bit, set bit in byte, and increase bit/byte offset
+					if(hidBuffEdges[i] <= HID_BIT_TIME_1_MAX && hidBuffEdges[i] >= HID_BIT_TIME_1_MIN)
+					{
+						hidBuff[hidLen] |= (1<<shift);
+						shift++;
+						if(shift == 8) { hidLen++; shift = 0; }
+					}
+					if(hidBuffEdges[i] <= HID_BIT_TIME_0_MAX && hidBuffEdges[i] >= HID_BIT_TIME_0_MIN)
+					{
+						shift++;
+						if(shift == 8) { hidLen++; shift = 0; }
+					}
+					//do NOT write outside array
+					if(hidLen == HID_BUF_SIZE) break;
+				}
+				//clear HID edge buffer
+				memset((void*)hidBuffEdges,0,HID_BUF_SIZE*8);
+				hid_arrived = 0; //reset flag for next packet
+				parseBuffer(hidBuff, hidLen); //parse buffer for HID commands
+				hidLen = 0; //reset HID length
+			}
+			HID_Tasks(); //preform USB-HID tasks
 
 			//check if connection is still existing
 			//if not, set our flag here to false
@@ -328,32 +389,17 @@ int main(void)
 
 				//and set connected flag
 				prompt = 1;
-				//reset AT parser & cim mode
-				cimMode = 0;
 			}
 
-
-			/* either parse as keyboard/mouse/joystick commands or send to vcom */
-			if(Chip_GPIO_GetPinState(LPC_GPIO, 0, 17) == false)	{
-				if(uartidleflag == 1) {
-					rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
-					parseBuffer(g_rxBuff,rdCnt);
-				} else {
-					rdCnt = 0;
-				}
-				if(rdCnt != 0) uartidleflag = 0;
-			} else {
-				/* read incoming bytes from UART */
-				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
-				//if connected to vcom and bytes were in the ringbuffer, send to vcom
-				if(prompt && rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
-			}
-
-			//independent from UART direction select:
-			//always send received data from CDC to UART
+			//if connected
 			if(prompt)
 			{
-				//check if buffer has at least 50% free, and read then
+				/* read incoming bytes from UART & send to CDC if something is available*/
+				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+				//TODO: test return value (sent bytes)
+				if(rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
+
+				//check if buffer has at least 50% free, and read then from CDC
 				if(RingBuffer_GetFree(&txring) > (UART_TXB_SIZE / 2))
 				{
 					//read from USB, send to UART ringbuffer
