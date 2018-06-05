@@ -42,11 +42,11 @@
  ****************************************************************************/
 
 /* Transmit and receive ring buffers (UART/CDC)*/
-STATIC RINGBUFF_T txring, rxring;
+RINGBUFF_T txring, rxring;
 
 /* Transmit and receive ring buffer sizes (UART/CDC)*/
-#define UART_TXB_SIZE 256	/* Send */
-#define UART_RXB_SIZE 256	/* Receive */
+#define UART_TXB_SIZE 1024	/* Send to ESP32 */
+#define UART_RXB_SIZE 256	/* Receive from ESP32 */
 #define ATCMD_LENGTH  256	/* Receive */
 
 /* Transmit and receive buffers (UART/CDC)*/
@@ -76,7 +76,6 @@ volatile uint32_t hidBuffEdges[HID_BUF_SIZE*8]; //declared as HID_BUF_SIZE*8, be
  ****************************************************************************/
 static USBD_HANDLE_T g_hUsb;
 static uint8_t g_rxBuff[UART_TXB_SIZE];
-static uint8_t g_txBuff[ATCMD_LENGTH];
 
 extern const  USBD_HW_API_T hw_api;
 extern const  USBD_CORE_API_T core_api;
@@ -385,7 +384,6 @@ int main(void)
 				RingBuffer_Flush(&rxring);
 				//flush buffers
 				memset(g_rxBuff,0,sizeof(g_rxBuff));
-				memset(g_txBuff,0,sizeof(g_txBuff));
 
 				//and set connected flag
 				prompt = 1;
@@ -398,14 +396,6 @@ int main(void)
 				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
 				//TODO: test return value (sent bytes)
 				if(rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
-
-				//check if buffer has at least 50% free, and read then from CDC
-				if(RingBuffer_GetFree(&txring) > (UART_TXB_SIZE / 2))
-				{
-					//read from USB, send to UART ringbuffer
-					rdCnt = vcom_bread(g_txBuff, RingBuffer_GetFree(&txring));
-					if(rdCnt != 0) Chip_UART_SendRB(LPC_USART, &txring, g_txBuff, rdCnt);
-				}
 			}
 		}
 

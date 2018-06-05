@@ -46,6 +46,8 @@
  */
 VCOM_DATA_T g_vCOM;
 
+extern RINGBUFF_T txring;
+
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -69,7 +71,8 @@ static ErrorCode_t VCOM_bulk_out_hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t e
 	switch (event) {
 	case USB_EVT_OUT:
 		pVcom->rx_count = USBD_API->hw->ReadEP(hUsb, USB_CDC_OUT_EP, pVcom->rx_buff);
-		if (pVcom->rx_flags & VCOM_RX_BUF_QUEUED) {
+		Chip_UART_SendRB(LPC_USART, &txring, pVcom->rx_buff, pVcom->rx_count);
+		/*if (pVcom->rx_flags & VCOM_RX_BUF_QUEUED) {
 			pVcom->rx_flags &= ~VCOM_RX_BUF_QUEUED;
 			if (pVcom->rx_count != 0) {
 				pVcom->rx_flags |= VCOM_RX_BUF_FULL;
@@ -79,7 +82,7 @@ static ErrorCode_t VCOM_bulk_out_hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t e
 		else if (pVcom->rx_flags & VCOM_RX_DB_QUEUED) {
 			pVcom->rx_flags &= ~VCOM_RX_DB_QUEUED;
 			pVcom->rx_flags |= VCOM_RX_DONE;
-		}
+		}*/
 		break;
 
 	case USB_EVT_OUT_NAK:
