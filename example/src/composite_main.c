@@ -44,6 +44,9 @@
 /* Transmit and receive ring buffers (UART/CDC)*/
 RINGBUFF_T txring, rxring;
 
+//added this const here, because if we do not need anything from board lib, it does not compile.
+const uint32_t OscRateIn = 12000000;
+
 /* Transmit and receive ring buffer sizes (UART/CDC)*/
 #define UART_TXB_SIZE 1024	/* Send to ESP32 */
 #define UART_RXB_SIZE 256	/* Receive from ESP32 */
@@ -53,7 +56,7 @@ RINGBUFF_T txring, rxring;
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
 
 /* Length of HID buffer (in bytes) */
-#define HID_BUF_SIZE 16
+#define HID_BUF_SIZE 4
 
 /* HID input completed, this variable is set, if the stop edge is received. It contains the received edges timings (excluding stop edge) */
 volatile uint32_t hid_arrived = 0;
@@ -333,8 +336,6 @@ int main(void)
 	//finally start timer.
 	Chip_TIMER_Enable(LPC_TIMER32_0);
 
-	/// @todo do something on HID coutnry code (keyboard), feature request. Hard to find offset in uint8 array...
-
 	while (1) {
 		/* If everything went well with stack init do the tasks or else sleep */
 		if (ret == LPC_OK) {
@@ -368,7 +369,7 @@ int main(void)
 				parseBuffer(hidBuff, hidLen); //parse buffer for HID commands
 				hidLen = 0; //reset HID length
 			}
-			HID_Tasks(); //preform USB-HID tasks
+			HID_Tasks(); //perform USB-HID tasks
 
 			//check if connection is still existing
 			//if not, set our flag here to false
