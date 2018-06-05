@@ -75,6 +75,7 @@ void Keyboard_UpdateReport(uint8_t *reportData, uint8_t autoClear);
 void Joystick_UpdateReport(uint8_t *reportData);
 void UpdateReport(void);
 void USB_resetdevice(void);
+void HID_waitIdle(void);
 /**
  * @}
  */

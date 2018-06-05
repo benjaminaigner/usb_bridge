@@ -137,45 +137,6 @@ void Mouse_UpdateReport(uint8_t *reportData, uint8_t autoClear)
 	//if not, a transmission will be started
 	HID_Tasks();
 }
-/*
-
-	uint8_t joystick_status = Joystick_GetStatus();
-	CLEAR_HID_MOUSE_REPORT(&g_mouse.reportMouse[0]);
-	CLEAR_HID_KEYBOARD_REPORT(&g_mouse.reportKeyboard[0]);
-	g_mouse.reportMouse[0] = HID_REPORTID_MOUSE;
-	g_mouse.reportKeyboard[0] = HID_REPORTID_KEYBOARD;
-
-	switch (joystick_status) {
-	case JOY_PRESS:
-		g_mouse.reportKeyboard[3] = 27; //press y key
-		g_mouse.tx_flags |= FLAG_KEYBOARD;
-		g_mouse.nextsend = HID_REPORTID_KEYBOARD;
-		//setLeftButtonMouseReport(g_mouse.report, 1);
-		//TODO....
-		break;
-
-	case JOY_LEFT:
-		setXYMouseReport(g_mouse.reportMouse, -4, 0);
-		g_mouse.tx_flags |= FLAG_MOUSE;
-		g_mouse.nextsend = HID_REPORTID_MOUSE;
-		break;
-
-	case JOY_RIGHT:
-		setXYMouseReport(g_mouse.reportMouse, 4, 0);
-		g_mouse.tx_flags |= FLAG_MOUSE;
-		break;
-
-	case JOY_UP:
-		setXYMouseReport(g_mouse.reportMouse, 0, -4);
-		g_mouse.tx_flags |= FLAG_MOUSE;
-		break;
-
-	case JOY_DOWN:
-		setXYMouseReport(g_mouse.reportMouse, 0, 4);
-		g_mouse.tx_flags |= FLAG_MOUSE;
-		break;
-	}
-}*/
 
 /* HID Get Report Request Callback. Called automatically on HID Get Report Request */
 static ErrorCode_t Mouse_GetReport(USBD_HANDLE_T hHid, USB_SETUP_PACKET *pSetup, uint8_t * *pBuffer, uint16_t *plength)
@@ -261,9 +222,6 @@ ErrorCode_t HID_Init(USBD_HANDLE_T hUsb,
 		return ERR_FAILED;
 	}
 
-	/* init joystick control */
-	Board_Joystick_Init();
-
 	/* Init HID params */
 	memset((void *) &hid_param, 0, sizeof(USBD_HID_INIT_PARAM_T));
 	hid_param.max_reports = 1;
@@ -297,7 +255,12 @@ void USB_resetdevice(void)
 	mwUSB_ResetCore(g_mouse.hUsb);
 }
 
-/* Mouse tasks routine. */
+void HID_waitIdle(void)
+{
+	while(g_mouse.tx_busy);
+}
+
+/* HID tasks routine. */
 void HID_Tasks(void)
 {
 	/* check device is configured before sending report. */
@@ -340,14 +303,6 @@ void HID_Tasks(void)
 				//return, we cannot send 2 reports at once.
 				return;
 			}
-
-			//if we are here, no flags for required updates were set.
-			//send a keepalive packet (mouse report with previous set buttons, but no movement)
-			/*for(uint8_t i=2; i<MOUSE_REPORT_SIZE;i++)
-			{
-				g_mouse.reportMouse[2] = (uint8_t) -0;
-			}*/
-			//USBD_API->hw->WriteEP(g_mouse.hUsb, HID_EP_IN, &g_mouse.reportMouse[0], MOUSE_REPORT_SIZE);
 		}
 	} else {
 		/* reset busy flag if we get disconnected. */
