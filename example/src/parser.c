@@ -11,14 +11,14 @@
  * This report is changed and sent on an incoming command
  * 1. byte is the modifier, bytes 2-7 are keycodes
  */
-uint8_t keyboard_report[7];
+uint8_t keyboard_report[7] = {0,0,0,0,0,0,0};
 
 
 /** @brief Currently active mouse report
  * This report is changed and sent on an incoming command
  * 1. byte is the button map, bytes 2-4 are X/Y/wheel (int8_t)
  */
-uint8_t mouse_report[4];
+uint8_t mouse_report[4] = {0,0,0,0};
 
 
 /** @brief Currently active joystick report
@@ -42,7 +42,7 @@ uint8_t mouse_report[4];
  * [10]			bit 6-7: slider right low bits
  * [11]			bit 0-7: slider right high bits
  */
-uint8_t joystick_report[12];
+uint8_t joystick_report[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
 
 /** @brief Remove a keycode from the given HID keycode array.
  *
@@ -98,6 +98,24 @@ uint8_t add_keycode(uint8_t keycode,uint8_t *keycode_arr)
   return 1;
 }
 
+/** @brief Test if key is in given keycode array
+ * @note The size of the keycode_arr parameter MUST be 6
+ * @param keycode Keycode to be tested
+ * @param keycode_arr Array to test
+ * @return 0 if the keycode is not in array, 1 if the keycode is in the array
+ */
+uint8_t is_in_keycode_arr(uint8_t keycode,uint8_t *keycode_arr)
+{
+	if (keycode_arr[0] != keycode && keycode_arr[1] != keycode &&
+			keycode_arr[2] != keycode && keycode_arr[3] != keycode &&
+			keycode_arr[4] != keycode && keycode_arr[5] != keycode)
+	{
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
 uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 {
 	//we do relatively simple parsing:
@@ -111,22 +129,27 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 		//0x13	Press & release button LEFT
 		//0x14	Press & release button RIGHT
 		//0x15	Press & release button MIDDLE
-		//0x17	Press button LEFT
-		//0x18	Press button RIGHT
-		//0x19	Press button MIDDLE
-		//0x1B	Release button LEFT
-		//0x1C	Release button RIGHT
-		//0x1D	Release button MIDDLE
+		//0x16	Press button LEFT
+		//0x17	Press button RIGHT
+		//0x18	Press button MIDDLE
+		//0x19	Release button LEFT
+		//0x1A	Release button RIGHT
+		//0x1B	Release button MIDDLE
+		//0x1C	Toggle button LEFT
+		//0x1D	Toggle button RIGHT
+		//0x1E	Toggle button MIDDLE
 		//0x1F	Reset Mouse report
 
 	//0x2X		Update Keyboard
 		//0x20	Press & release a key (needs 1 additional keycode byte)
 		//0x21	Press a key (needs 1 additional keycode byte)
 		//0x22	Release a key (needs 1 additional keycode byte)
-		//0x23	Press & release a modifier (needs 1 additional modifier byte)
-		//0x24	Press a modifier (needs 1 additional modifier bytemask)
-		//0x25	Release a modifier (needs 1 additional modifier bytemask)
-		//0x26-8	TBD: Maybe these will be used for media keys
+		//0x23	Toggle a key (needs 1 additional keycode byte)
+		//0x24	Press & release a modifier (needs 1 additional modifier byte)
+		//0x25	Press a modifier (needs 1 additional modifier bitmask)
+		//0x26	Release a modifier (needs 1 additional modifier bitmask)
+		//0x27	Toggle a modifier (needs 1 additional modifier bitmask)
+		//0x28-2B	TBD: Maybe these will be used for media keys
 		//0x2F	Reset Keyboard Report
 
 	//0x3X		Update Joystick
@@ -137,12 +160,12 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 			 * If bit 7 is 0, the remaining 7 bits determine the button to be set/released
 			 * If bit 7 is 1, the remaining 7 bits are used as hat position (15 is idle, 0-7 are valid positions)
 			 */
-		//0x34	Update X axis (+2Bytes int16 -> LSB first)
-		//0x35	Update Y axis (+2Bytes int16 -> LSB first)
-		//0x36	Update Z axis (+2Bytes int16 -> LSB first)
-		//0x37	Update Z-rotate axis (+2Bytes int16 -> LSB first)
-		//0x38	Update slider left (+2Bytes int16 -> LSB first)
-		//0x39	Update slider right (+2Bytes int16 -> LSB first)
+		//0x34	Update X axis (+2Bytes uint16 -> LSB first)
+		//0x35	Update Y axis (+2Bytes uint16 -> LSB first)
+		//0x36	Update Z axis (+2Bytes uint16 -> LSB first)
+		//0x37	Update Z-rotate axis (+2Bytes uint16 -> LSB first)
+		//0x38	Update slider left (+2Bytes uint16 -> LSB first)
+		//0x39	Update slider right (+2Bytes uint16 -> LSB first)
 		//0x3F	Reset Joystick report
 	if(len<=1) return 1; //too short, cannot proceed
 	//before parsing, wait for an idle EP
@@ -195,30 +218,44 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 					HID_waitIdle();
 					break;
 				/* Press */
-				case 7: //left
+				case 6: //left
 					mouse_report[0] |= (1<<0);
 					break;
-				case 8: //right
+				case 7: //right
 					mouse_report[0] |= (1<<1);
 					break;
-				case 9: //middle
+				case 8: //middle
 					mouse_report[0] |= (1<<2);
 					break;
 				/* Release */
-				case 11: //left
+				case 9: //left
 					mouse_report[0] &= ~(1<<0);
 					break;
-				case 12: //right
+				case 10: //right
 					mouse_report[0] &= ~(1<<1);
 					break;
-				case 13: //middle
+				case 11: //middle
 					mouse_report[0] &= ~(1<<2);
+					break;
+				/* Toggle */
+				case 12: //left
+					mouse_report[0] ^= (1<<0);
+					break;
+				case 13: //right
+					mouse_report[0] ^= (1<<1);
+					break;
+				case 14: //middle
+					mouse_report[0] ^= (1<<2);
 					break;
 				case 15: //reset mouse
 					memset(mouse_report,0,sizeof(mouse_report));
 					break;
 			}
 			Mouse_UpdateReport(mouse_report, 0);
+			//always reset relative movements:
+			mouse_report[1] = 0;
+			mouse_report[2] = 0;
+			mouse_report[3] = 0;
 			break;
 		//Keyboard handling
 		case 0x20:
@@ -239,7 +276,11 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 				case 2: //Release a key
 					remove_keycode(buf[1], &keyboard_report[1]);
 					break;
-				case 3: //Press & release a modifier (mask!)
+				case 3: //Toggle a key
+					if(is_in_keycode_arr(buf[1],&keyboard_report[1])) remove_keycode(buf[1], &keyboard_report[1]);
+					else add_keycode(buf[1], &keyboard_report[1]);
+					break;
+				case 4: //Press & release a modifier (mask!)
 					keyboard_report[0] |= buf[1];
 					Keyboard_UpdateReport(keyboard_report, 0);
 					//remove modifier & wait for Idle EP,
@@ -247,11 +288,14 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 					keyboard_report[0] &= ~buf[1];
 					HID_waitIdle();
 					break;
-				case 4: //Press a modifier (mask!)
+				case 5: //Press a modifier (mask!)
 					keyboard_report[0] |= buf[1];
 					break;
-				case 5: //Release a modifier (mask!)
+				case 6: //Release a modifier (mask!)
 					keyboard_report[0] &= ~buf[1];
+					break;
+				case 7: //Toggle a modifier mask
+					keyboard_report[0] ^= buf[1];
 					break;
 				case 15:
 					memset(keyboard_report,0,sizeof(keyboard_report));
