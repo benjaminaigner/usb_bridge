@@ -167,7 +167,7 @@ ALIGNED(4) const uint8_t USB_DeviceDescriptor[] = {
 	0x01,							/* bDeviceProtocol */
 	USB_MAX_PACKET0,				/* bMaxPacketSize0 */
 	WBVAL(0x1FC9),					/* idVendor */
-	WBVAL(0x0087),					/* idProduct */
+	WBVAL(0x8231),					/* idProduct; NOTE: assigned by NXP! We have: 0x8231, 0x8232, 0x8233 */
 	WBVAL(0x0100),					/* bcdDevice : 1.00 */
 	0x01,							/* iManufacturer */
 	0x02,							/* iProduct */
@@ -241,8 +241,10 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	0x02,								/* bInterfaceCount */
 	CDC_COMMUNICATION_INTERFACE_CLASS,	/* bFunctionClass */
 	CDC_ABSTRACT_CONTROL_MODEL,			/* bFunctionSubClass */
-	0x00,								/* bFunctionProtocol */
+	0x01,								/* bFunctionProtocol */
 	0x05,								/* iFunction */
+	// a big thanks for stackoverflow for this hint with bFunctionProtocol / bInterfaceProtocol!
+	//https://stackoverflow.com/questions/7144858/lpc17xx-as-cdc-device-with-pxa168
 
 	/* Interface 1, Alternate Setting 0, Communication class interface descriptor */
 	USB_INTERFACE_DESC_SIZE,			/* bLength */
@@ -252,7 +254,7 @@ ALIGNED(4) uint8_t USB_FsConfigDescriptor[] = {
 	0x01,								/* bNumEndpoints: One endpoint used */
 	CDC_COMMUNICATION_INTERFACE_CLASS,	/* bInterfaceClass: Communication Interface Class */
 	CDC_ABSTRACT_CONTROL_MODEL,			/* bInterfaceSubClass: Abstract Control Model */
-	0x00,								/* bInterfaceProtocol: no protocol used */
+	0x01,								/* bInterfaceProtocol: no protocol used */
 	0x05,								/* iInterface: */
 	/* Header Functional Descriptor*/
 	0x05,								/* bLength: CDC header Descriptor size */

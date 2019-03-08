@@ -37,9 +37,68 @@
 #include "app_usbd_cfg.h"
 #include "cdc_vcom.h"
 
+//test with LPC ADC!
+
+static ADC_CLOCK_SETUP_T ADCSetup;
+
+
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
+
+/* PIN/PORT: SCL, connected to EXT header and ESP32 */
+#define PIN_SCL		4
+#define PORT_SCL	0
+/* PIN/PORT: SCL, connected to EXT header and ESP32 */
+#define PIN_SDA		5
+#define PORT_SDA	0
+/* PIN/PORT: ESP32 power, turns on/off the ESP32; active high*/
+#define PIN_ESP_ON	8
+#define PORT_ESP_ON	0
+/* PIN/PORT/ADC channel: FSR 1-4*/
+#define PIN_FSR1	11
+#define PORT_FSR1	0
+#define ADC_FSR1	0
+#define PIN_FSR2	12
+#define PORT_FSR2	0
+#define ADC_FSR2	1
+#define PIN_FSR3	14
+#define PORT_FSR3	0
+#define ADC_FSR3	3
+#define PIN_FSR4	13
+#define PORT_FSR4 	0
+#define ADC_FSR4	2
+/* PIN/PORT/ADC channel: pressure sensor*/
+#define PIN_PRESSURE 	16
+#define PORT_PRESSURE 	0
+#define ADC_PRESSURE	5
+/* PIN/PORT: ESP_SIGNAL, used for sending PPM modulated HID commands */
+#define PIN_ESP_SIGNAL	17
+#define PORT_ESP_SIGNAL	0
+/* PIN/PORT: ESP_RX, used for sending UART data from CDC to ESP32 */
+#define PIN_ESP_RX	19
+#define PORT_ESP_RX 0
+/* PIN/PORT: ESP_TX, used for sending UART data from ESP32 to CDC*/
+#define PIN_ESP_TX	18
+#define PORT_ESP_TX 0
+
+
+/* PIN/PORT: ESP_DEBUG_RX, used for sending debug/programming data to ESP32 */
+#define PIN_ESP_DEBUG_RX	13
+#define PORT_ESP_DEBUG_RX 	1
+/* PIN/PORT: ESP_DEBUG_TX, used for sending debug/programming from ESP32 to CDC */
+#define PIN_ESP_DEBUG_TX	14
+#define PORT_ESP_DEBUG_TX 	1
+/* PIN/PORT: ESP_RESET, reset pin of ESP32; high or floating -> boot;  */
+#define PIN_ESP_RESET	16
+#define PORT_ESP_RESET	1
+/* PIN/PORT: ESP_BOOT, boot mode select for ESP32: high or floating -> normal boot; low -> serial flasher*/
+#define PIN_ESP_BOOT	22
+#define PORT_ESP_BOOT	0
+
+#define UART_CDC			0
+#define UART_ESP_DEBUG		1
+
 
 /* Transmit and receive ring buffers (UART/CDC)*/
 RINGBUFF_T txring, rxring;
@@ -56,7 +115,7 @@ const uint32_t OscRateIn = 12000000;
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
 
 /* Length of HID buffer (in bytes) */
-#define HID_BUF_SIZE 4
+#define HID_BUF_SIZE 5
 
 /* HID input completed, this variable is set, if the stop edge is received. It contains the received edges timings (excluding stop edge) */
 volatile uint32_t hid_arrived = 0;
@@ -84,7 +143,13 @@ extern const  USBD_HW_API_T hw_api;
 extern const  USBD_CORE_API_T core_api;
 extern const  USBD_HID_API_T hid_api;
 extern const  USBD_CDC_API_T cdc_api;
-/* Since this example only uses HID class link functions for that class only */
+
+/* We use following API structures:
+ * * HW API
+ * * CORE API
+ * * HID API
+ * * CDC API
+ */
 static const  USBD_API_T g_usbApi = {
 	&hw_api,
 	&core_api,
@@ -97,6 +162,23 @@ static const  USBD_API_T g_usbApi = {
 };
 
 const  USBD_API_T *g_pUsbApi = &g_usbApi;
+
+//tick count (currently configured to 10Hz)
+uint32_t tick_count = 0;
+uint32_t tick_count_prev = 0;
+
+
+/**+++++ auto reset into MSD - related stuff (AN11305) ++++*/
+
+//different RAM region, according to https://community.nxp.com/thread/421162
+//0x1000017C - 0x1000025B
+typedef void (*IAP)(uint32_t [], uint32_t []);
+IAP iap_entry_local = (IAP)0x1fff1ff1;
+uint32_t command[5], result[4];
+///@todo What value is working? 0x1000017C or 0x1000025B?
+//#define init_msdstate() *((uint32_t *)(0x10000054)) = 0x0 //original version from AN11305
+#define init_msdstate() *((uint32_t *)(0x10000054)) = 0x0
+///@todo Also one note: maybe we don't need to set the MSP pointer to 0? https://community.nxp.com/thread/465231
 
 /*****************************************************************************
  * Private functions
@@ -116,12 +198,178 @@ static void usb_pin_clk_init(void)
 	/* Enable IOCON clock */
 	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
 	Chip_IOCON_PinMuxSet(LPC_IOCON,0,6,(IOCON_FUNC1 | IOCON_MODE_INACT));
-
 }
 
 /*****************************************************************************
  * Public functions
  ****************************************************************************/
+
+/**
+ * @brief Calling this function resets the LPC chip into bootloader mode.
+ * Depending on PIO0.3 (USB_VBUS), either serial or MSC download mode is entered.
+ * @note MSC mode is only available on LPC11U24
+ * @note This function is implemented according to AN11305, with a change for
+ * the memory region according to https://community.nxp.com/thread/421162
+ */
+void LPC_InvokeBootloader(void)
+{
+	/* make sure USB clock is turned on before calling ISP */
+	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_USB);
+	/* make sure 32-bit Timer 1 is turned on before calling ISP */
+	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_CT32B1);
+	/* make sure GPIO clock is turned on before calling ISP */
+	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_GPIO);
+	/* make sure IO configuration clock is turned on before calling ISP */
+	Chip_Clock_EnablePeriphClock(SYSCTL_CLOCK_IOCON);
+
+	/* make sure AHB clock divider is 1:1 */
+	Chip_Clock_SetSysClockDiv(1);
+
+	/* Send Reinvoke ISP command to ISP entry point*/
+	command[0] = 57;
+
+	init_msdstate();					 /* Initialize Storage state machine */
+	/* Set stack pointer to ROM value (reset default) This must be the last
+	     piece of code executed before calling ISP, because most C expressions
+	     and function returns will fail after the stack pointer is changed. */
+	__set_MSP(*((uint32_t *)0x00000000));
+
+	/* Enter ISP. We call "iap_entry" to enter ISP because the ISP entry is done
+	     through the same command interface as IAP. */
+	iap_entry(command, result);
+	// Not supposed to come back!
+}
+
+/**
+ * @brief	Reset the ESP32 chip into bootloader mode.
+ * @return 	Nothing
+ */
+void ESP32_ResetBootloader(void)
+{
+	uint32_t ticklocal = 0;
+
+	//1.) set GPIO0 to low
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_BOOT, PIN_ESP_BOOT);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_BOOT, PIN_ESP_BOOT, false);
+	//2.) set RST pin low
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET, false);
+	//3.) wait (in our case 1 tick -> 5ms)
+	ticklocal = Chip_TIMER_ReadCount(LPC_TIMER32_0);
+	while(Chip_TIMER_ReadCount(LPC_TIMER32_0) <= (ticklocal+512));
+	//4.) release RST pin
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+	//5.) wait (in our case 1 tick -> 5ms)
+	ticklocal = Chip_TIMER_ReadCount(LPC_TIMER32_0);
+	while(Chip_TIMER_ReadCount(LPC_TIMER32_0) <= (ticklocal+512));
+	//6.) release GPIO0
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_BOOT, PIN_ESP_BOOT);
+}
+/**
+ * @brief	Change ESP32 reset pin.
+ * @return 	Nothing
+ * @param	state If set to true, ESP32 will be in reset. ESP32 will start otherwise.
+ */
+void ESP32_Reset(bool state)
+{
+	if(state)
+	{
+		Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+		Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET, false);
+	} else {
+		Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+	}
+}
+
+/**
+ * @brief Enable ESP32 by turning on power & release the reset line
+ * @return Nothing
+ */
+static inline void ESP32_Enable(void)
+{
+	//the power mosfet must be driven high
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, true);
+	//the reset pin should be set to input, otherwise
+	//we have to charge the 1uF capacitor via this pin, and loosing the delay
+	//function of this capacitor
+	Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+}
+
+/**
+ * @brief Disable ESP32 by pulling the reset line low and disabling the power
+ * @return Nothing
+ */
+static inline void ESP32_Disable(void)
+{
+	//pull reset pin to low
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET, false);
+
+	//the power mosfet is switched off
+	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, false);
+}
+
+static inline void ESP32_PinInit(void)
+{
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_RESET, PIN_ESP_RESET, IOCON_FUNC0 | IOCON_MODE_PULLUP);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_ON, PIN_ESP_ON, IOCON_FUNC0 | IOCON_MODE_PULLUP);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_BOOT, PIN_ESP_BOOT, IOCON_FUNC0 | IOCON_MODE_PULLUP);
+}
+
+/**
+ * @brief Switch between UARTs.
+ * @param output If UART_CDC is given, the CDC will send to UART0
+ * which is used to transfer e.g. AT commands to the ESP32
+ * If UART_ESP_DEBUG is given, the CDC will be used for bridging UART0 from ESP32,
+ * which is used for debug outputs & programming.
+ * @note UART init is not done here, must be initialized before calling this method.
+ * @note This method assumes we started with UART_CDC.
+ */
+void ESP32_SwitchUART(int32_t output)
+{
+	//remember last state to avoid unnecessary UART changes
+	static int32_t output_prev = UART_CDC;
+
+	//if given parameter is the same as currently active
+	//UART, return & do nothing
+	if(output_prev == output) return;
+
+	//first of all: disable UART.
+	NVIC_DisableIRQ(UART0_IRQn);
+	Chip_UART_TXDisable(LPC_USART);
+
+	switch(output)
+	{
+		case UART_ESP_DEBUG:
+			//disable ESP32's UART 1 by using pins as GPIOs.
+			//note: the TX pin is used with a pullup.
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_TX, PIN_ESP_TX, IOCON_FUNC0 | IOCON_MODE_INACT);
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_RX, PIN_ESP_RX, IOCON_FUNC0 | IOCON_MODE_PULLUP);
+
+			//enable ESP32's UART 0
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_DEBUG_TX, PIN_ESP_DEBUG_TX, IOCON_FUNC3 | IOCON_MODE_INACT);
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_DEBUG_RX, PIN_ESP_DEBUG_RX, IOCON_FUNC3 | IOCON_MODE_INACT);
+			Chip_UART_SetBaud(LPC_USART, 115200);
+		break;
+		case UART_CDC:
+			//disable ESP32's UART 0
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_DEBUG_TX, PIN_ESP_DEBUG_TX, IOCON_FUNC0 | IOCON_MODE_INACT);
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_DEBUG_RX, PIN_ESP_DEBUG_RX, IOCON_FUNC0 | IOCON_MODE_PULLUP);
+
+			//enable ESP32's UART 1
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_TX, PIN_ESP_TX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
+			Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_RX, PIN_ESP_RX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
+			Chip_UART_SetBaud(LPC_USART, 230400);
+		break;
+		default: break;
+	}
+
+	//enable UART again.
+	Chip_UART_TXEnable(LPC_USART);
+	NVIC_EnableIRQ(UART0_IRQn);
+}
 
 /**
  * @brief	UART interrupt handler using ring buffers
@@ -201,13 +449,54 @@ void TIMER32_0_IRQHandler(void)
 	}
 }
 
+void int_to_str(uint16_t val, char * target)   // convert integer number (0-1023, 4-digits) into ASCII string
+{
+
+	for (int8_t i=3;i>=0;i--)
+	{
+	    target[i]= val%10 + '0';   // convert einerstelle into ascii-readable character
+    	val/=10;                // shift value 1 to the right (in decimal)
+	}
+
+	target[4]=0;  // endkennung für string
+}
+
+/**
+ * @brief	Handle interrupt from SysTick timer
+ * @return	Nothing
+ */
+void SysTick_Handler(void)
+{
+	tick_count++;
+	/*if((tick_count % 16) == 0)
+	{
+		uint8_t buf[8];
+		uint16_t temp = 0;
+		Chip_ADC_ReadValue(LPC_ADC,0,&temp);
+		int_to_str(temp,buf);
+		vcom_write(buf, 4);
+		Chip_ADC_ReadValue(LPC_ADC,1,&temp);
+		int_to_str(temp,buf);
+				vcom_write(buf, 4);
+		Chip_ADC_ReadValue(LPC_ADC,2,&temp);
+		int_to_str(temp,buf);
+				vcom_write(buf, 4);
+		Chip_ADC_ReadValue(LPC_ADC,3,&temp);
+		int_to_str(temp,buf);
+				vcom_write(buf, 4);
+				buf[0] = 0x0A;
+				buf[1] = 0x0D;
+		vcom_write(buf, 2);
+	}*/
+}
+
 /** @brief Handler for USB suspend event
  * In our case: switch off external MCU, by setting IO1_16 to low
  * @note ISR context, be fast!
  */
 ErrorCode_t onSuspendHandler(USBD_HANDLE_T hUsb)
 {
-	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, false);
+	ESP32_Disable();
 	return LPC_OK;
 }
 
@@ -217,9 +506,10 @@ ErrorCode_t onSuspendHandler(USBD_HANDLE_T hUsb)
  */
 ErrorCode_t onResumeHandler(USBD_HANDLE_T hUsb)
 {
-	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+	ESP32_Enable();
 	return LPC_OK;
 }
+
 
 /**
  * @brief Main for USB CDC+HID to serial bridge for FLipMouse/FABI with ESP32
@@ -240,9 +530,27 @@ int main(void)
 	//flag for connection status (0 not connected, != 0 connected)
 	//currently read bytes from CDC
 	uint32_t prompt = 0, rdCnt = 0;
+	uint32_t inBootMode = 0;
 
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
+	/* Initialize GPIOs and turn off ESP32*/
+	Chip_GPIO_Init(LPC_GPIO);
+	/* Initialize ESP reset related GPIOs */
+	ESP32_PinInit();
+	ESP32_Disable();
+
+	//test with LPC adc
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 11, FUNC2);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 12, FUNC2);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 13, FUNC2);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 14, FUNC2);
+	Chip_ADC_Init(LPC_ADC, &ADCSetup);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH1, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH2, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH3, ENABLE);
+	Chip_ADC_SetBurstCmd(LPC_ADC,ENABLE);
 
 	/* Initialise call back structures */
 	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
@@ -288,17 +596,9 @@ int main(void)
 	}
 
 
-	/* Initialize GPIOs */
-	Chip_GPIO_Init(LPC_GPIO);
-
-	/*++++ ESP32 power switch pin ++++*/
-	Chip_GPIO_SetPinDIROutput(LPC_GPIO, 1, 16);
-	Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
-
-
-	/*++++ Setup UART for 115200 8N1 - CDC communication ++++*/
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 18, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 19, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
+	/*++++ Setup UART for 230400 8N1 - CDC communication ++++*/
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_TX, PIN_ESP_TX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_RX, PIN_ESP_RX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
 	Chip_UART_Init(LPC_USART);
 	Chip_UART_SetBaud(LPC_USART, 230400);
 	Chip_UART_ConfigData(LPC_USART, (UART_LCR_WLEN8 | UART_LCR_SBS_1BIT));
@@ -325,7 +625,7 @@ int main(void)
 
 	Chip_TIMER_Init(LPC_TIMER32_0);
 	// Timer setup for capture (both edges + interrupt)
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 17, IOCON_FUNC2 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_SIGNAL, PIN_ESP_SIGNAL, IOCON_FUNC2 | IOCON_MODE_INACT);	/* PIO0_17 used for HID receiving. */
 	Chip_TIMER_Reset(LPC_TIMER32_0);
 	Chip_TIMER_PrescaleSet(LPC_TIMER32_0, 2);
 	Chip_TIMER_CaptureFallingEdgeEnable(LPC_TIMER32_0, 0);
@@ -335,6 +635,17 @@ int main(void)
 	NVIC_EnableIRQ(TIMER_32_0_IRQn);
 	//finally start timer.
 	Chip_TIMER_Enable(LPC_TIMER32_0);
+
+	/*++++ Init systick ++++*/
+	SystemCoreClockUpdate();
+	SysTick_Config(SystemCoreClock / 200);
+
+	/*++++ Boot up the ESP32. ++++*/
+	//TODO: just for testing, set automatically to UART0 of ESP32.
+	//ESP32_SwitchUART(UART_ESP_DEBUG);
+	//ESP32_Reset(true);
+	ESP32_Enable();
+	//ESP32_ResetBootloader();
 
 	while (1) {
 		/* If everything went well with stack init do the tasks or else sleep */
@@ -394,10 +705,39 @@ int main(void)
 			if(prompt)
 			{
 				/* read incoming bytes from UART & send to CDC if something is available*/
-				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+				//rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], UART_TXB_SIZE);
+				//according to:
+				//https://community.nxp.com/thread/429714
+				//we need to limit to 63B
+				rdCnt = Chip_UART_ReadRB(LPC_USART, &rxring, &g_rxBuff[0], 63);
 				//TODO: test return value (sent bytes)
 				if(rdCnt != 0) vcom_write(&g_rxBuff[0], rdCnt);
 			}
+
+			//check if we have to switch to programming the ESP32:
+			//first we check if 2.56s are passed
+			/*if((tick_count % 512) == 0)
+			{
+				//if 2s are passed, check if we reached the rts/dts trigger threshold
+				//but just reset once.
+				if((rts_dts_count > 4) && (inBootMode == 0))
+				{
+					//
+					inBootMode = 1;
+					//switch to programming the ESP32
+					ESP32_SwitchUART(UART_ESP_DEBUG);
+					ESP32_ResetBootloader();
+				}
+				//reset count (otherwise we might switch to ESP
+				//programming mode by opening/closing the CDC port too often)
+				rts_dts_count = 0;
+			}*/
+		} else {
+			//TODO: do some error recovering if init didn't work.
+			//maybe resetting or reset some settings?!?
+
+			//maybe we do this via the watchdog:
+			//feed em wrong -> reset.
 		}
 
 		/* Sleep until next IRQ happens */

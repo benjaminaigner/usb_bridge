@@ -122,6 +122,11 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 	//1 Byte determines HID interface + command:
 	//0x00		Reset all HID reports to zero and send
 
+		//additional actions, which don't fit into corresponding first byte
+	//0x01	Send mouse x & y (needs 2 additional int8 bytes; x+y)
+	//0x02	Trigger an ESP32 update (switch UART and reset ESP32 to download mode)
+	//0x03	Trigger an LPC update (reset this chip into MSD download mode -> only available on LPC11U24)
+
 	//0x1X		Update Mouse
 		//0x10	Send X movement (needs 1 additional int8 byte)
 		//0x11	Send Y movement (needs 1 additional int8 byte)
@@ -173,14 +178,30 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 	//start parsing, now USB is free.
 	switch(buf[0] & 0xF0)
 	{
-		//reset all reports
+		//reset all reports + additional actions
 		case 0x00:
-			memset(mouse_report,0,sizeof(mouse_report));
-			memset(keyboard_report,0,sizeof(keyboard_report));
-			memset(joystick_report,0,sizeof(joystick_report));
-			Keyboard_UpdateReport(keyboard_report,0);
-			Mouse_UpdateReport(mouse_report, 0);
-			Joystick_UpdateReport(joystick_report);
+			switch(buf[0] & 0x0F)
+			{
+				case 0: //reset all reports
+					memset(mouse_report,0,sizeof(mouse_report));
+					memset(keyboard_report,0,sizeof(keyboard_report));
+					memset(joystick_report,0,sizeof(joystick_report));
+					Keyboard_UpdateReport(keyboard_report,0);
+					Mouse_UpdateReport(mouse_report, 0);
+					Joystick_UpdateReport(joystick_report);
+					break;
+				case 1: //send X+Y for mouse
+					mouse_report[1] = buf[1];
+					mouse_report[2] = buf[2];
+					Mouse_UpdateReport(mouse_report, 0);
+					break;
+				case 2: //reset ESP32
+					ESP32_ResetBootloader();
+					break;
+				case 3: //reset LPC
+					LPC_InvokeBootloader();
+					break;
+			}
 			break;
 		//mouse handling
 		case 0x10:

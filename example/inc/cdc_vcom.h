@@ -39,6 +39,8 @@ extern "C"
 {
 #endif
 
+extern volatile uint32_t rts_dts_count;
+
 /** @ingroup EXAMPLES_USBDLIB_11XX_COMPOSITE
  * @{
  */

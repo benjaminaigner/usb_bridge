@@ -15,4 +15,7 @@
 
 uint8_t parseBuffer(uint8_t *buf, uint8_t len);
 
+extern void ESP32_ResetBootloader(void);
+extern void LPC_InvokeBootloader(void);
+
 #endif /* INC_PARSER_H_ */

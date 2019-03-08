@@ -1,11 +1,11 @@
 /*
  * GENERATED FILE - DO NOT EDIT
  * (c) Code Red Technologies Ltd, 2008-2013
- * (c) NXP Semiconductors 2013-2018
+ * (c) NXP Semiconductors 2013-2019
  * Generated linker script file for LPC11U14/201
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.1.1 [Build 606] [2018-01-02] on 07-Jun-2018 13:53:52
+ * MCUXpresso IDE v10.1.1 [Build 606] [2018-01-02] on 08-Mar-2019 10:43:55
  */
 
 INCLUDE "usb_bridge_LPC11U14_Debug_library.ld"

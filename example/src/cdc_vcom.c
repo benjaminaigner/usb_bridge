@@ -48,6 +48,12 @@ VCOM_DATA_T g_vCOM;
 
 extern RINGBUFF_T txring;
 
+/** counter for issued rts/dts events.
+ * If a certain threshold is reached, this firmware assumes
+ * we have an auto-reset request for programming the ESP32
+ */
+volatile uint32_t rts_dts_count = 0;
+
 /*****************************************************************************
  * Private functions
  ****************************************************************************/
@@ -107,7 +113,47 @@ static ErrorCode_t VCOM_SetLineCode(USBD_HANDLE_T hCDC, CDC_LINE_CODING *line_co
 
 	/* Called when baud rate is changed/set. Using it to know host connection state */
 	pVcom->tx_flags = VCOM_TX_CONNECTED;	/* reset other flags */
+	return LPC_OK;
+}
 
+/** Get RTS/DTR updates */
+static ErrorCode_t VCOM_SetCtrLineState(USBD_HANDLE_T hCDC, uint16_t state)
+{
+	//rts_dts_count++;
+	//return LPC_OK;
+
+	//bit 0 DTR
+	//bit 1 RTS
+
+	//if both are asserted, we don't trigger a reset
+	//we don't have the autoloading circuit available from here,
+	//so we do this in software
+	if(((state & 0x03) == 0) || ((state & 0x03) == 0x03))
+	{
+		//boot
+		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, true);
+		//reset
+		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+		return LPC_OK;
+	}
+
+	if(state & 0x01)
+	{
+		//boot
+		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, false);
+	} else {
+		//boot
+		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, true);
+	}
+
+	if(state & 0x02)
+	{
+		//reset
+		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, false);
+	} else {
+		//reset
+		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+	}
 	return LPC_OK;
 }
 
@@ -129,6 +175,7 @@ ErrorCode_t vcom_init(USBD_HANDLE_T hUsb, USB_CORE_DESCS_T *pDesc, USBD_API_INIT
 	cdc_param.cif_intf_desc = (uint8_t *) find_IntfDesc(pDesc->high_speed_desc, CDC_COMMUNICATION_INTERFACE_CLASS);
 	cdc_param.dif_intf_desc = (uint8_t *) find_IntfDesc(pDesc->high_speed_desc, CDC_DATA_INTERFACE_CLASS);
 	cdc_param.SetLineCode = VCOM_SetLineCode;
+	cdc_param.SetCtrlLineState = VCOM_SetCtrLineState;
 
 	ret = USBD_API->cdc->init(hUsb, &cdc_param, &g_vCOM.hCdc);
 
