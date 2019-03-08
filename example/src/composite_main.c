@@ -37,10 +37,6 @@
 #include "app_usbd_cfg.h"
 #include "cdc_vcom.h"
 
-//test with LPC ADC!
-
-static ADC_CLOCK_SETUP_T ADCSetup;
-
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -103,6 +99,19 @@ static ADC_CLOCK_SETUP_T ADCSetup;
 /* Transmit and receive ring buffers (UART/CDC)*/
 RINGBUFF_T txring, rxring;
 
+/** @brief I2C Transer struct */
+static I2C_XFER_T i2c_xfer;
+/** @brief I2C Data area for reading (from ESP32 -> I2C master)
+ * @note We have 5 ADC channels (2B each) */
+static uint8_t adc_data[10];
+/** @brief I2C RX array.
+ * @note We will get HID data here
+ */
+static uint8_t hid_data[10];
+
+/** @brief Our local I2C adress for slave 0 */
+#define I2C_SLAVE_ADDR_0 0x05
+
 //added this const here, because if we do not need anything from board lib, it does not compile.
 const uint32_t OscRateIn = 12000000;
 
@@ -114,24 +123,8 @@ const uint32_t OscRateIn = 12000000;
 /* Transmit and receive buffers (UART/CDC)*/
 static uint8_t rxbuff[UART_RXB_SIZE], txbuff[UART_TXB_SIZE];
 
-/* Length of HID buffer (in bytes) */
-#define HID_BUF_SIZE 5
-
 /* HID input completed, this variable is set, if the stop edge is received. It contains the received edges timings (excluding stop edge) */
 volatile uint32_t hid_arrived = 0;
-/* HID input edge buffer, used in timer isr to save the received edges, processed in main */
-volatile uint32_t hidBuffEdges[HID_BUF_SIZE*8]; //declared as HID_BUF_SIZE*8, because of 8 edges each byte
-
-/* single bit time for receiving HID ('0' bit, '1' bit is twice this value) */
-//normal value 160
-#define HID_BIT_TIME_0_MIN	100
-#define HID_BIT_TIME_0_MAX	200
-//normal value 320
-#define HID_BIT_TIME_1_MIN	250
-#define HID_BIT_TIME_1_MAX	450
-//normal value: 640
-#define HID_BIT_TIME_S_MIN	500
-#define HID_BIT_TIME_S_MAX	800
 
 /*****************************************************************************
  * Public types/enumerations/variables
@@ -419,48 +412,6 @@ USB_INTERFACE_DESCRIPTOR *find_IntfDesc(const uint8_t *pDesc, uint32_t intfClass
 	return pIntfDesc;
 }
 
-void TIMER32_0_IRQHandler(void)
-{
-	//previous captured timer value
-	static uint32_t capture_prev = 0;
-	//edge counter
-	static uint32_t edgeC = 0;
-	//calculate diff between edges & save for next IRQ
-	uint32_t diff = Chip_TIMER_ReadCapture(LPC_TIMER32_0, 0) - capture_prev;
-	capture_prev = Chip_TIMER_ReadCapture(LPC_TIMER32_0, 0);
-	//clear pending
-	Chip_TIMER_ClearCapture(LPC_TIMER32_0, 0);
-
-	//discard wrong readings
-	if(diff > HID_BIT_TIME_S_MAX) return;
-
-	//if this variable is still set, main did not process yet -> do nothing
-	if(hid_arrived == 0)
-	{
-		//hid arrived is 0 -> process
-		//if stop bit detected, save edge count to hid_arrived
-		hidBuffEdges[edgeC] = diff;
-
-		if(diff <= HID_BIT_TIME_S_MAX && diff >= HID_BIT_TIME_S_MIN) {
-			//save received bytes
-			hid_arrived = edgeC;
-			edgeC = 0;
-		} else edgeC++;
-	}
-}
-
-void int_to_str(uint16_t val, char * target)   // convert integer number (0-1023, 4-digits) into ASCII string
-{
-
-	for (int8_t i=3;i>=0;i--)
-	{
-	    target[i]= val%10 + '0';   // convert einerstelle into ascii-readable character
-    	val/=10;                // shift value 1 to the right (in decimal)
-	}
-
-	target[4]=0;  // endkennung für string
-}
-
 /**
  * @brief	Handle interrupt from SysTick timer
  * @return	Nothing
@@ -468,26 +419,6 @@ void int_to_str(uint16_t val, char * target)   // convert integer number (0-1023
 void SysTick_Handler(void)
 {
 	tick_count++;
-	/*if((tick_count % 16) == 0)
-	{
-		uint8_t buf[8];
-		uint16_t temp = 0;
-		Chip_ADC_ReadValue(LPC_ADC,0,&temp);
-		int_to_str(temp,buf);
-		vcom_write(buf, 4);
-		Chip_ADC_ReadValue(LPC_ADC,1,&temp);
-		int_to_str(temp,buf);
-				vcom_write(buf, 4);
-		Chip_ADC_ReadValue(LPC_ADC,2,&temp);
-		int_to_str(temp,buf);
-				vcom_write(buf, 4);
-		Chip_ADC_ReadValue(LPC_ADC,3,&temp);
-		int_to_str(temp,buf);
-				vcom_write(buf, 4);
-				buf[0] = 0x0A;
-				buf[1] = 0x0D;
-		vcom_write(buf, 2);
-	}*/
 }
 
 /** @brief Handler for USB suspend event
@@ -510,49 +441,134 @@ ErrorCode_t onResumeHandler(USBD_HANDLE_T hUsb)
 	return LPC_OK;
 }
 
-
-/**
- * @brief Main for USB CDC+HID to serial bridge for FLipMouse/FABI with ESP32
- *
- * The main method initialises:
- * * the USBD ROM stack
- * * UART for receiving CDC data or HID commands (determined by GPIO)
- * * Timer for measuring a timeout before processing HID commands
- * * Handle data from/to CDC and HID
- *
- * @return	Function should not exit.
- */
-int main(void)
+void ADC_Init(void)
 {
-	USBD_API_INIT_PARAM_T usb_param;
-	USB_CORE_DESCS_T desc;
-	ErrorCode_t ret = LPC_OK;
-	//flag for connection status (0 not connected, != 0 connected)
-	//currently read bytes from CDC
-	uint32_t prompt = 0, rdCnt = 0;
-	uint32_t inBootMode = 0;
-
-	/* enable clocks and pinmux */
-	usb_pin_clk_init();
-	/* Initialize GPIOs and turn off ESP32*/
-	Chip_GPIO_Init(LPC_GPIO);
-	/* Initialize ESP reset related GPIOs */
-	ESP32_PinInit();
-	ESP32_Disable();
-
-	//test with LPC adc
+	static ADC_CLOCK_SETUP_T ADCSetup;
+	//function 2 (IOCON) for channels 0-3 (shared with JTAG)
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 11, FUNC2);
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 12, FUNC2);
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 13, FUNC2);
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 14, FUNC2);
+	//function 1 (IOCON) for channel 5!
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 16, FUNC1);
 	Chip_ADC_Init(LPC_ADC, &ADCSetup);
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH1, ENABLE);
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH2, ENABLE);
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH3, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH5, ENABLE);
+	//enable interrupt for channel 5
+	//this way, we receive an IRQ when all 5 channels are finished
+	Chip_ADC_Int_SetChannelCmd(LPC_ADC,ADC_CH5,ENABLE);
+	NVIC_EnableIRQ(ADC_IRQn);
 	Chip_ADC_SetBurstCmd(LPC_ADC,ENABLE);
+}
 
-	/* Initialise call back structures */
+
+/**
+ * @brief	I2C Interrupt Handler
+ * @return	None
+ */
+void I2C_IRQHandler(void)
+{
+	if (Chip_I2C_IsMasterActive(I2C0)) {
+		Chip_I2C_MasterStateHandler(I2C0);
+	}
+	else {
+		Chip_I2C_SlaveStateHandler(I2C0);
+	}
+}
+
+
+/* Slave event handler for simulated EEPROM */
+static void i2c_events(I2C_ID_T id, I2C_EVENT_T event)
+{
+	switch (event) {
+	case I2C_EVENT_DONE:
+		//we receive HID data
+		i2c_xfer.rxBuff = hid_data;
+		i2c_xfer.rxSz = sizeof(hid_data);
+		//we send ADC data
+		i2c_xfer.txBuff = adc_data;
+		i2c_xfer.txSz = sizeof(adc_data);
+
+		break;
+
+	case I2C_EVENT_SLAVE_RX:
+		//we got HID data -> activate parser (in main)
+		hid_arrived = 1;
+		break;
+
+	case I2C_EVENT_SLAVE_TX:
+		//don't need to do anything here.
+		break;
+	default: break;
+	}
+}
+
+void ADC_MapToI2C(void)
+{
+	uint16_t temp = 0;
+	//enter a critical section
+	//we don't want to be interrupted
+	//on updating data in array.
+	//-> inconsistent data would be possible
+	NVIC_DisableIRQ(I2C0_IRQn);
+	//iterate all 4 FSR channels (up/down/left/right)
+	for(uint8_t i = 0; i<=3; i++)
+	{
+		temp = 0;
+		Chip_ADC_ReadValue(LPC_ADC,i,&temp);
+		//split up into 8bit chunks
+		adc_data[i*2] = temp & 0xFF;
+		adc_data[i*2+1] = (temp & 0xFF00)>>8;
+	}
+	//read again the pressure sensor (Channel 5).
+	temp = 0;
+	Chip_ADC_ReadValue(LPC_ADC,5,&temp);
+	adc_data[8] = temp & 0xFF;
+	adc_data[9] = (temp & 0xFF00)>>8;
+	//re-enable I2C interrupt
+	NVIC_EnableIRQ(I2C0_IRQn);
+}
+
+
+void ADC_IRQHandler(void)
+{
+	//map the ADC data to the I2C array (disable I2C IRQ in between)
+	ADC_MapToI2C();
+}
+
+void I2C_Init()
+{
+	Chip_SYSCTL_PeriphReset(RESET_I2C0);
+	//init SDA/SCL with FastPlus Bit
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 4, IOCON_FUNC1 | 0);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 5, IOCON_FUNC1 | 0);
+	/* Initialize I2C */
+	Chip_I2C_Init(I2C0);
+	Chip_I2C_SetClockRate(I2C0, 400000);
+	//Chip_I2C_SetMasterEventHandler(id, Chip_I2C_EventHandler);
+	NVIC_EnableIRQ(I2C0_IRQn);
+	memset(adc_data, 0x00, sizeof(adc_data));
+	memset(hid_data, 0x00, sizeof(hid_data));
+	i2c_xfer.slaveAddr = (I2C_SLAVE_ADDR_0 << 1);
+	//we receive HID data
+	i2c_xfer.rxBuff = hid_data;
+	i2c_xfer.rxSz = sizeof(hid_data);
+	//we send ADC data
+	i2c_xfer.txBuff = adc_data;
+	i2c_xfer.txSz = sizeof(adc_data);
+	Chip_I2C_SlaveSetup(I2C0, I2C_SLAVE_0, &i2c_xfer, i2c_events, 0);
+}
+
+ErrorCode_t USB_Init()
+{
+	ErrorCode_t ret = LPC_OK;
+	USBD_API_INIT_PARAM_T usb_param;
+	USB_CORE_DESCS_T desc;
+	/* enable clocks and pinmux */
+	usb_pin_clk_init();
 	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
 	usb_param.USB_Resume_Event = onResumeHandler;
 	usb_param.USB_Suspend_Event = onSuspendHandler;
@@ -579,9 +595,9 @@ int main(void)
 	if (ret == LPC_OK) {
 		//initialize HID interface
 		ret = HID_Init(g_hUsb,
-						 (USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.full_speed_desc,
-																	USB_DEVICE_CLASS_HUMAN_INTERFACE),
-						 &usb_param.mem_base, &usb_param.mem_size);
+				(USB_INTERFACE_DESCRIPTOR *) find_IntfDesc(desc.full_speed_desc,
+						USB_DEVICE_CLASS_HUMAN_INTERFACE),
+						&usb_param.mem_base, &usb_param.mem_size);
 		if (ret == LPC_OK) {
 			// Init CDC interface
 			ret = vcom_init(g_hUsb, &desc, &usb_param);
@@ -591,11 +607,16 @@ int main(void)
 				//and set the USB HW to connect
 				//normally this would setup the pull up resistor, not used in this case.
 				USBD_API->hw->Connect(g_hUsb, 1);
+				return LPC_OK;
 			}
 		}
 	}
+	//didn't succed, return fail.
+	return ERR_FAILED;
+}
 
-
+void UART_Init()
+{
 	/*++++ Setup UART for 230400 8N1 - CDC communication ++++*/
 	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_TX, PIN_ESP_TX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_18 used for RXD */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_RX, PIN_ESP_RX, IOCON_FUNC1 | IOCON_MODE_INACT);	/* PIO0_19 used for TXD */
@@ -616,25 +637,44 @@ int main(void)
 	/* preemption = 1, sub-priority = 1 */
 	NVIC_SetPriority(UART0_IRQn, 1);
 	NVIC_EnableIRQ(UART0_IRQn);
+}
 
-	/*++++ Setup timer 0 for HID command receiving */
-	uint8_t hidBuff[HID_BUF_SIZE];
-	uint8_t hidLen = 0;
-	//clear HID buffer
-	memset((void*)hidBuffEdges,0,HID_BUF_SIZE*8);
 
-	Chip_TIMER_Init(LPC_TIMER32_0);
-	// Timer setup for capture (both edges + interrupt)
-	Chip_IOCON_PinMuxSet(LPC_IOCON, PORT_ESP_SIGNAL, PIN_ESP_SIGNAL, IOCON_FUNC2 | IOCON_MODE_INACT);	/* PIO0_17 used for HID receiving. */
-	Chip_TIMER_Reset(LPC_TIMER32_0);
-	Chip_TIMER_PrescaleSet(LPC_TIMER32_0, 2);
-	Chip_TIMER_CaptureFallingEdgeEnable(LPC_TIMER32_0, 0);
-	Chip_TIMER_CaptureRisingEdgeEnable(LPC_TIMER32_0, 0);
-	Chip_TIMER_CaptureEnableInt(LPC_TIMER32_0, 0);
-	NVIC_ClearPendingIRQ(TIMER_32_0_IRQn);
-	NVIC_EnableIRQ(TIMER_32_0_IRQn);
-	//finally start timer.
-	Chip_TIMER_Enable(LPC_TIMER32_0);
+/**
+ * @brief Main for USB CDC+HID to serial bridge for FLipMouse/FABI with ESP32
+ *
+ * The main method initialises:
+ * * the USBD ROM stack
+ * * UART for receiving CDC data or HID commands (determined by GPIO)
+ * * Timer for measuring a timeout before processing HID commands
+ * * Handle data from/to CDC and HID
+ *
+ * @return	Function should not exit.
+ */
+int main(void)
+{
+
+	ErrorCode_t ret = LPC_OK;
+	//flag for connection status (0 not connected, != 0 connected)
+	//currently read bytes from CDC
+	uint32_t prompt = 0, rdCnt = 0;
+	uint32_t inBootMode = 0;
+
+	/* Initialize GPIOs and turn off ESP32*/
+	Chip_GPIO_Init(LPC_GPIO);
+	/* Initialize ESP reset related GPIOs */
+	ESP32_PinInit();
+	ESP32_Disable();
+
+	/* Initialize ADC & I2C */
+	ADC_Init();
+	I2C_Init();
+
+	/* Initialize USB */
+	ret = USB_Init();
+
+	/* Initialize UART */
+	UART_Init();
 
 	/*++++ Init systick ++++*/
 	SystemCoreClockUpdate();
@@ -653,32 +693,8 @@ int main(void)
 			/* Do HID tasks (mouse, keyboard and joystick*/
 			if(hid_arrived != 0) //if a HID command was received
 			{
-				//clear previous HID buffer
-				memset(hidBuff,0,HID_BUF_SIZE);
-				uint8_t shift = 0;
-				//for each received edge
-				for(uint8_t i = 0; i<hid_arrived; i++)
-				{
-					//if it is a 1 bit, set bit in byte, and increase bit/byte offset
-					if(hidBuffEdges[i] <= HID_BIT_TIME_1_MAX && hidBuffEdges[i] >= HID_BIT_TIME_1_MIN)
-					{
-						hidBuff[hidLen] |= (1<<shift);
-						shift++;
-						if(shift == 8) { hidLen++; shift = 0; }
-					}
-					if(hidBuffEdges[i] <= HID_BIT_TIME_0_MAX && hidBuffEdges[i] >= HID_BIT_TIME_0_MIN)
-					{
-						shift++;
-						if(shift == 8) { hidLen++; shift = 0; }
-					}
-					//do NOT write outside array
-					if(hidLen == HID_BUF_SIZE) break;
-				}
-				//clear HID edge buffer
-				memset((void*)hidBuffEdges,0,HID_BUF_SIZE*8);
 				hid_arrived = 0; //reset flag for next packet
-				parseBuffer(hidBuff, hidLen); //parse buffer for HID commands
-				hidLen = 0; //reset HID length
+				parseBuffer(hid_data, sizeof(hid_data)); //parse buffer for HID commands
 			}
 			HID_Tasks(); //perform USB-HID tasks
 

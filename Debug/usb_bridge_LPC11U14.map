@@ -10,14 +10,14 @@ Archive member included to satisfy reference by file (symbol)
                               /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o) (Chip_Clock_SetSystemPLLSource)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
                               ./example/src/composite_main.o (Chip_GPIO_Init)
+/home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                              ./example/src/composite_main.o (Chip_I2C_MasterStateHandler)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
                               ./example/src/composite_main.o (Chip_IOCON_PinMuxSet)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
                               ./example/src/composite_main.o (RingBuffer_Init)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
                               /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o) (Chip_SYSCTL_PowerDown)
-/home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
-                              ./example/src/composite_main.o (Chip_TIMER_Init)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
                               ./example/src/composite_main.o (Chip_UART_Init)
 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
@@ -112,7 +112,6 @@ SystemCoreClock     0x4               /home/beni/Documents/MCUXpresso_10.1.0_589
 command             0x14              ./example/src/composite_main.o
 rxring              0x14              ./example/src/composite_main.o
 result              0x10              ./example/src/composite_main.o
-hidBuffEdges        0xa0              ./example/src/composite_main.o
 
 Discarded input sections
 
@@ -235,8 +234,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./example/src/composite_main.o
  .data          0x0000000000000000        0x0 ./example/src/composite_main.o
  .bss           0x0000000000000000        0x0 ./example/src/composite_main.o
- .text.NVIC_DisableIRQ
-                0x0000000000000000       0x30 ./example/src/composite_main.o
  .text.Chip_UART_TXDisable
                 0x0000000000000000       0x16 ./example/src/composite_main.o
  .bss.tick_count_prev
@@ -247,9 +244,7 @@ Discarded input sections
                 0x0000000000000000       0x48 ./example/src/composite_main.o
  .text.ESP32_SwitchUART
                 0x0000000000000000       0xd0 ./example/src/composite_main.o
- .text.int_to_str
-                0x0000000000000000       0x7c ./example/src/composite_main.o
- .bss.output_prev.7032
+ .bss.output_prev.7033
                 0x0000000000000000        0x4 ./example/src/composite_main.o
  .debug_macro   0x0000000000000000      0x8b6 ./example/src/composite_main.o
  .debug_macro   0x0000000000000000       0x10 ./example/src/composite_main.o
@@ -556,16 +551,10 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.Chip_Clock_DisablePeriphClock
                 0x0000000000000000       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .text.readAdcVal
-                0x0000000000000000       0x46 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.Chip_ADC_DeInit
                 0x0000000000000000       0x2a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .text.Chip_ADC_ReadValue
-                0x0000000000000000       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.Chip_ADC_ReadStatus
                 0x0000000000000000       0x7a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .text.Chip_ADC_Int_SetChannelCmd
-                0x0000000000000000       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.Chip_ADC_SetStartMode
                 0x0000000000000000       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.Chip_ADC_SetSampleRate
@@ -786,6 +775,89 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
  .debug_macro   0x0000000000000000       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
  .debug_macro   0x0000000000000000      0x21c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text          0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .data          0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .bss           0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_Clock_DisablePeriphClock
+                0x0000000000000000       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.disableClk
+                0x0000000000000000       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.startMasterXfer
+                0x0000000000000000       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.isI2CBusFree
+                0x0000000000000000       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_EventHandlerPolling
+                0x0000000000000000       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_DeInit
+                0x0000000000000000       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_GetClockRate
+                0x0000000000000000       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_SetMasterEventHandler
+                0x0000000000000000       0x48 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_GetMasterEventHandler
+                0x0000000000000000       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_MasterTransfer
+                0x0000000000000000       0xa4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_MasterSend
+                0x0000000000000000       0x78 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_MasterCmdRead
+                0x0000000000000000       0x84 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_MasterRead
+                0x0000000000000000       0x72 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_Disable
+                0x0000000000000000       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.Chip_I2C_IsStateChanged
+                0x0000000000000000       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x8b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x12d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x5b2 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x22 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x7b /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x1f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x3a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x241 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x125 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x2e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0xf1 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x137 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x31a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x4f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0xb8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x11 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x7c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x0000000000000000      0x21c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
@@ -912,65 +984,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
  .debug_macro   0x0000000000000000       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
  .debug_macro   0x0000000000000000      0x21c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text          0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .data          0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .bss           0x0000000000000000        0x0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text.Chip_Clock_DisablePeriphClock
-                0x0000000000000000       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text.Chip_TIMER_DeInit
-                0x0000000000000000       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text.Chip_TIMER_ExtMatchControlSet
-                0x0000000000000000       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x8b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x12d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x5b2 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x22 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x7b /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x1f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x3a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x241 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x125 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x2e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0xf1 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x137 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x31a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x4f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0xb8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x11 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x7c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000000000      0x21c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .group         0x0000000000000000        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
@@ -1333,7 +1346,7 @@ END GROUP
                 0x0000000020004800                __top_RamUsb2 = 0x20004800
                 0x0000000020004800                __top_RAM2 = 0x20004800
 
-.text           0x0000000000000000     0x5d10
+.text           0x0000000000000000     0x6724
  FILL mask 0xff
                 0x0000000000000000                __vectors_start__ = ABSOLUTE (.)
  *(.isr_vector)
@@ -1342,16 +1355,16 @@ END GROUP
                 0x00000000000000c0                . = ALIGN (0x4)
                 0x00000000000000c0                __section_table_start = .
                 0x00000000000000c0                __data_section_table = .
-                0x00000000000000c0        0x4 LONG 0x5d10 LOADADDR (.data)
+                0x00000000000000c0        0x4 LONG 0x6724 LOADADDR (.data)
                 0x00000000000000c4        0x4 LONG 0x10000000 ADDR (.data)
-                0x00000000000000c8        0x4 LONG 0x6c SIZEOF (.data)
-                0x00000000000000cc        0x4 LONG 0x5d10 LOADADDR (.data_RAM2)
+                0x00000000000000c8        0x4 LONG 0x88 SIZEOF (.data)
+                0x00000000000000cc        0x4 LONG 0x6724 LOADADDR (.data_RAM2)
                 0x00000000000000d0        0x4 LONG 0x20004000 ADDR (.data_RAM2)
                 0x00000000000000d4        0x4 LONG 0x0 SIZEOF (.data_RAM2)
                 0x00000000000000d8                __data_section_table_end = .
                 0x00000000000000d8                __bss_section_table = .
-                0x00000000000000d8        0x4 LONG 0x1000006c ADDR (.bss)
-                0x00000000000000dc        0x4 LONG 0xc44 SIZEOF (.bss)
+                0x00000000000000d8        0x4 LONG 0x10000088 ADDR (.bss)
+                0x00000000000000dc        0x4 LONG 0xbf4 SIZEOF (.bss)
                 0x00000000000000e0        0x4 LONG 0x20004000 ADDR (.bss_RAM2)
                 0x00000000000000e4        0x4 LONG 0x0 SIZEOF (.bss_RAM2)
                 0x00000000000000e8                __bss_section_table_end = .
@@ -1364,6 +1377,7 @@ END GROUP
                 0x00000000000000ec                SVC_Handler
                 0x00000000000000ee                PendSV_Handler
                 0x00000000000000f2                TIMER16_0_IRQHandler
+                0x00000000000000f2                TIMER32_0_IRQHandler
                 0x00000000000000f2                FLEX_INT7_IRQHandler
                 0x00000000000000f2                TIMER32_1_IRQHandler
                 0x00000000000000f2                FLEX_INT1_IRQHandler
@@ -1375,11 +1389,9 @@ END GROUP
                 0x00000000000000f2                TIMER16_1_IRQHandler
                 0x00000000000000f2                USB_FIQHandler
                 0x00000000000000f2                FLEX_INT5_IRQHandler
-                0x00000000000000f2                ADC_IRQHandler
                 0x00000000000000f2                SSP1_IRQHandler
                 0x00000000000000f2                FLEX_INT3_IRQHandler
                 0x00000000000000f2                BOD_IRQHandler
-                0x00000000000000f2                I2C_IRQHandler
                 0x00000000000000f2                WDT_IRQHandler
                 0x00000000000000f2                GINT0_IRQHandler
                 0x00000000000000f2                FLEX_INT4_IRQHandler
@@ -1417,645 +1429,712 @@ END GROUP
                 0x0000000000000554                vcom_write
  .text.NVIC_EnableIRQ
                 0x00000000000005cc       0x2c ./example/src/composite_main.o
- .text.NVIC_ClearPendingIRQ
-                0x00000000000005f8       0x34 ./example/src/composite_main.o
+ .text.NVIC_DisableIRQ
+                0x00000000000005f8       0x30 ./example/src/composite_main.o
  .text.NVIC_SetPriority
-                0x000000000000062c       0xdc ./example/src/composite_main.o
+                0x0000000000000628       0xdc ./example/src/composite_main.o
  .text.SysTick_Config
-                0x0000000000000708       0x4c ./example/src/composite_main.o
+                0x0000000000000704       0x4c ./example/src/composite_main.o
+ .text.Chip_SYSCTL_AssertPeriphReset
+                0x0000000000000750       0x30 ./example/src/composite_main.o
+ .text.Chip_SYSCTL_DeassertPeriphReset
+                0x0000000000000780       0x2c ./example/src/composite_main.o
+ .text.Chip_SYSCTL_PeriphReset
+                0x00000000000007ac       0x28 ./example/src/composite_main.o
  .text.Chip_Clock_SetSysClockDiv
-                0x0000000000000754       0x1c ./example/src/composite_main.o
+                0x00000000000007d4       0x1c ./example/src/composite_main.o
  .text.Chip_Clock_EnablePeriphClock
-                0x0000000000000770       0x30 ./example/src/composite_main.o
- .text.Chip_TIMER_ClearCapture
-                0x00000000000007a0       0x28 ./example/src/composite_main.o
- .text.Chip_TIMER_Enable
-                0x00000000000007c8       0x1c ./example/src/composite_main.o
+                0x00000000000007f0       0x30 ./example/src/composite_main.o
  .text.Chip_TIMER_ReadCount
-                0x00000000000007e4       0x14 ./example/src/composite_main.o
- .text.Chip_TIMER_PrescaleSet
-                0x00000000000007f8       0x18 ./example/src/composite_main.o
- .text.Chip_TIMER_ReadCapture
-                0x0000000000000810       0x28 ./example/src/composite_main.o
- .text.Chip_TIMER_CaptureRisingEdgeEnable
-                0x0000000000000838       0x34 ./example/src/composite_main.o
- .text.Chip_TIMER_CaptureFallingEdgeEnable
-                0x000000000000086c       0x36 ./example/src/composite_main.o
- .text.Chip_TIMER_CaptureEnableInt
-                0x00000000000008a2       0x36 ./example/src/composite_main.o
+                0x0000000000000820       0x14 ./example/src/composite_main.o
  .text.RingBuffer_Flush
-                0x00000000000008d8       0x1e ./example/src/composite_main.o
+                0x0000000000000834       0x1e ./example/src/composite_main.o
  .text.Chip_UART_TXEnable
-                0x00000000000008f6       0x16 ./example/src/composite_main.o
+                0x0000000000000852       0x16 ./example/src/composite_main.o
  .text.Chip_UART_IntEnable
-                0x000000000000090c       0x1e ./example/src/composite_main.o
+                0x0000000000000868       0x1e ./example/src/composite_main.o
  .text.Chip_UART_SetupFIFOS
-                0x000000000000092a       0x18 ./example/src/composite_main.o
+                0x0000000000000886       0x18 ./example/src/composite_main.o
  .text.Chip_UART_ConfigData
-                0x0000000000000942       0x18 ./example/src/composite_main.o
- *fill*         0x000000000000095a        0x2 ff
+                0x000000000000089e       0x18 ./example/src/composite_main.o
+ *fill*         0x00000000000008b6        0x2 ff
  .text.iap_entry
-                0x000000000000095c       0x20 ./example/src/composite_main.o
+                0x00000000000008b8       0x20 ./example/src/composite_main.o
  .text.Chip_GPIO_SetPinState
-                0x000000000000097c       0x3e ./example/src/composite_main.o
+                0x00000000000008d8       0x3e ./example/src/composite_main.o
  .text.Chip_GPIO_SetPinDIROutput
-                0x00000000000009ba       0x50 ./example/src/composite_main.o
+                0x0000000000000916       0x50 ./example/src/composite_main.o
  .text.Chip_GPIO_SetPinDIRInput
-                0x0000000000000a0a       0x52 ./example/src/composite_main.o
+                0x0000000000000966       0x52 ./example/src/composite_main.o
  .text.vcom_connected
-                0x0000000000000a5c       0x1c ./example/src/composite_main.o
+                0x00000000000009b8       0x1c ./example/src/composite_main.o
  .text.usb_pin_clk_init
-                0x0000000000000a78       0x40 ./example/src/composite_main.o
+                0x00000000000009d4       0x40 ./example/src/composite_main.o
  .text.LPC_InvokeBootloader
-                0x0000000000000ab8       0x5c ./example/src/composite_main.o
-                0x0000000000000ab8                LPC_InvokeBootloader
+                0x0000000000000a14       0x5c ./example/src/composite_main.o
+                0x0000000000000a14                LPC_InvokeBootloader
  .text.ESP32_ResetBootloader
-                0x0000000000000b14       0xb8 ./example/src/composite_main.o
-                0x0000000000000b14                ESP32_ResetBootloader
+                0x0000000000000a70       0xb8 ./example/src/composite_main.o
+                0x0000000000000a70                ESP32_ResetBootloader
  .text.ESP32_Enable
-                0x0000000000000bcc       0x34 ./example/src/composite_main.o
+                0x0000000000000b28       0x34 ./example/src/composite_main.o
  .text.ESP32_Disable
-                0x0000000000000c00       0x42 ./example/src/composite_main.o
- *fill*         0x0000000000000c42        0x2 ff
+                0x0000000000000b5c       0x42 ./example/src/composite_main.o
+ *fill*         0x0000000000000b9e        0x2 ff
  .text.ESP32_PinInit
-                0x0000000000000c44       0x34 ./example/src/composite_main.o
+                0x0000000000000ba0       0x34 ./example/src/composite_main.o
  .text.UART_IRQHandler
-                0x0000000000000c78       0x24 ./example/src/composite_main.o
-                0x0000000000000c78                UART_IRQHandler
+                0x0000000000000bd4       0x24 ./example/src/composite_main.o
+                0x0000000000000bd4                UART_IRQHandler
  .text.USB_IRQHandler
-                0x0000000000000c9c       0x24 ./example/src/composite_main.o
-                0x0000000000000c9c                USB_IRQHandler
+                0x0000000000000bf8       0x24 ./example/src/composite_main.o
+                0x0000000000000bf8                USB_IRQHandler
  .text.find_IntfDesc
-                0x0000000000000cc0       0x5a ./example/src/composite_main.o
-                0x0000000000000cc0                find_IntfDesc
- *fill*         0x0000000000000d1a        0x2 ff
- .text.TIMER32_0_IRQHandler
-                0x0000000000000d1c       0xa0 ./example/src/composite_main.o
-                0x0000000000000d1c                TIMER32_0_IRQHandler
+                0x0000000000000c1c       0x5a ./example/src/composite_main.o
+                0x0000000000000c1c                find_IntfDesc
+ *fill*         0x0000000000000c76        0x2 ff
  .text.SysTick_Handler
-                0x0000000000000dbc       0x18 ./example/src/composite_main.o
-                0x0000000000000dbc                SysTick_Handler
+                0x0000000000000c78       0x18 ./example/src/composite_main.o
+                0x0000000000000c78                SysTick_Handler
  .text.onSuspendHandler
-                0x0000000000000dd4       0x16 ./example/src/composite_main.o
-                0x0000000000000dd4                onSuspendHandler
+                0x0000000000000c90       0x16 ./example/src/composite_main.o
+                0x0000000000000c90                onSuspendHandler
  .text.onResumeHandler
-                0x0000000000000dea       0x16 ./example/src/composite_main.o
-                0x0000000000000dea                onResumeHandler
- .text.main     0x0000000000000e00      0x4cc ./example/src/composite_main.o
-                0x0000000000000e00                main
+                0x0000000000000ca6       0x16 ./example/src/composite_main.o
+                0x0000000000000ca6                onResumeHandler
+ .text.ADC_Init
+                0x0000000000000cbc       0xb8 ./example/src/composite_main.o
+                0x0000000000000cbc                ADC_Init
+ .text.I2C_IRQHandler
+                0x0000000000000d74       0x22 ./example/src/composite_main.o
+                0x0000000000000d74                I2C_IRQHandler
+ *fill*         0x0000000000000d96        0x2 ff
+ .text.i2c_events
+                0x0000000000000d98       0x60 ./example/src/composite_main.o
+ .text.ADC_MapToI2C
+                0x0000000000000df8       0xa8 ./example/src/composite_main.o
+                0x0000000000000df8                ADC_MapToI2C
+ .text.ADC_IRQHandler
+                0x0000000000000ea0        0xe ./example/src/composite_main.o
+                0x0000000000000ea0                ADC_IRQHandler
+ *fill*         0x0000000000000eae        0x2 ff
+ .text.I2C_Init
+                0x0000000000000eb0       0xa0 ./example/src/composite_main.o
+                0x0000000000000eb0                I2C_Init
+ .text.USB_Init
+                0x0000000000000f50      0x120 ./example/src/composite_main.o
+                0x0000000000000f50                USB_Init
+ .text.UART_Init
+                0x0000000000001070       0xa0 ./example/src/composite_main.o
+                0x0000000000001070                UART_Init
+ .text.main     0x0000000000001110      0x110 ./example/src/composite_main.o
+                0x0000000000001110                main
  .text.USB_IsConfigured
-                0x00000000000012cc       0x20 ./example/src/hid.o
+                0x0000000000001220       0x20 ./example/src/hid.o
  .text.Keyboard_UpdateReport
-                0x00000000000012ec       0x80 ./example/src/hid.o
-                0x00000000000012ec                Keyboard_UpdateReport
+                0x0000000000001240       0x80 ./example/src/hid.o
+                0x0000000000001240                Keyboard_UpdateReport
  .text.Joystick_UpdateReport
-                0x000000000000136c       0x40 ./example/src/hid.o
-                0x000000000000136c                Joystick_UpdateReport
+                0x00000000000012c0       0x40 ./example/src/hid.o
+                0x00000000000012c0                Joystick_UpdateReport
  .text.UpdateReport
-                0x00000000000013ac        0xa ./example/src/hid.o
-                0x00000000000013ac                UpdateReport
- *fill*         0x00000000000013b6        0x2 ff
+                0x0000000000001300        0xa ./example/src/hid.o
+                0x0000000000001300                UpdateReport
+ *fill*         0x000000000000130a        0x2 ff
  .text.Mouse_UpdateReport
-                0x00000000000013b8       0x94 ./example/src/hid.o
-                0x00000000000013b8                Mouse_UpdateReport
+                0x000000000000130c       0x94 ./example/src/hid.o
+                0x000000000000130c                Mouse_UpdateReport
  .text.Mouse_GetReport
-                0x000000000000144c       0x80 ./example/src/hid.o
+                0x00000000000013a0       0x80 ./example/src/hid.o
  .text.Mouse_SetReport
-                0x00000000000014cc       0x3c ./example/src/hid.o
+                0x0000000000001420       0x3c ./example/src/hid.o
  .text.Mouse_EpIN_Hdlr
-                0x0000000000001508       0x28 ./example/src/hid.o
+                0x000000000000145c       0x28 ./example/src/hid.o
  .text.HID_Init
-                0x0000000000001530       0xec ./example/src/hid.o
-                0x0000000000001530                HID_Init
+                0x0000000000001484       0xec ./example/src/hid.o
+                0x0000000000001484                HID_Init
  .text.HID_waitIdle
-                0x000000000000161c       0x18 ./example/src/hid.o
-                0x000000000000161c                HID_waitIdle
+                0x0000000000001570       0x18 ./example/src/hid.o
+                0x0000000000001570                HID_waitIdle
  .text.HID_Tasks
-                0x0000000000001634       0xf0 ./example/src/hid.o
-                0x0000000000001634                HID_Tasks
+                0x0000000000001588       0xf0 ./example/src/hid.o
+                0x0000000000001588                HID_Tasks
  .text.remove_keycode
-                0x0000000000001724       0x7c ./example/src/parser.o
-                0x0000000000001724                remove_keycode
+                0x0000000000001678       0x7c ./example/src/parser.o
+                0x0000000000001678                remove_keycode
  .text.add_keycode
-                0x00000000000017a0       0xca ./example/src/parser.o
-                0x00000000000017a0                add_keycode
+                0x00000000000016f4       0xca ./example/src/parser.o
+                0x00000000000016f4                add_keycode
  .text.is_in_keycode_arr
-                0x000000000000186a       0x6e ./example/src/parser.o
-                0x000000000000186a                is_in_keycode_arr
+                0x00000000000017be       0x6e ./example/src/parser.o
+                0x00000000000017be                is_in_keycode_arr
  .text.parseBuffer
-                0x00000000000018d8      0x948 ./example/src/parser.o
-                0x00000000000018d8                parseBuffer
+                0x000000000000182c      0x948 ./example/src/parser.o
+                0x000000000000182c                parseBuffer
  .text.SystemInit
-                0x0000000000002220        0xe ./example/src/sysinit.o
-                0x0000000000002220                SystemInit
- *fill*         0x000000000000222e        0x2 ff
+                0x0000000000002174        0xe ./example/src/sysinit.o
+                0x0000000000002174                SystemInit
+ *fill*         0x0000000000002182        0x2 ff
  .text.Chip_FMC_SetFLASHAccess
-                0x0000000000002230       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000002184       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_SetupSystemPLL
-                0x0000000000002260       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x00000000000021b4       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_IsSystemPLLLocked
-                0x0000000000002298       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x00000000000021ec       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_SetupUSBPLL
-                0x00000000000022b4       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000002208       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_IsUSBPLLLocked
-                0x00000000000022ec       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000002240       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_SetSysClockDiv
-                0x0000000000002308       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x000000000000225c       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Chip_Clock_EnablePeriphClock
-                0x0000000000002324       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000002278       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.SystemSetupClocking
-                0x0000000000002354       0x92 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- *fill*         0x00000000000023e6        0x2 ff
+                0x00000000000022a8       0x92 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ *fill*         0x000000000000233a        0x2 ff
  .text.SystemSetupMuxing
-                0x00000000000023e8       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x000000000000233c       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .text.Board_SystemInit
-                0x0000000000002440       0x12 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
-                0x0000000000002440                Board_SystemInit
- *fill*         0x0000000000002452        0x2 ff
+                0x0000000000002394       0x12 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000002394                Board_SystemInit
+ *fill*         0x00000000000023a6        0x2 ff
  .text.Chip_Clock_EnablePeriphClock
-                0x0000000000002454       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x00000000000023a8       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.getFullConvClk
-                0x0000000000002484        0xc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x00000000000023d8        0xc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .text.getClkDiv
-                0x0000000000002490       0x7a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- *fill*         0x000000000000250a        0x2 ff
+                0x00000000000023e4       0x7a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ *fill*         0x000000000000245e        0x2 ff
  .text.setStartMode
-                0x000000000000250c       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
-                0x000000000000250c                setStartMode
+                0x0000000000002460       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x0000000000002460                setStartMode
+ .text.readAdcVal
+                0x0000000000002494       0x46 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x0000000000002494                readAdcVal
+ *fill*         0x00000000000024da        0x2 ff
  .text.Chip_ADC_Init
-                0x0000000000002540       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
-                0x0000000000002540                Chip_ADC_Init
+                0x00000000000024dc       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x00000000000024dc                Chip_ADC_Init
+ .text.Chip_ADC_ReadValue
+                0x000000000000256c       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x000000000000256c                Chip_ADC_ReadValue
+ .text.Chip_ADC_Int_SetChannelCmd
+                0x0000000000002598       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x0000000000002598                Chip_ADC_Int_SetChannelCmd
  .text.Chip_ADC_EnableChannel
-                0x00000000000025d0       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
-                0x00000000000025d0                Chip_ADC_EnableChannel
+                0x00000000000025ec       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x00000000000025ec                Chip_ADC_EnableChannel
  .text.Chip_ADC_SetBurstCmd
-                0x0000000000002634       0x48 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
-                0x0000000000002634                Chip_ADC_SetBurstCmd
+                0x0000000000002650       0x48 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x0000000000002650                Chip_ADC_SetBurstCmd
  .text.SystemCoreClockUpdate
-                0x000000000000267c       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
-                0x000000000000267c                SystemCoreClockUpdate
+                0x0000000000002698       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+                0x0000000000002698                SystemCoreClockUpdate
  .text.Chip_Clock_GetMainOscRate
-                0x0000000000002694       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000026b0       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
  .text.Chip_Clock_GetIntOscRate
-                0x00000000000026a8       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000026c4       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
  .text.Chip_Clock_GetWDTLFORate
-                0x00000000000026b8       0x48 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000026d4       0x48 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
  .text.Chip_Clock_GetPLLFreq
-                0x0000000000002700       0x22 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- *fill*         0x0000000000002722        0x2 ff
+                0x000000000000271c       0x22 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ *fill*         0x000000000000273e        0x2 ff
  .text.Chip_Clock_SetSystemPLLSource
-                0x0000000000002724       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x0000000000002724                Chip_Clock_SetSystemPLLSource
+                0x0000000000002740       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x0000000000002740                Chip_Clock_SetSystemPLLSource
  .text.Chip_Clock_SetUSBPLLSource
-                0x0000000000002750       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x0000000000002750                Chip_Clock_SetUSBPLLSource
+                0x000000000000276c       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x000000000000276c                Chip_Clock_SetUSBPLLSource
  .text.Chip_Clock_SetMainClockSource
-                0x000000000000277c       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x000000000000277c                Chip_Clock_SetMainClockSource
+                0x0000000000002798       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x0000000000002798                Chip_Clock_SetMainClockSource
  .text.Chip_Clock_SetUSBClockSource
-                0x00000000000027a8       0x3c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x00000000000027a8                Chip_Clock_SetUSBClockSource
+                0x00000000000027c4       0x3c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000027c4                Chip_Clock_SetUSBClockSource
  .text.Chip_Clock_GetWDTOSCRate
-                0x00000000000027e4       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x00000000000027e4                Chip_Clock_GetWDTOSCRate
+                0x0000000000002800       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x0000000000002800                Chip_Clock_GetWDTOSCRate
  .text.Chip_Clock_GetSystemPLLInClockRate
-                0x0000000000002800       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x0000000000002800                Chip_Clock_GetSystemPLLInClockRate
+                0x000000000000281c       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x000000000000281c                Chip_Clock_GetSystemPLLInClockRate
  .text.Chip_Clock_GetSystemPLLOutClockRate
-                0x0000000000002840       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x0000000000002840                Chip_Clock_GetSystemPLLOutClockRate
+                0x000000000000285c       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x000000000000285c                Chip_Clock_GetSystemPLLOutClockRate
  .text.Chip_Clock_GetMainClockRate
-                0x0000000000002864       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x0000000000002864                Chip_Clock_GetMainClockRate
+                0x0000000000002880       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x0000000000002880                Chip_Clock_GetMainClockRate
  .text.Chip_Clock_GetSystemClockRate
-                0x00000000000028c8       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
-                0x00000000000028c8                Chip_Clock_GetSystemClockRate
+                0x00000000000028e4       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000028e4                Chip_Clock_GetSystemClockRate
  .text.Chip_Clock_EnablePeriphClock
-                0x00000000000028ec       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+                0x0000000000002908       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
  .text.Chip_GPIO_Init
-                0x000000000000291c       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
-                0x000000000000291c                Chip_GPIO_Init
+                0x0000000000002938       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+                0x0000000000002938                Chip_GPIO_Init
+ *fill*         0x000000000000294e        0x2 ff
+ .text.Chip_Clock_EnablePeriphClock
+                0x0000000000002950       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.enableClk
+                0x0000000000002980       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.getClkRate
+                0x00000000000029b4       0x1a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.startSlaverXfer
+                0x00000000000029ce       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.getCurState
+                0x00000000000029ea       0x1a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.isMasterState
+                0x0000000000002a04       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.setSlaveAddr
+                0x0000000000002a2c       0x70 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.isSlaveAddrMatching
+                0x0000000000002a9c       0x4e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .text.lookupSlaveIndex
+                0x0000000000002aea       0xa0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ *fill*         0x0000000000002b8a        0x2 ff
+ .text.handleMasterXferState
+                0x0000000000002b8c      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002b8c                handleMasterXferState
+ .text.getSlaveIndex
+                0x0000000000002cac       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002cac                getSlaveIndex
+ .text.handleSlaveXferState
+                0x0000000000002cf8      0x118 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002cf8                handleSlaveXferState
+ .text.Chip_I2C_EventHandler
+                0x0000000000002e10       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002e10                Chip_I2C_EventHandler
+ .text.Chip_I2C_Init
+                0x0000000000002e60       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002e60                Chip_I2C_Init
+ .text.Chip_I2C_SetClockRate
+                0x0000000000002e98       0x70 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002e98                Chip_I2C_SetClockRate
+ .text.Chip_I2C_IsMasterActive
+                0x0000000000002f08       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002f08                Chip_I2C_IsMasterActive
+ .text.Chip_I2C_MasterStateHandler
+                0x0000000000002f38       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002f38                Chip_I2C_MasterStateHandler
+ .text.Chip_I2C_SlaveSetup
+                0x0000000000002f9c       0xc0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000000002f9c                Chip_I2C_SlaveSetup
+ .text.Chip_I2C_SlaveStateHandler
+                0x000000000000305c       0xcc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x000000000000305c                Chip_I2C_SlaveStateHandler
  .text.Chip_IOCON_PinMuxSet
-                0x0000000000002932       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
-                0x0000000000002932                Chip_IOCON_PinMuxSet
+                0x0000000000003128       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+                0x0000000000003128                Chip_IOCON_PinMuxSet
  .text.RingBuffer_GetCount
-                0x0000000000002982       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x0000000000003178       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .text.RingBuffer_GetFree
-                0x00000000000029a0       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x0000000000003196       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .text.RingBuffer_IsFull
-                0x00000000000029c0       0x2a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x00000000000031b6       0x2a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .text.RingBuffer_IsEmpty
-                0x00000000000029ea       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x00000000000031e0       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .text.RingBuffer_Init
-                0x0000000000002a0e       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
-                0x0000000000002a0e                RingBuffer_Init
+                0x0000000000003204       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x0000000000003204                RingBuffer_Init
  .text.RingBuffer_Insert
-                0x0000000000002a46       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
-                0x0000000000002a46                RingBuffer_Insert
+                0x000000000000323c       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x000000000000323c                RingBuffer_Insert
  .text.RingBuffer_InsertMult
-                0x0000000000002aa2      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
-                0x0000000000002aa2                RingBuffer_InsertMult
+                0x0000000000003298      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x0000000000003298                RingBuffer_InsertMult
  .text.RingBuffer_Pop
-                0x0000000000002bc2       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
-                0x0000000000002bc2                RingBuffer_Pop
+                0x00000000000033b8       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x00000000000033b8                RingBuffer_Pop
  .text.RingBuffer_PopMult
-                0x0000000000002c1e      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
-                0x0000000000002c1e                RingBuffer_PopMult
- *fill*         0x0000000000002d3e        0x2 ff
+                0x0000000000003414      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x0000000000003414                RingBuffer_PopMult
  .text.Chip_SYSCTL_PowerDown
-                0x0000000000002d40       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
-                0x0000000000002d40                Chip_SYSCTL_PowerDown
+                0x0000000000003534       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+                0x0000000000003534                Chip_SYSCTL_PowerDown
  .text.Chip_SYSCTL_PowerUp
-                0x0000000000002d84       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
-                0x0000000000002d84                Chip_SYSCTL_PowerUp
+                0x0000000000003578       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+                0x0000000000003578                Chip_SYSCTL_PowerUp
  .text.Chip_Clock_EnablePeriphClock
-                0x0000000000002dc8       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text.Chip_TIMER_GetClock
-                0x0000000000002df8       0x60 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .text.Chip_TIMER_Init
-                0x0000000000002e58       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
-                0x0000000000002e58                Chip_TIMER_Init
- .text.Chip_TIMER_Reset
-                0x0000000000002e78       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
-                0x0000000000002e78                Chip_TIMER_Reset
- .text.Chip_Clock_EnablePeriphClock
-                0x0000000000002eb0       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000035bc       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_Clock_SetUARTClockDiv
-                0x0000000000002ee0       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000035ec       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.RingBuffer_IsEmpty
-                0x0000000000002efc       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003608       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_SendByte
-                0x0000000000002f20       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000362c       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_ReadByte
-                0x0000000000002f3e       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000364a       0x16 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_IntEnable
-                0x0000000000002f54       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003660       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_IntDisable
-                0x0000000000002f72       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000367e       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_SetupFIFOS
-                0x0000000000002f92       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000369e       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_ConfigData
-                0x0000000000002faa       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000036b6       0x18 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_EnableDivisorAccess
-                0x0000000000002fc2       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000036ce       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_DisableDivisorAccess
-                0x0000000000002fde       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000036ea       0x1e /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_SetDivisorLatches
-                0x0000000000002ffc       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003708       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_ReadLineStatus
-                0x000000000000302c       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003738       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .text.Chip_UART_Init
-                0x0000000000003040       0x36 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x0000000000003040                Chip_UART_Init
+                0x000000000000374c       0x36 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000374c                Chip_UART_Init
  .text.Chip_UART_SetBaud
-                0x0000000000003076       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x0000000000003076                Chip_UART_SetBaud
+                0x0000000000003782       0x64 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003782                Chip_UART_SetBaud
  .text.Chip_UART_RXIntHandlerRB
-                0x00000000000030da       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x00000000000030da                Chip_UART_RXIntHandlerRB
+                0x00000000000037e6       0x44 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000037e6                Chip_UART_RXIntHandlerRB
  .text.Chip_UART_TXIntHandlerRB
-                0x000000000000311e       0x46 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x000000000000311e                Chip_UART_TXIntHandlerRB
+                0x000000000000382a       0x46 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x000000000000382a                Chip_UART_TXIntHandlerRB
  .text.Chip_UART_SendRB
-                0x0000000000003164       0x6c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x0000000000003164                Chip_UART_SendRB
+                0x0000000000003870       0x6c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003870                Chip_UART_SendRB
  .text.Chip_UART_ReadRB
-                0x00000000000031d0       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x00000000000031d0                Chip_UART_ReadRB
+                0x00000000000038dc       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x00000000000038dc                Chip_UART_ReadRB
  .text.Chip_UART_IRQRBHandler
-                0x00000000000031f4       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
-                0x00000000000031f4                Chip_UART_IRQRBHandler
+                0x0000000000003900       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000003900                Chip_UART_IRQRBHandler
  .text.USB_ReqGetConfiguration
-                0x0000000000003240       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003240                USB_ReqGetConfiguration
+                0x000000000000394c       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x000000000000394c                USB_ReqGetConfiguration
  .text.USBD_virt_to_phys
-                0x0000000000003264        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003264                USBD_virt_to_phys
+                0x0000000000003970        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003970                USBD_virt_to_phys
  .text.USBD_cache_flush
-                0x0000000000003268        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003268                USBD_cache_flush
+                0x0000000000003974        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003974                USBD_cache_flush
  .text.USB_ReqGetStatus
-                0x000000000000326c       0xa4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x000000000000326c                USB_ReqGetStatus
+                0x0000000000003978       0xa4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003978                USB_ReqGetStatus
  .text.USB_ReqGetDescriptor
-                0x0000000000003310      0x11c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003310                USB_ReqGetDescriptor
+                0x0000000000003a1c      0x11c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003a1c                USB_ReqGetDescriptor
  .text.USB_ReqGetInterface
-                0x000000000000342c       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x000000000000342c                USB_ReqGetInterface
+                0x0000000000003b38       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003b38                USB_ReqGetInterface
  .text.USB_ReqSetInterface
-                0x000000000000346c      0x170 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x000000000000346c                USB_ReqSetInterface
+                0x0000000000003b78      0x170 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003b78                USB_ReqSetInterface
  .text.USB_ReqSetConfiguration
-                0x00000000000035dc      0x258 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x00000000000035dc                USB_ReqSetConfiguration
+                0x0000000000003ce8      0x258 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003ce8                USB_ReqSetConfiguration
  .text.USB_ReqSetClrFeature
-                0x0000000000003834       0xe0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003834                USB_ReqSetClrFeature
+                0x0000000000003f40       0xe0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000003f40                USB_ReqSetClrFeature
  .text.USB_EvtOutHandler
-                0x0000000000003914       0xe4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003914                USB_EvtOutHandler
+                0x0000000000004020       0xe4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004020                USB_EvtOutHandler
  .text.USB_EndPoint0
-                0x00000000000039f8      0x140 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x00000000000039f8                USB_EndPoint0
+                0x0000000000004104      0x140 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004104                USB_EndPoint0
  .text.USB_EvtSetupHandler
-                0x0000000000003b38      0x1f4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003b38                USB_EvtSetupHandler
+                0x0000000000004244      0x1f4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004244                USB_EvtSetupHandler
  .text.mwUSB_ResetCore
-                0x0000000000003d2c       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003d2c                mwUSB_ResetCore
+                0x0000000000004438       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004438                mwUSB_ResetCore
  .text.mwUSB_SetupStage
-                0x0000000000003dac       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003dac                mwUSB_SetupStage
+                0x00000000000044b8       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x00000000000044b8                mwUSB_SetupStage
  .text.mwUSB_DataInStage
-                0x0000000000003dbc       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003dbc                mwUSB_DataInStage
+                0x00000000000044c8       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x00000000000044c8                mwUSB_DataInStage
  .text.mwUSB_DataOutStage
-                0x0000000000003df0       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003df0                mwUSB_DataOutStage
+                0x00000000000044fc       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x00000000000044fc                mwUSB_DataOutStage
  .text.mwUSB_StatusInStage
-                0x0000000000003e14       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003e14                mwUSB_StatusInStage
+                0x0000000000004520       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004520                mwUSB_StatusInStage
  .text.mwUSB_StatusOutStage
-                0x0000000000003e24       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003e24                mwUSB_StatusOutStage
+                0x0000000000004530       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004530                mwUSB_StatusOutStage
  .text.mwUSB_StallEp0
-                0x0000000000003e34       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003e34                mwUSB_StallEp0
+                0x0000000000004540       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004540                mwUSB_StallEp0
  .text.mwUSB_InitCore
-                0x0000000000003e48       0xe8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003e48                mwUSB_InitCore
+                0x0000000000004554       0xe8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004554                mwUSB_InitCore
  .text.mwUSB_RegisterClassHandler
-                0x0000000000003f30       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003f30                mwUSB_RegisterClassHandler
+                0x000000000000463c       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x000000000000463c                mwUSB_RegisterClassHandler
  .text.mwUSB_RegisterEpHandler
-                0x0000000000003f5c       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
-                0x0000000000003f5c                mwUSB_RegisterEpHandler
+                0x0000000000004668       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000004668                mwUSB_RegisterEpHandler
  .text.def_ep_handler
-                0x0000000000003f84        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003f84                def_ep_handler
+                0x0000000000004690        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004690                def_ep_handler
  .text.hwUSB_ForceFullSpeed
-                0x0000000000003f88        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003f88                hwUSB_ForceFullSpeed
+                0x0000000000004694        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004694                hwUSB_ForceFullSpeed
  .text.hwUSB_GetMemSize
-                0x0000000000003f8c       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003f8c                hwUSB_GetMemSize
+                0x0000000000004698       0x14 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004698                hwUSB_GetMemSize
  .text.hwUSB_Connect
-                0x0000000000003fa0       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003fa0                hwUSB_Connect
+                0x00000000000046ac       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x00000000000046ac                hwUSB_Connect
  .text.hwUSB_WakeUp
-                0x0000000000003fc8       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003fc8                hwUSB_WakeUp
+                0x00000000000046d4       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x00000000000046d4                hwUSB_WakeUp
  .text.hwUSB_WakeUpCfg
-                0x0000000000003fe8       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000003fe8                hwUSB_WakeUpCfg
+                0x00000000000046f4       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x00000000000046f4                hwUSB_WakeUpCfg
  .text.hwUSB_SetAddress
-                0x0000000000004010       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004010                hwUSB_SetAddress
+                0x000000000000471c       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x000000000000471c                hwUSB_SetAddress
  .text.hwUSB_SetTestMode
-                0x000000000000402c        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x000000000000402c                hwUSB_SetTestMode
+                0x0000000000004738        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004738                hwUSB_SetTestMode
  .text.hwUSB_Configure
-                0x0000000000004034       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004034                hwUSB_Configure
+                0x0000000000004740       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004740                hwUSB_Configure
  .text.hwUSB_ConfigEP
-                0x0000000000004058       0xcc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004058                hwUSB_ConfigEP
+                0x0000000000004764       0xcc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004764                hwUSB_ConfigEP
  .text.hwUSB_DirCtrlEP
-                0x0000000000004124        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004124                hwUSB_DirCtrlEP
+                0x0000000000004830        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004830                hwUSB_DirCtrlEP
  .text.hwUSB_EnableEP
-                0x0000000000004128       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004128                hwUSB_EnableEP
+                0x0000000000004834       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004834                hwUSB_EnableEP
  .text.hwUSB_DisableEP
-                0x0000000000004178       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004178                hwUSB_DisableEP
+                0x0000000000004884       0x34 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004884                hwUSB_DisableEP
  .text.hwUSB_ResetEP
-                0x00000000000041ac       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000041ac                hwUSB_ResetEP
+                0x00000000000048b8       0x4c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x00000000000048b8                hwUSB_ResetEP
  .text.hwUSB_SetStallEP
-                0x00000000000041f8       0xb0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000041f8                hwUSB_SetStallEP
+                0x0000000000004904       0xb0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004904                hwUSB_SetStallEP
  .text.hwUSB_ClrStallEP
-                0x00000000000042a8       0xc0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000042a8                hwUSB_ClrStallEP
+                0x00000000000049b4       0xc0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x00000000000049b4                hwUSB_ClrStallEP
  .text.hwUSB_EnableEvent
-                0x0000000000004368      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004368                hwUSB_EnableEvent
+                0x0000000000004a74      0x120 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004a74                hwUSB_EnableEvent
  .text.hwUSB_ReadSetupPkt
-                0x0000000000004488       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004488                hwUSB_ReadSetupPkt
+                0x0000000000004b94       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004b94                hwUSB_ReadSetupPkt
  .text.hwUSB_ReadReqEP
-                0x00000000000044e0        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000044e0                hwUSB_ReadReqEP
+                0x0000000000004bec        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004bec                hwUSB_ReadReqEP
  .text.hwUSB_ReadEP
-                0x00000000000044e4       0xdc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000044e4                hwUSB_ReadEP
+                0x0000000000004bf0       0xdc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004bf0                hwUSB_ReadEP
  .text.hwUSB_WriteEP
-                0x00000000000045c0       0xdc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x00000000000045c0                hwUSB_WriteEP
+                0x0000000000004ccc       0xdc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004ccc                hwUSB_WriteEP
  .text.hwUSB_Reset
-                0x000000000000469c       0xcc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x000000000000469c                hwUSB_Reset
+                0x0000000000004da8       0xcc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004da8                hwUSB_Reset
  .text.hwUSB_Init
-                0x0000000000004768      0x1fc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004768                hwUSB_Init
+                0x0000000000004e74      0x1fc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000004e74                hwUSB_Init
  .text.hwUSB_ISR
-                0x0000000000004964      0x1b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
-                0x0000000000004964                hwUSB_ISR
+                0x0000000000005070      0x1b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000005070                hwUSB_ISR
  .text.mwCDC_SetRequest
-                0x0000000000004b14       0x98 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004b14                mwCDC_SetRequest
+                0x0000000000005220       0x98 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x0000000000005220                mwCDC_SetRequest
  .text.mwCDC_ep0_hdlr
-                0x0000000000004bac       0xe4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004bac                mwCDC_ep0_hdlr
+                0x00000000000052b8       0xe4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x00000000000052b8                mwCDC_ep0_hdlr
  .text.mwCDC_GetRequest
-                0x0000000000004c90       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004c90                mwCDC_GetRequest
+                0x000000000000539c       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x000000000000539c                mwCDC_GetRequest
  .text.mwCDC_SendNotification
-                0x0000000000004ce4       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004ce4                mwCDC_SendNotification
+                0x00000000000053f0       0x54 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x00000000000053f0                mwCDC_SendNotification
  .text.mwCDC_GetMemSize
-                0x0000000000004d38        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004d38                mwCDC_GetMemSize
+                0x0000000000005444        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x0000000000005444                mwCDC_GetMemSize
  .text.mwCDC_init
-                0x0000000000004d3c      0x154 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
-                0x0000000000004d3c                mwCDC_init
+                0x0000000000005448      0x154 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x0000000000005448                mwCDC_init
  .text.mwHID_GetReportDesc
-                0x0000000000004e90       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
-                0x0000000000004e90                mwHID_GetReportDesc
+                0x000000000000559c       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x000000000000559c                mwHID_GetReportDesc
  .text.mwHID_SetIdle
-                0x0000000000004eac       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
-                0x0000000000004eac                mwHID_SetIdle
+                0x00000000000055b8       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x00000000000055b8                mwHID_SetIdle
  .text.mwHID_ep0_hdlr
-                0x0000000000004edc      0x1e8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
-                0x0000000000004edc                mwHID_ep0_hdlr
+                0x00000000000055e8      0x1e8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x00000000000055e8                mwHID_ep0_hdlr
  .text.mwHID_GetMemSize
-                0x00000000000050c4        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
-                0x00000000000050c4                mwHID_GetMemSize
+                0x00000000000057d0        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x00000000000057d0                mwHID_GetMemSize
  .text.mwHID_init
-                0x00000000000050cc      0x1a0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
-                0x00000000000050cc                mwHID_init
- .text.__main   0x000000000000526c        0xc /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(_cr__main.o)
-                0x000000000000526c                __main
- .text.memcpy   0x0000000000005278        0x8 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(memcpy.o)
-                0x0000000000005278                memcpy
- .text.memset   0x0000000000005280        0x8 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(memset.o)
-                0x0000000000005280                memset
- .text._initio  0x0000000000005288       0x7c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(initio.o)
-                0x0000000000005288                _initio
- .text.setvbuf  0x0000000000005304       0x48 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(setvbuf.o)
-                0x0000000000005304                setvbuf
- .text._fdopen  0x000000000000534c       0x74 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_fdopen.o)
-                0x000000000000534c                _fdopen
- .text.fclose   0x00000000000053c0       0x5c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fclose.o)
-                0x00000000000053c0                fclose
- .text.fflush   0x000000000000541c       0x44 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fflush.o)
-                0x000000000000541c                fflush
- .text.fseek    0x0000000000005460       0xf0 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fseek.o)
-                0x0000000000005460                fseek
- .text.ftell    0x0000000000005550       0x48 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(ftell.o)
-                0x0000000000005550                ftell
- .text.remove   0x0000000000005598       0x12 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(remove.o)
-                0x0000000000005598                remove
- *fill*         0x00000000000055aa        0x2 ff
- .text.strlen   0x00000000000055ac       0x58 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(strlen.o)
-                0x00000000000055ac                strlen
+                0x00000000000057d8      0x1a0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x00000000000057d8                mwHID_init
+ .text.__main   0x0000000000005978        0xc /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(_cr__main.o)
+                0x0000000000005978                __main
+ .text.memcpy   0x0000000000005984        0x8 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(memcpy.o)
+                0x0000000000005984                memcpy
+ .text.memset   0x000000000000598c        0x8 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(memset.o)
+                0x000000000000598c                memset
+ .text._initio  0x0000000000005994       0x7c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(initio.o)
+                0x0000000000005994                _initio
+ .text.setvbuf  0x0000000000005a10       0x48 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(setvbuf.o)
+                0x0000000000005a10                setvbuf
+ .text._fdopen  0x0000000000005a58       0x74 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_fdopen.o)
+                0x0000000000005a58                _fdopen
+ .text.fclose   0x0000000000005acc       0x5c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fclose.o)
+                0x0000000000005acc                fclose
+ .text.fflush   0x0000000000005b28       0x44 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fflush.o)
+                0x0000000000005b28                fflush
+ .text.fseek    0x0000000000005b6c       0xf0 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(fseek.o)
+                0x0000000000005b6c                fseek
+ .text.ftell    0x0000000000005c5c       0x48 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(ftell.o)
+                0x0000000000005c5c                ftell
+ .text.remove   0x0000000000005ca4       0x12 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(remove.o)
+                0x0000000000005ca4                remove
+ *fill*         0x0000000000005cb6        0x2 ff
+ .text.strlen   0x0000000000005cb8       0x58 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(strlen.o)
+                0x0000000000005cb8                strlen
  .text._do_fflush
-                0x0000000000005604       0x44 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_do_fflush.o)
-                0x0000000000005604                _do_fflush
- .text._fflush  0x0000000000005648       0x5c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_fflush.o)
-                0x0000000000005648                _fflush
+                0x0000000000005d10       0x44 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_do_fflush.o)
+                0x0000000000005d10                _do_fflush
+ .text._fflush  0x0000000000005d54       0x5c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_fflush.o)
+                0x0000000000005d54                _fflush
  .text._Cwritebuf
-                0x00000000000056a4       0x68 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_writebuf.o)
-                0x00000000000056a4                _Cwritebuf
- .text.free     0x000000000000570c       0x2c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(alloc.o)
-                0x000000000000570c                free
+                0x0000000000005db0       0x68 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_writebuf.o)
+                0x0000000000005db0                _Cwritebuf
+ .text.free     0x0000000000005e18       0x2c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(alloc.o)
+                0x0000000000005e18                free
  .text._deferredlazyseek
-                0x0000000000005738       0x40 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_deferredlazyseek.o)
-                0x0000000000005738                _deferredlazyseek
+                0x0000000000005e44       0x40 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(_deferredlazyseek.o)
+                0x0000000000005e44                _deferredlazyseek
  .text.__aeabi_division_idivmod
-                0x0000000000005778       0x78 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(division_32.o)
-                0x0000000000005778                __aeabi_idiv
-                0x0000000000005778                __aeabi_idivmod
-                0x000000000000577e                __aeabi_uidiv
-                0x000000000000577e                __aeabi_uidivmod
+                0x0000000000005e84       0x78 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(division_32.o)
+                0x0000000000005e84                __aeabi_idiv
+                0x0000000000005e84                __aeabi_idivmod
+                0x0000000000005e8a                __aeabi_uidiv
+                0x0000000000005e8a                __aeabi_uidivmod
  .text.__aeabi_division_idiv0
-                0x00000000000057f0        0x2 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(division_idiv0.o)
-                0x00000000000057f0                __aeabi_idiv0
+                0x0000000000005efc        0x2 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(division_idiv0.o)
+                0x0000000000005efc                __aeabi_idiv0
  .text.__aeabi_memcpy
-                0x00000000000057f2       0x2c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(memcpy.o)
-                0x00000000000057f2                __aeabi_memcpy
-                0x00000000000057f2                __aeabi_memcpy4
-                0x00000000000057f2                __aeabi_memcpy8
+                0x0000000000005efe       0x2c /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(memcpy.o)
+                0x0000000000005efe                __aeabi_memcpy
+                0x0000000000005efe                __aeabi_memcpy4
+                0x0000000000005efe                __aeabi_memcpy8
  .text.__aeabi_memset_lowlevel
-                0x000000000000581e       0x2a /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(memcpy.o)
-                0x000000000000581e                __aeabi_lowlevel_memset
+                0x0000000000005f2a       0x2a /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v6-m/libcr_eabihelpers.a(memcpy.o)
+                0x0000000000005f2a                __aeabi_lowlevel_memset
  .text.__sys_close
-                0x0000000000005848        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_close.o)
-                0x0000000000005848                __sys_close
+                0x0000000000005f54        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_close.o)
+                0x0000000000005f54                __sys_close
  .text.__sys_flen
-                0x000000000000584e        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_flen.o)
-                0x000000000000584e                __sys_flen
+                0x0000000000005f5a        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_flen.o)
+                0x0000000000005f5a                __sys_flen
  .text.__sys_istty
-                0x0000000000005854        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_istty.o)
-                0x0000000000005854                __sys_istty
+                0x0000000000005f60        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_istty.o)
+                0x0000000000005f60                __sys_istty
  .text.__sys_remove
-                0x000000000000585a        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_remove.o)
-                0x000000000000585a                __sys_remove
+                0x0000000000005f66        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_remove.o)
+                0x0000000000005f66                __sys_remove
  .text.__sys_seek
-                0x0000000000005860        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_seek.o)
-                0x0000000000005860                __sys_seek
+                0x0000000000005f6c        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_seek.o)
+                0x0000000000005f6c                __sys_seek
  .text.__sys_tmpnam
-                0x0000000000005866        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_tmpnam.o)
-                0x0000000000005866                __sys_tmpnam
+                0x0000000000005f72        0x6 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_tmpnam.o)
+                0x0000000000005f72                __sys_tmpnam
  .text.__sys_write
-                0x000000000000586c        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_write.o)
-                0x000000000000586c                __sys_write
+                0x0000000000005f78        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_write.o)
+                0x0000000000005f78                __sys_write
  *(.rodata .rodata.* .constdata .constdata.*)
  .rodata.HID_ReportDescriptor
-                0x0000000000005870       0xcc ./example/src/composite_desc.o
-                0x0000000000005870                HID_ReportDescriptor
+                0x0000000000005f7c       0xcc ./example/src/composite_desc.o
+                0x0000000000005f7c                HID_ReportDescriptor
  .rodata.HID_ReportDescSize
-                0x000000000000593c        0x2 ./example/src/composite_desc.o
-                0x000000000000593c                HID_ReportDescSize
- *fill*         0x000000000000593e        0x2 ff
+                0x0000000000006048        0x2 ./example/src/composite_desc.o
+                0x0000000000006048                HID_ReportDescSize
+ *fill*         0x000000000000604a        0x2 ff
  .rodata.USB_DeviceDescriptor
-                0x0000000000005940       0x12 ./example/src/composite_desc.o
-                0x0000000000005940                USB_DeviceDescriptor
- *fill*         0x0000000000005952        0x2 ff
+                0x000000000000604c       0x12 ./example/src/composite_desc.o
+                0x000000000000604c                USB_DeviceDescriptor
+ *fill*         0x000000000000605e        0x2 ff
  .rodata.USB_StringDescriptorFLipMouse
-                0x0000000000005954       0x92 ./example/src/composite_desc.o
-                0x0000000000005954                USB_StringDescriptorFLipMouse
- *fill*         0x00000000000059e6        0x2 ff
+                0x0000000000006060       0x92 ./example/src/composite_desc.o
+                0x0000000000006060                USB_StringDescriptorFLipMouse
+ *fill*         0x00000000000060f2        0x2 ff
  .rodata.OscRateIn
-                0x00000000000059e8        0x4 ./example/src/composite_main.o
-                0x00000000000059e8                OscRateIn
+                0x00000000000060f4        0x4 ./example/src/composite_main.o
+                0x00000000000060f4                OscRateIn
  .rodata.g_usbApi
-                0x00000000000059ec       0x20 ./example/src/composite_main.o
+                0x00000000000060f8       0x20 ./example/src/composite_main.o
  .rodata.parseBuffer
-                0x0000000000005a0c       0xc0 ./example/src/parser.o
+                0x0000000000006118       0xc0 ./example/src/parser.o
  .rodata.pinmuxing
-                0x0000000000005acc       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x00000000000061d8       0x24 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .rodata.wdtOSCRate
-                0x0000000000005af0       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x00000000000061fc       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .rodata.handleMasterXferState
+                0x000000000000623c      0x164 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .rodata.handleSlaveXferState
+                0x00000000000063a0      0x1a4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
  .rodata.USB_EndPoint0
-                0x0000000000005b30       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000006544       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
  .rodata.USB_EvtSetupHandler
-                0x0000000000005b50       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
+                0x0000000000006564       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
  .rodata.hw_api
-                0x0000000000005b80       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
-                0x0000000000005b80                hw_api
+                0x0000000000006594       0x5c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
+                0x0000000000006594                hw_api
  .rodata.core_api
-                0x0000000000005bdc       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
-                0x0000000000005bdc                core_api
+                0x00000000000065f0       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
+                0x00000000000065f0                core_api
  .rodata.hid_api
-                0x0000000000005bfc        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
-                0x0000000000005bfc                hid_api
+                0x0000000000006610        0x8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
+                0x0000000000006610                hid_api
  .rodata.cdc_api
-                0x0000000000005c04        0xc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
-                0x0000000000005c04                cdc_api
+                0x0000000000006618        0xc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_rom_api.o)
+                0x0000000000006618                cdc_api
  .rodata.hwUSB_EnableEvent
-                0x0000000000005c10       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
+                0x0000000000006624       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(hw_usbd_ip3511.o)
  .rodata.mwCDC_SetRequest
-                0x0000000000005c48       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
+                0x000000000000665c       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_cdcuser.o)
  .rodata.mwHID_ep0_hdlr
-                0x0000000000005cd8       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
+                0x00000000000066ec       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_hiduser.o)
  .rodata._initio.str1.1
-                0x0000000000005d08        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(initio.o)
+                0x000000000000671c        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(initio.o)
  .rodata.__num_Ciob_streams
-                0x0000000000005d0c        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__ciob.o)
-                0x0000000000005d0c                __num_Ciob_streams
-                0x0000000000005d10                . = ALIGN (0x4)
+                0x0000000000006720        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__ciob.o)
+                0x0000000000006720                __num_Ciob_streams
+                0x0000000000006724                . = ALIGN (0x4)
 
-.glue_7         0x0000000000005d10        0x0
- .glue_7        0x0000000000005d10        0x0 linker stubs
+.glue_7         0x0000000000006724        0x0
+ .glue_7        0x0000000000006724        0x0 linker stubs
 
-.glue_7t        0x0000000000005d10        0x0
- .glue_7t       0x0000000000005d10        0x0 linker stubs
+.glue_7t        0x0000000000006724        0x0
+ .glue_7t       0x0000000000006724        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000005d10        0x0
- .vfp11_veneer  0x0000000000005d10        0x0 linker stubs
+.vfp11_veneer   0x0000000000006724        0x0
+ .vfp11_veneer  0x0000000000006724        0x0 linker stubs
 
-.v4_bx          0x0000000000005d10        0x0
- .v4_bx         0x0000000000005d10        0x0 linker stubs
+.v4_bx          0x0000000000006724        0x0
+ .v4_bx         0x0000000000006724        0x0 linker stubs
 
-.iplt           0x0000000000005d10        0x0
- .iplt          0x0000000000005d10        0x0 ./example/src/cdc_vcom.o
+.iplt           0x0000000000006724        0x0
+ .iplt          0x0000000000006724        0x0 ./example/src/cdc_vcom.o
 
-.rel.dyn        0x0000000000005d10        0x0
- .rel.iplt      0x0000000000005d10        0x0 ./example/src/cdc_vcom.o
+.rel.dyn        0x0000000000006724        0x0
+ .rel.iplt      0x0000000000006724        0x0 ./example/src/cdc_vcom.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000000005d10                __exidx_start = .
+                0x0000000000006724                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000000005d10                __exidx_end = .
-                0x0000000000005d10                _etext = .
+                0x0000000000006724                __exidx_end = .
+                0x0000000000006724                _etext = .
 
-.data_RAM2      0x0000000020004000        0x0 load address 0x0000000000005d10
+.data_RAM2      0x0000000020004000        0x0 load address 0x0000000000006724
  FILL mask 0xff
                 [!provide]                        PROVIDE (__start_data_RAM2, .)
  *(.ramfunc.$RAM2)
@@ -2071,7 +2150,7 @@ END GROUP
                 0x0000000010000000                . = ALIGN (0x4)
                 0x0000000010000000                _end_uninit_RESERVED = .
 
-.data           0x0000000010000000       0x6c load address 0x0000000000005d10
+.data           0x0000000010000000       0x88 load address 0x0000000000006724
  FILL mask 0xff
                 0x0000000010000000                _data = .
  *(vtable)
@@ -2084,11 +2163,12 @@ END GROUP
  .data.g_pUsbApi
                 0x0000000010000068        0x4 ./example/src/composite_main.o
                 0x0000000010000068                g_pUsbApi
-                0x000000001000006c                . = ALIGN (0x4)
-                0x000000001000006c                _edata = .
+ .data.i2c      0x000000001000006c       0x1c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                0x0000000010000088                . = ALIGN (0x4)
+                0x0000000010000088                _edata = .
 
-.igot.plt       0x000000001000006c        0x0 load address 0x0000000000005d7c
- .igot.plt      0x000000001000006c        0x0 ./example/src/cdc_vcom.o
+.igot.plt       0x0000000010000088        0x0 load address 0x00000000000067ac
+ .igot.plt      0x0000000010000088        0x0 ./example/src/cdc_vcom.o
 
 .bss_RAM2       0x0000000020004000        0x0
                 [!provide]                        PROVIDE (__start_bss_RAM2, .)
@@ -2097,55 +2177,58 @@ END GROUP
                 0x0000000020004000                . = ALIGN ((. != 0x0)?0x4:0x1)
                 [!provide]                        PROVIDE (__end_bss_RAM2, .)
 
-.bss            0x000000001000006c      0xc44
-                0x000000001000006c                _bss = .
+.bss            0x0000000010000088      0xbf4
+                0x0000000010000088                _bss = .
  *(.bss*)
- .bss.ADCSetup  0x000000001000006c        0x8 ./example/src/composite_main.o
- .bss.rxbuff    0x0000000010000074      0x100 ./example/src/composite_main.o
- .bss.txbuff    0x0000000010000174      0x400 ./example/src/composite_main.o
+ .bss.i2c_xfer  0x0000000010000088       0x18 ./example/src/composite_main.o
+ .bss.adc_data  0x00000000100000a0        0xa ./example/src/composite_main.o
+ *fill*         0x00000000100000aa        0x2 
+ .bss.hid_data  0x00000000100000ac        0xa ./example/src/composite_main.o
+ *fill*         0x00000000100000b6        0x2 
+ .bss.rxbuff    0x00000000100000b8      0x100 ./example/src/composite_main.o
+ .bss.txbuff    0x00000000100001b8      0x400 ./example/src/composite_main.o
  .bss.hid_arrived
-                0x0000000010000574        0x4 ./example/src/composite_main.o
-                0x0000000010000574                hid_arrived
- .bss.g_hUsb    0x0000000010000578        0x4 ./example/src/composite_main.o
- .bss.g_rxBuff  0x000000001000057c      0x400 ./example/src/composite_main.o
+                0x00000000100005b8        0x4 ./example/src/composite_main.o
+                0x00000000100005b8                hid_arrived
+ .bss.g_hUsb    0x00000000100005bc        0x4 ./example/src/composite_main.o
+ .bss.g_rxBuff  0x00000000100005c0      0x400 ./example/src/composite_main.o
  .bss.tick_count
-                0x000000001000097c        0x4 ./example/src/composite_main.o
-                0x000000001000097c                tick_count
- .bss.capture_prev.7056
-                0x0000000010000980        0x4 ./example/src/composite_main.o
- .bss.edgeC.7057
-                0x0000000010000984        0x4 ./example/src/composite_main.o
- .bss.g_mouse   0x0000000010000988       0x24 ./example/src/hid.o
+                0x00000000100009c0        0x4 ./example/src/composite_main.o
+                0x00000000100009c0                tick_count
+ .bss.ADCSetup.7066
+                0x00000000100009c4        0x8 ./example/src/composite_main.o
+ .bss.g_mouse   0x00000000100009cc       0x24 ./example/src/hid.o
  .bss.buttons_prev.6968
-                0x00000000100009ac        0x1 ./example/src/hid.o
- *fill*         0x00000000100009ad        0x3 
+                0x00000000100009f0        0x1 ./example/src/hid.o
+ *fill*         0x00000000100009f1        0x3 
  .bss.keyboard_report
-                0x00000000100009b0        0x7 ./example/src/parser.o
-                0x00000000100009b0                keyboard_report
- *fill*         0x00000000100009b7        0x1 
+                0x00000000100009f4        0x7 ./example/src/parser.o
+                0x00000000100009f4                keyboard_report
+ *fill*         0x00000000100009fb        0x1 
  .bss.mouse_report
-                0x00000000100009b8        0x4 ./example/src/parser.o
-                0x00000000100009b8                mouse_report
+                0x00000000100009fc        0x4 ./example/src/parser.o
+                0x00000000100009fc                mouse_report
  .bss.joystick_report
-                0x00000000100009bc        0xc ./example/src/parser.o
-                0x00000000100009bc                joystick_report
- .bss.errno     0x00000000100009c8        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(errno.o)
-                0x00000000100009c8                errno
- .bss.__Ciob    0x00000000100009cc      0x1e0 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__ciob.o)
-                0x00000000100009cc                __Ciob
+                0x0000000010000a00        0xc ./example/src/parser.o
+                0x0000000010000a00                joystick_report
+ .bss.i2c_slave
+                0x0000000010000a0c       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .bss.errno     0x0000000010000a34        0x4 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_c.a(errno.o)
+                0x0000000010000a34                errno
+ .bss.__Ciob    0x0000000010000a38      0x1e0 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__ciob.o)
+                0x0000000010000a38                __Ciob
  *(COMMON)
- COMMON         0x0000000010000bac       0x14 ./example/src/cdc_vcom.o
-                0x0000000010000bac                g_vCOM
- COMMON         0x0000000010000bc0       0xec ./example/src/composite_main.o
-                0x0000000010000bc0                txring
-                0x0000000010000bd4                command
-                0x0000000010000be8                rxring
-                0x0000000010000bfc                result
-                0x0000000010000c0c                hidBuffEdges
- COMMON         0x0000000010000cac        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
-                0x0000000010000cac                SystemCoreClock
-                0x0000000010000cb0                . = ALIGN (0x4)
-                0x0000000010000cb0                _ebss = .
+ COMMON         0x0000000010000c18       0x14 ./example/src/cdc_vcom.o
+                0x0000000010000c18                g_vCOM
+ COMMON         0x0000000010000c2c       0x4c ./example/src/composite_main.o
+                0x0000000010000c2c                txring
+                0x0000000010000c40                command
+                0x0000000010000c54                rxring
+                0x0000000010000c68                result
+ COMMON         0x0000000010000c78        0x4 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+                0x0000000010000c78                SystemCoreClock
+                0x0000000010000c7c                . = ALIGN (0x4)
+                0x0000000010000c7c                _ebss = .
                 [!provide]                        PROVIDE (end, .)
 
 .noinit_RAM2    0x0000000020004000        0x0
@@ -2153,112 +2236,112 @@ END GROUP
  *(.noinit.$RamUsb2*)
                 0x0000000020004000                . = ALIGN (0x4)
 
-.noinit         0x0000000010000cb0        0x0
-                0x0000000010000cb0                _noinit = .
+.noinit         0x0000000010000c7c        0x0
+                0x0000000010000c7c                _noinit = .
  *(.noinit*)
-                0x0000000010000cb0                . = ALIGN (0x4)
-                0x0000000010000cb0                _end_noinit = .
-                0x0000000010000cb0                PROVIDE (_pvHeapStart, DEFINED (__user_heap_base)?__user_heap_base:.)
+                0x0000000010000c7c                . = ALIGN (0x4)
+                0x0000000010000c7c                _end_noinit = .
+                0x0000000010000c7c                PROVIDE (_pvHeapStart, DEFINED (__user_heap_base)?__user_heap_base:.)
                 0x0000000010001000                PROVIDE (_vStackTop, DEFINED (__user_stack_top)?__user_stack_top:(__top_RamLoc4 - 0x0))
                 [!provide]                        PROVIDE (__valid_user_code_checksum, (0x0 - (((_vStackTop + (ResetISR + 0x1)) + (DEFINED (NMI_Handler)?NMI_Handler:M0_NMI_Handler + 0x1)) + (DEFINED (HardFault_Handler)?HardFault_Handler:M0_HardFault_Handler + 0x1))))
                 0x0000000000000000                _image_start = LOADADDR (.text)
-                0x0000000000005d7c                _image_end = (LOADADDR (.data) + SIZEOF (.data))
-                0x0000000000005d7c                _image_size = (_image_end - _image_start)
+                0x00000000000067ac                _image_end = (LOADADDR (.data) + SIZEOF (.data))
+                0x00000000000067ac                _image_size = (_image_end - _image_start)
 OUTPUT(usb_bridge_LPC11U14.axf elf32-littlearm)
 
-.debug_info     0x0000000000000000     0xdc20
+.debug_info     0x0000000000000000     0xe55b
  .debug_info    0x0000000000000000     0x1c88 ./example/src/cdc_vcom.o
  .debug_info    0x0000000000001c88     0x1273 ./example/src/composite_desc.o
- .debug_info    0x0000000000002efb     0x2bd3 ./example/src/composite_main.o
- .debug_info    0x0000000000005ace      0x26d ./example/src/cr_startup_lpc11xx.o
- .debug_info    0x0000000000005d3b     0x1aca ./example/src/hid.o
- .debug_info    0x0000000000007805     0x147d ./example/src/parser.o
- .debug_info    0x0000000000008c82      0x1fc ./example/src/sysinit.o
- .debug_info    0x0000000000008e7e      0xab3 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_info    0x0000000000009931      0xcad /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_info    0x000000000000a5de      0x10a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_info    0x000000000000a6e8      0x92b /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_info    0x000000000000b013      0x9a3 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_info    0x000000000000b9b6      0x1a6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_info    0x000000000000bb5c      0x380 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_info    0x000000000000bedc      0x5cc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_info    0x000000000000c4a8      0x877 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_info    0x000000000000cd1f      0xf01 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_info    0x0000000000002efb     0x2c5d ./example/src/composite_main.o
+ .debug_info    0x0000000000005b58      0x26d ./example/src/cr_startup_lpc11xx.o
+ .debug_info    0x0000000000005dc5     0x1aca ./example/src/hid.o
+ .debug_info    0x000000000000788f     0x147d ./example/src/parser.o
+ .debug_info    0x0000000000008d0c      0x1fc ./example/src/sysinit.o
+ .debug_info    0x0000000000008f08      0xab3 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_info    0x00000000000099bb      0xcad /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_info    0x000000000000a668      0x10a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_info    0x000000000000a772      0x92b /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_info    0x000000000000b09d      0x9a3 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_info    0x000000000000ba40     0x1128 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_info    0x000000000000cb68      0x1a6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_info    0x000000000000cd0e      0x380 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_info    0x000000000000d08e      0x5cc /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_info    0x000000000000d65a      0xf01 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_abbrev   0x0000000000000000     0x2008
+.debug_abbrev   0x0000000000000000     0x2183
  .debug_abbrev  0x0000000000000000      0x365 ./example/src/cdc_vcom.o
  .debug_abbrev  0x0000000000000365      0x19b ./example/src/composite_desc.o
- .debug_abbrev  0x0000000000000500      0x4a0 ./example/src/composite_main.o
- .debug_abbrev  0x00000000000009a0      0x100 ./example/src/cr_startup_lpc11xx.o
- .debug_abbrev  0x0000000000000aa0      0x2dd ./example/src/hid.o
- .debug_abbrev  0x0000000000000d7d      0x20d ./example/src/parser.o
- .debug_abbrev  0x0000000000000f8a       0xc0 ./example/src/sysinit.o
- .debug_abbrev  0x000000000000104a      0x21a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_abbrev  0x0000000000001264      0x21f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_abbrev  0x0000000000001483       0xa6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_abbrev  0x0000000000001529      0x1e6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_abbrev  0x000000000000170f      0x1a8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_abbrev  0x00000000000018b7       0xe5 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_abbrev  0x000000000000199c      0x162 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_abbrev  0x0000000000001afe      0x10c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_abbrev  0x0000000000001c0a      0x1c8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_abbrev  0x0000000000001dd2      0x236 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_abbrev  0x0000000000000500      0x4df ./example/src/composite_main.o
+ .debug_abbrev  0x00000000000009df      0x100 ./example/src/cr_startup_lpc11xx.o
+ .debug_abbrev  0x0000000000000adf      0x2dd ./example/src/hid.o
+ .debug_abbrev  0x0000000000000dbc      0x20d ./example/src/parser.o
+ .debug_abbrev  0x0000000000000fc9       0xc0 ./example/src/sysinit.o
+ .debug_abbrev  0x0000000000001089      0x21a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_abbrev  0x00000000000012a3      0x21f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_abbrev  0x00000000000014c2       0xa6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_abbrev  0x0000000000001568      0x1e6 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_abbrev  0x000000000000174e      0x1a8 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_abbrev  0x00000000000018f6      0x304 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_abbrev  0x0000000000001bfa       0xe5 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_abbrev  0x0000000000001cdf      0x162 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_abbrev  0x0000000000001e41      0x10c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_abbrev  0x0000000000001f4d      0x236 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_aranges  0x0000000000000000      0x768
+.debug_aranges  0x0000000000000000      0x848
  .debug_aranges
                 0x0000000000000000       0x78 ./example/src/cdc_vcom.o
  .debug_aranges
                 0x0000000000000078       0x18 ./example/src/composite_desc.o
  .debug_aranges
-                0x0000000000000090      0x170 ./example/src/composite_main.o
+                0x0000000000000090      0x178 ./example/src/composite_main.o
  .debug_aranges
-                0x0000000000000200       0x60 ./example/src/cr_startup_lpc11xx.o
+                0x0000000000000208       0x60 ./example/src/cr_startup_lpc11xx.o
  .debug_aranges
-                0x0000000000000260       0x78 ./example/src/hid.o
+                0x0000000000000268       0x78 ./example/src/hid.o
  .debug_aranges
-                0x00000000000002d8       0x38 ./example/src/parser.o
+                0x00000000000002e0       0x38 ./example/src/parser.o
  .debug_aranges
-                0x0000000000000310       0x20 ./example/src/sysinit.o
+                0x0000000000000318       0x20 ./example/src/sysinit.o
  .debug_aranges
-                0x0000000000000330       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+                0x0000000000000338       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
  .debug_aranges
-                0x0000000000000398       0xa0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+                0x00000000000003a0       0xa0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
  .debug_aranges
-                0x0000000000000438       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+                0x0000000000000440       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
  .debug_aranges
-                0x0000000000000458       0xa0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+                0x0000000000000460       0xa0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
  .debug_aranges
-                0x00000000000004f8       0x78 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+                0x0000000000000500       0x78 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
  .debug_aranges
-                0x0000000000000570       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+                0x0000000000000578      0x128 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
  .debug_aranges
-                0x0000000000000590       0x60 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x00000000000006a0       0x20 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
  .debug_aranges
-                0x00000000000005f0       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+                0x00000000000006c0       0x60 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .debug_aranges
-                0x0000000000000628       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
+                0x0000000000000720       0x38 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
  .debug_aranges
-                0x0000000000000678       0xf0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+                0x0000000000000758       0xf0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_ranges   0x0000000000000000      0x650
+.debug_ranges   0x0000000000000000      0x730
  .debug_ranges  0x0000000000000000       0x68 ./example/src/cdc_vcom.o
- .debug_ranges  0x0000000000000068      0x160 ./example/src/composite_main.o
- .debug_ranges  0x00000000000001c8       0x50 ./example/src/cr_startup_lpc11xx.o
- .debug_ranges  0x0000000000000218       0x68 ./example/src/hid.o
- .debug_ranges  0x0000000000000280       0x28 ./example/src/parser.o
- .debug_ranges  0x00000000000002a8       0x10 ./example/src/sysinit.o
- .debug_ranges  0x00000000000002b8       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_ranges  0x0000000000000310       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_ranges  0x00000000000003a0       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_ranges  0x00000000000003b0       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_ranges  0x0000000000000440       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_ranges  0x00000000000004a8       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_ranges  0x00000000000004b8       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_ranges  0x0000000000000508       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_ranges  0x0000000000000530       0x40 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_ranges  0x0000000000000570       0xe0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_ranges  0x0000000000000068      0x168 ./example/src/composite_main.o
+ .debug_ranges  0x00000000000001d0       0x50 ./example/src/cr_startup_lpc11xx.o
+ .debug_ranges  0x0000000000000220       0x68 ./example/src/hid.o
+ .debug_ranges  0x0000000000000288       0x28 ./example/src/parser.o
+ .debug_ranges  0x00000000000002b0       0x10 ./example/src/sysinit.o
+ .debug_ranges  0x00000000000002c0       0x58 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_ranges  0x0000000000000318       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_ranges  0x00000000000003a8       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_ranges  0x00000000000003b8       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_ranges  0x0000000000000448       0x68 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_ranges  0x00000000000004b0      0x118 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_ranges  0x00000000000005c8       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_ranges  0x00000000000005d8       0x50 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_ranges  0x0000000000000628       0x28 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_ranges  0x0000000000000650       0xe0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_macro    0x0000000000000000     0x58d2
+.debug_macro    0x0000000000000000     0x58bb
  .debug_macro   0x0000000000000000      0x256 ./example/src/cdc_vcom.o
  .debug_macro   0x0000000000000256      0x8b6 ./example/src/cdc_vcom.o
  .debug_macro   0x0000000000000b0c       0x10 ./example/src/cdc_vcom.o
@@ -2299,80 +2382,80 @@ OUTPUT(usb_bridge_LPC11U14.axf elf32-littlearm)
  .debug_macro   0x0000000000002f5d       0x2e ./example/src/cdc_vcom.o
  .debug_macro   0x0000000000002f8b       0xf5 ./example/src/composite_desc.o
  .debug_macro   0x0000000000003080       0x7b ./example/src/composite_desc.o
- .debug_macro   0x00000000000030fb      0x391 ./example/src/composite_main.o
- .debug_macro   0x000000000000348c       0x28 ./example/src/composite_main.o
- .debug_macro   0x00000000000034b4       0x26 ./example/src/composite_main.o
- .debug_macro   0x00000000000034da       0x26 ./example/src/cr_startup_lpc11xx.o
- .debug_macro   0x0000000000003500      0x8bc ./example/src/cr_startup_lpc11xx.o
- .debug_macro   0x0000000000003dbc      0x25e ./example/src/hid.o
- .debug_macro   0x000000000000401a      0x12f ./example/src/parser.o
- .debug_macro   0x0000000000004149      0x193 ./example/src/sysinit.o
- .debug_macro   0x00000000000042dc      0x1a1 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_macro   0x000000000000447d      0x8b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_macro   0x0000000000004d2d      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_macro   0x0000000000004e8a      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_macro   0x0000000000004fe7      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_macro   0x0000000000005144      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_macro   0x00000000000052a1      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_macro   0x00000000000053fe       0x83 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_macro   0x0000000000005481       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_macro   0x0000000000005491      0x187 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_macro   0x0000000000005618      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_macro   0x0000000000005775      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_macro   0x00000000000030fb      0x368 ./example/src/composite_main.o
+ .debug_macro   0x0000000000003463       0x28 ./example/src/composite_main.o
+ .debug_macro   0x000000000000348b       0x26 ./example/src/composite_main.o
+ .debug_macro   0x00000000000034b1       0x26 ./example/src/cr_startup_lpc11xx.o
+ .debug_macro   0x00000000000034d7      0x8bc ./example/src/cr_startup_lpc11xx.o
+ .debug_macro   0x0000000000003d93      0x25e ./example/src/hid.o
+ .debug_macro   0x0000000000003ff1      0x12f ./example/src/parser.o
+ .debug_macro   0x0000000000004120      0x193 ./example/src/sysinit.o
+ .debug_macro   0x00000000000042b3      0x1a1 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_macro   0x0000000000004454      0x8b0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_macro   0x0000000000004d04      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_macro   0x0000000000004e61      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_macro   0x0000000000004fbe      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_macro   0x000000000000511b      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_macro   0x0000000000005278      0x16f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_macro   0x00000000000053e7      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_macro   0x0000000000005544       0x83 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_macro   0x00000000000055c7       0x10 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_macro   0x00000000000055d7      0x187 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_macro   0x000000000000575e      0x15d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_line     0x0000000000000000     0x473c
+.debug_line     0x0000000000000000     0x4a1f
  .debug_line    0x0000000000000000      0x612 ./example/src/cdc_vcom.o
  .debug_line    0x0000000000000612      0x2c1 ./example/src/composite_desc.o
- .debug_line    0x00000000000008d3      0x993 ./example/src/composite_main.o
- .debug_line    0x0000000000001266       0xf3 ./example/src/cr_startup_lpc11xx.o
- .debug_line    0x0000000000001359      0x61a ./example/src/hid.o
- .debug_line    0x0000000000001973      0x527 ./example/src/parser.o
- .debug_line    0x0000000000001e9a      0x36d ./example/src/sysinit.o
- .debug_line    0x0000000000002207      0x46f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_line    0x0000000000002676      0x46a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_line    0x0000000000002ae0      0x2ea /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_line    0x0000000000002dca      0x459 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_line    0x0000000000003223      0x3d9 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_line    0x00000000000035fc      0x2ee /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_line    0x00000000000038ea      0x259 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_line    0x0000000000003b43      0x327 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_line    0x0000000000003e6a      0x378 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_line    0x00000000000041e2      0x55a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_line    0x00000000000008d3      0x986 ./example/src/composite_main.o
+ .debug_line    0x0000000000001259       0xf3 ./example/src/cr_startup_lpc11xx.o
+ .debug_line    0x000000000000134c      0x61a ./example/src/hid.o
+ .debug_line    0x0000000000001966      0x527 ./example/src/parser.o
+ .debug_line    0x0000000000001e8d      0x36d ./example/src/sysinit.o
+ .debug_line    0x00000000000021fa      0x46f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_line    0x0000000000002669      0x46a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_line    0x0000000000002ad3      0x2ea /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_line    0x0000000000002dbd      0x459 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_line    0x0000000000003216      0x3d9 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_line    0x00000000000035ef      0x668 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_line    0x0000000000003c57      0x2ee /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_line    0x0000000000003f45      0x259 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_line    0x000000000000419e      0x327 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_line    0x00000000000044c5      0x55a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
-.debug_str      0x0000000000000000     0xfb1c
- .debug_str     0x0000000000000000     0xd1f5 ./example/src/cdc_vcom.o
+.debug_str      0x0000000000000000     0xff1b
+ .debug_str     0x0000000000000000     0xd1fb ./example/src/cdc_vcom.o
                                        0xd3fe (size before relaxing)
- .debug_str     0x000000000000d1f5       0x5a ./example/src/composite_desc.o
+ .debug_str     0x000000000000d1fb       0x5a ./example/src/composite_desc.o
                                        0x8a92 (size before relaxing)
- .debug_str     0x000000000000d24f      0xfec ./example/src/composite_main.o
-                                       0xe231 (size before relaxing)
- .debug_str     0x000000000000e23b      0x25b ./example/src/cr_startup_lpc11xx.o
+ .debug_str     0x000000000000d255     0x110b ./example/src/composite_main.o
+                                       0xe37e (size before relaxing)
+ .debug_str     0x000000000000e360      0x25b ./example/src/cr_startup_lpc11xx.o
                                        0x26b3 (size before relaxing)
- .debug_str     0x000000000000e496      0x370 ./example/src/hid.o
+ .debug_str     0x000000000000e5bb      0x370 ./example/src/hid.o
                                        0xd438 (size before relaxing)
- .debug_str     0x000000000000e806       0x7e ./example/src/parser.o
+ .debug_str     0x000000000000e92b       0x7e ./example/src/parser.o
                                        0x8ed9 (size before relaxing)
- .debug_str     0x000000000000e884       0x19 ./example/src/sysinit.o
+ .debug_str     0x000000000000e9a9       0x19 ./example/src/sysinit.o
                                        0x816c (size before relaxing)
- .debug_str     0x000000000000e89d      0x2fd /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_str     0x000000000000e9c2      0x2fd /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
                                        0x899a (size before relaxing)
- .debug_str     0x000000000000eb9a      0x3d5 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_str     0x000000000000ecbf      0x3d0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
                                        0x86f9 (size before relaxing)
- .debug_str     0x000000000000ef6f       0x29 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_str     0x000000000000f08f       0x29 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
                                        0x7d6a (size before relaxing)
- .debug_str     0x000000000000ef98      0x444 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_str     0x000000000000f0b8      0x444 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
                                        0x8585 (size before relaxing)
- .debug_str     0x000000000000f3dc       0xda /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_str     0x000000000000f4fc       0xda /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
                                        0x83e3 (size before relaxing)
- .debug_str     0x000000000000f4b6       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_str     0x000000000000f5d6      0x40a /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+                                       0x8861 (size before relaxing)
+ .debug_str     0x000000000000f9e0       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
                                        0x7d9d (size before relaxing)
- .debug_str     0x000000000000f4e6      0x12f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_str     0x000000000000fa10      0x12f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
                                        0x3fef (size before relaxing)
- .debug_str     0x000000000000f615      0x19f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_str     0x000000000000fb3f      0x19f /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
                                        0x8188 (size before relaxing)
- .debug_str     0x000000000000f7b4      0x12b /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
-                                       0x83fb (size before relaxing)
- .debug_str     0x000000000000f8df      0x23d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_str     0x000000000000fcde      0x23d /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
                                        0x85de (size before relaxing)
 
 .comment        0x0000000000000000       0xef
@@ -2389,10 +2472,10 @@ OUTPUT(usb_bridge_LPC11U14.axf elf32-littlearm)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
  .comment       0x000000000000007f       0x80 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .comment       0x000000000000007f       0x70 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/libs/libusbd_11uxx_lib.a(mw_usbd_core.o)
                                          0x71 (size before relaxing)
@@ -2454,13 +2537,13 @@ OUTPUT(usb_bridge_LPC11U14.axf elf32-littlearm)
  .ARM.attributes
                 0x000000000000021b       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
  .ARM.attributes
-                0x000000000000024c       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+                0x000000000000024c       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
  .ARM.attributes
-                0x000000000000027d       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+                0x000000000000027d       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
  .ARM.attributes
-                0x00000000000002ae       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+                0x00000000000002ae       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
  .ARM.attributes
-                0x00000000000002df       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
+                0x00000000000002df       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
  .ARM.attributes
                 0x0000000000000310       0x31 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
  .ARM.attributes
@@ -2532,23 +2615,23 @@ OUTPUT(usb_bridge_LPC11U14.axf elf32-littlearm)
  .ARM.attributes
                 0x0000000000000962       0x31 /usr/local/mcuxpressoide-10.1.1_606/ide/tools/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v6-m/libcr_nohost.a(__sys_write.o)
 
-.debug_frame    0x0000000000000000     0x1770
+.debug_frame    0x0000000000000000     0x1ae0
  .debug_frame   0x0000000000000000      0x190 ./example/src/cdc_vcom.o
- .debug_frame   0x0000000000000190      0x554 ./example/src/composite_main.o
- .debug_frame   0x00000000000006e4       0xb0 ./example/src/cr_startup_lpc11xx.o
- .debug_frame   0x0000000000000794      0x184 ./example/src/hid.o
- .debug_frame   0x0000000000000918       0x90 ./example/src/parser.o
- .debug_frame   0x00000000000009a8       0x2c ./example/src/sysinit.o
- .debug_frame   0x00000000000009d4      0x144 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
- .debug_frame   0x0000000000000b18      0x22c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
- .debug_frame   0x0000000000000d44       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
- .debug_frame   0x0000000000000d70      0x220 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
- .debug_frame   0x0000000000000f90      0x190 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
- .debug_frame   0x0000000000001120       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
- .debug_frame   0x0000000000001150      0x130 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
- .debug_frame   0x0000000000001280       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
- .debug_frame   0x0000000000001310       0xf0 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(timer_11xx.o)
- .debug_frame   0x0000000000001400      0x370 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
+ .debug_frame   0x0000000000000190      0x564 ./example/src/composite_main.o
+ .debug_frame   0x00000000000006f4       0xb0 ./example/src/cr_startup_lpc11xx.o
+ .debug_frame   0x00000000000007a4      0x184 ./example/src/hid.o
+ .debug_frame   0x0000000000000928       0x90 ./example/src/parser.o
+ .debug_frame   0x00000000000009b8       0x2c ./example/src/sysinit.o
+ .debug_frame   0x00000000000009e4      0x144 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/nxp_lpcxpresso_11u14_board_lib/Debug/libnxp_lpcxpresso_11u14_board_lib.a(board_sysinit.o)
+ .debug_frame   0x0000000000000b28      0x22c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(adc_11xx.o)
+ .debug_frame   0x0000000000000d54       0x2c /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(chip_11xx.o)
+ .debug_frame   0x0000000000000d80      0x220 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(clock_11xx.o)
+ .debug_frame   0x0000000000000fa0      0x190 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(gpio_11xx_1.o)
+ .debug_frame   0x0000000000001130      0x450 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(i2c_11xx.o)
+ .debug_frame   0x0000000000001580       0x30 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(iocon_11xx.o)
+ .debug_frame   0x00000000000015b0      0x130 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(ring_buffer.o)
+ .debug_frame   0x00000000000016e0       0x90 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(sysctl_11xx.o)
+ .debug_frame   0x0000000000001770      0x370 /home/beni/Documents/MCUXpresso_10.1.0_589/workspace/lpc_chip_11uxx_lib/Debug/liblpc_chip_11uxx_lib.a(uart_11xx.o)
 
 .debug_loc      0x0000000000000000      0x1c6
  .debug_loc     0x0000000000000000      0x1c6 ./example/src/cr_startup_lpc11xx.o
