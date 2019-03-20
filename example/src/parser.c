@@ -133,6 +133,7 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 		//0x12	Send wheel movement (needs 1 additional int8 byte)
 		//0x13	Press & release button LEFT
 		//0x14	Press & release button RIGHT
+
 		//0x15	Press & release button MIDDLE
 		//0x16	Press button LEFT
 		//0x17	Press button RIGHT
@@ -194,6 +195,10 @@ uint8_t parseBuffer(uint8_t *buf, uint8_t len)
 					mouse_report[1] = buf[1];
 					mouse_report[2] = buf[2];
 					Mouse_UpdateReport(mouse_report, 0);
+					//always reset relative movements:
+					mouse_report[1] = 0;
+					mouse_report[2] = 0;
+					mouse_report[3] = 0;
 					break;
 				case 2: //reset ESP32
 					ESP32_ResetBootloader();
