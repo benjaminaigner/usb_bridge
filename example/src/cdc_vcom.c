@@ -37,6 +37,8 @@
  * Private types/enumerations/variables
  ****************************************************************************/
 
+uint16_t ctrllinestate = 0;
+
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
@@ -76,19 +78,13 @@ static ErrorCode_t VCOM_bulk_out_hdlr(USBD_HANDLE_T hUsb, void *data, uint32_t e
 
 	switch (event) {
 	case USB_EVT_OUT:
-		pVcom->rx_count = USBD_API->hw->ReadEP(hUsb, USB_CDC_OUT_EP, pVcom->rx_buff);
-		Chip_UART_SendRB(LPC_USART, &txring, pVcom->rx_buff, pVcom->rx_count);
-		/*if (pVcom->rx_flags & VCOM_RX_BUF_QUEUED) {
-			pVcom->rx_flags &= ~VCOM_RX_BUF_QUEUED;
-			if (pVcom->rx_count != 0) {
-				pVcom->rx_flags |= VCOM_RX_BUF_FULL;
-			}
-
-		}
-		else if (pVcom->rx_flags & VCOM_RX_DB_QUEUED) {
-			pVcom->rx_flags &= ~VCOM_RX_DB_QUEUED;
-			pVcom->rx_flags |= VCOM_RX_DONE;
-		}*/
+		///@todo Is this working or does it break USB if we don't read the EP?
+		if(!(RingBuffer_GetFree(&txring) < 64))
+		{
+			pVcom->rx_count = USBD_API->hw->ReadEP(hUsb, USB_CDC_OUT_EP, pVcom->rx_buff);
+			Chip_UART_SendRB(LPC_USART, &txring, pVcom->rx_buff, pVcom->rx_count);
+		} else return ERR_USBD_UNHANDLED;
+		//TODO: do we know which type of return code is necessary?
 		break;
 
 	case USB_EVT_OUT_NAK:
@@ -112,47 +108,20 @@ static ErrorCode_t VCOM_SetLineCode(USBD_HANDLE_T hCDC, CDC_LINE_CODING *line_co
 	VCOM_DATA_T *pVcom = &g_vCOM;
 
 	/* Called when baud rate is changed/set. Using it to know host connection state */
-	pVcom->tx_flags = VCOM_TX_CONNECTED;	/* reset other flags */
+	//TODO: maybe this causes trouble...
+	//pVcom->tx_flags = VCOM_TX_CONNECTED;	/* reset other flags */
 	return LPC_OK;
 }
 
 /** Get RTS/DTR updates */
 static ErrorCode_t VCOM_SetCtrLineState(USBD_HANDLE_T hCDC, uint16_t state)
 {
-	//rts_dts_count++;
-	//return LPC_OK;
-
-	//bit 0 DTR
-	//bit 1 RTS
-
-	//if both are asserted, we don't trigger a reset
-	//we don't have the autoloading circuit available from here,
-	//so we do this in software
-	if(((state & 0x03) == 0) || ((state & 0x03) == 0x03))
+	ctrllinestate = state;
+	if(state == 0)
 	{
-		//boot
-		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, true);
-		//reset
-		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
-		return LPC_OK;
-	}
-
-	if(state & 0x01)
-	{
-		//boot
-		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, false);
-	} else {
-		//boot
-		Chip_GPIO_SetPinState(LPC_GPIO, 0, 22, true);
-	}
-
-	if(state & 0x02)
-	{
-		//reset
-		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, false);
-	} else {
-		//reset
-		Chip_GPIO_SetPinState(LPC_GPIO, 1, 16, true);
+		g_vCOM.tx_flags &= ~VCOM_TX_CONNECTED;
+	}else {
+		g_vCOM.tx_flags |= VCOM_TX_CONNECTED;
 	}
 	return LPC_OK;
 }
