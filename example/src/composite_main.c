@@ -493,7 +493,7 @@ ErrorCode_t onSuspendHandler(USBD_HANDLE_T hUsb)
 
 	//disable peripheral clocks
 	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_ADC);
-	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_I2C);
+	//Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_I2C);
 	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_UART0);
 	//set main clock to crystal (12MHz)
 	Chip_Clock_SetMainClockSource(SYSCTL_MAINCLKSRC_PLLIN);
@@ -535,7 +535,7 @@ ErrorCode_t onResumeHandler(USBD_HANDLE_T hUsb)
 
 	//re-init, does not work otherwise
 	ADC_Init();
-	I2C_Init();
+	//I2C_Init();
 	UART_Init();
 
 	//clear sleep flag
@@ -760,7 +760,7 @@ ErrorCode_t USB_Init()
 			}
 		}
 	}
-	//didn't succed, return fail.
+	//didn't succeed, return fail.
 	return ERR_FAILED;
 }
 
