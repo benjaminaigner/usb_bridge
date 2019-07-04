@@ -49,8 +49,8 @@
 #define PIN_SDA		5
 #define PORT_SDA	0
 /* PIN/PORT: ESP32 power, turns on/off the ESP32; active high*/
-#define PIN_ESP_ON	8
-#define PORT_ESP_ON	0
+#define PIN_ESP_ON	27
+#define PORT_ESP_ON	1
 /* PIN/PORT/ADC channel: FSR 1-4*/
 #define PIN_FSR1	11
 #define PORT_FSR1	0
@@ -308,7 +308,7 @@ static inline void ESP32_Enable(void)
 	//the power mosfet must be driven high
 	//TODO: activate power on/off on rev3.1b
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON);
-	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, true);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, false);
 	//the reset pin should be set to input, otherwise
 	//we have to charge the 1uF capacitor via this pin, and loosing the delay
 	//function of this capacitor
@@ -329,7 +329,7 @@ static inline void ESP32_Disable(void)
 	//the power mosfet is switched off
 	//TODO: activate power on/off on rev3.1b
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON);
-	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, false);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, true);
 }
 
 static inline void ESP32_PinInit(void)
@@ -340,7 +340,7 @@ static inline void ESP32_PinInit(void)
 	Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_BOOT, PIN_ESP_BOOT);
 	Chip_GPIO_SetPinDIRInput(LPC_GPIO, PORT_ESP_RESET, PIN_ESP_RESET);
 	Chip_GPIO_SetPinDIROutput(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON);
-	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, false);
+	Chip_GPIO_SetPinState(LPC_GPIO, PORT_ESP_ON, PIN_ESP_ON, true);
 }
 
 /**
@@ -719,8 +719,8 @@ ErrorCode_t USB_Init()
 	/* enable clocks and pinmux */
 	usb_pin_clk_init();
 	memset((void *) &usb_param, 0, sizeof(USBD_API_INIT_PARAM_T));
-	usb_param.USB_Resume_Event = onResumeHandler;
-	usb_param.USB_Suspend_Event = onSuspendHandler;
+	//usb_param.USB_Resume_Event = onResumeHandler;
+	//usb_param.USB_Suspend_Event = onSuspendHandler;
 	usb_param.usb_reg_base = LPC_USB0_BASE;
 	usb_param.max_num_ep = 5;
 	usb_param.mem_base = USB_STACK_MEM_BASE;
@@ -813,7 +813,7 @@ int main(void)
 	Chip_GPIO_Init(LPC_GPIO);
 	/* Initialize ESP reset related GPIOs */
 	ESP32_PinInit();
-	//ESP32_Disable();
+	ESP32_Disable();
 
 	/* Turn on the PLL by clearing the power down bit */
 	Chip_SYSCTL_PowerUp(SYSCTL_POWERDOWN_SYSPLL_PD);
